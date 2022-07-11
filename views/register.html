@@ -1,0 +1,137 @@
+<style>
+    .btn-register{
+        background-color: #4e718c;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .btn-register:hover{
+        background-color: white ;
+        color: #4e718c;
+        border-color: #4e718c;
+        border: 1px solid;
+    }
+    .btn-danger{
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .btn-danger:hover{
+        background-color: white;
+        color: #dc3445;
+        border: 1px solid;
+    }
+</style>
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <!-- col-xl-4 col-lg-4 col-md-6 col-sm-8 col-10 -->
+        <div class="col-12">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <p class="justify-content-center text-start display-5" style="color: #4e718c; margin-top: 10px; margin-bottom: 10px;">Registro</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-12">
+            <div class="text-center mb-4" style="margin-top: 10%;"><img src="../img/Logo-V1.png" alt="" class="text-center " width="150px" height="150px"></div>
+        </div>
+        <div class="col-9">
+            <div class="row">
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control mt-2" id="names" placeholder=" ">
+                        <label for="names">Nombre(s)</label>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control mt-2" id="firstName" placeholder=" ">
+                        <label for="firstName">Primer apellido</label>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control mt-2" id="secondName" placeholder=" ">
+                        <label for="firstName">Segundo apellido</label>
+                    </div>
+                </div>
+                <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-6 col-sm-12 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control mt-2" id="email" placeholder=" ">
+                        <label for="email">Correo</label>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="date" class="form-control mt-2" id="dateBirth" placeholder=" ">
+                        <label for="dateBirth">Fecha de nacimiento</label>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="tel" class="form-control mt-2" id="phoneNumber" placeholder=" ">
+                        <label for="phoneNumber">Telefono</label>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="tel" class="form-control mt-2" id="extra" placeholder=" ">
+                        <label for="extra">Extra 1</label>
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="tel" class="form-control mt-2" id="extra2" placeholder=" ">
+                        <label for="extra2">Extra 2</label>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="tel" class="form-control mt-2" id="extra3" placeholder=" ">
+                        <label for="extra3">Extra 3</label>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <select class="form-select mt-2" aria-label="Default select example">
+                            <option selected disabled>Seleccione...</option>
+                            <option value="1">Reclutador</option>
+                            <option value="2">Voluntario</option>
+                            <option value="3">Administrador</option>
+                        </select>
+                        <label for="rol">Rol</label>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control mt-2" id="password" placeholder=" ">
+                        <label for="password">Contraseña</label>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control mt-2" id="confirmPassword" placeholder=" ">
+                        <label for="confirmPassword">Confirmar contraseña</label>
+                    </div>
+                </div>
+                
+                
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-floating mb-3 mt-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Estoy de acuerdo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="justify-content-end text-end">
+            <a href="login.html" class="btn btn-danger pt-2 pe-4 ps-4 pb-2">Cancelar</a>
+            <input type="button" class="btn btn-register pt-2 pe-4 ps-4 pb-2" value="Registrar">
+        </div>
+    </div>
+</div>
