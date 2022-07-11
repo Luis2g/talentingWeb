@@ -9,20 +9,19 @@
 </head>
 <body>
     
-    <div ng-view >
-
+    <div ng-view class="mt-5 row"  >
 
     </div>
     
-
-
-    <script src="/js/bootstrap.bundle.min.js" ></script>
-    <script src="/js/angular.min.js" ></script>
-    <script src="/js/angular-route.min.js" ></script>
+    <script src="/js/imports/bootstrap.bundle.min.js" ></script>
+    <script src="/js/imports/angular.min.js" ></script>
+    <script src="/js/imports/angular-route.min.js" ></script>
     <script src="/js/app.js" ></script>
-    <script src="/js/userController.js" ></script>
-    <script src="/js/jquery-3.6.0.min.js" ></script>
-    <script src="/js/jquery.mask.min.js" ></script>
+    <script src="/js/services/userService.js" ></script>
+    <script src="/js/controllers/userController.js" ></script>
+    <script src="/js/controllers/vacancyController.js" ></script>
+    <script src="/js/imports/jquery-3.6.0.min.js" ></script>
+    <script src="/js/imports/jquery.mask.min.js" ></script>
     <script>
         $(document).ready(function () {
             $('.phone-mask').mask('(000)000-00-00');
