@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="talenting" >
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <title>Document</title>
+</head>
+<body>
+    
+    <div ng-view >
+
+
+    </div>
+    
+
+
+    <script src="/js/bootstrap.bundle.min.js" ></script>
+    <script src="/js/angular.min.js" ></script>
+    <script src="/js/angular-route.min.js" ></script>
+    <script src="/js/app.js" ></script>
+    <script src="/js/userController.js" ></script>
+    <script src="/js/jquery-3.6.0.min.js" ></script>
+    <script src="/js/jquery.mask.min.js" ></script>
+    <script>
+        $(document).ready(function () {
+            $('.phone-mask').mask('(000)000-00-00');
+        });
+    </script>
+</body>
+</html>

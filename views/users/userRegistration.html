@@ -1,0 +1,169 @@
+
+<div ng-form="userRegistration" novalidate >
+
+    <div class="container" >
+
+        <div class="row" >
+
+            <input
+                type="button"
+                value="press"
+                ng-click="registerUser()"
+            >
+
+            <div class="col-4" >
+                <label>Fecha de nacimiento</label>
+                <input
+                    id="dateOfBirth"
+                    name="dateOfBirth"
+                    ng-model="person.dateOfBirth"
+                    type="date"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Nombre</label>
+                <input
+                    id="name"
+                    name="name"
+                    ng-model="person.name"
+                    type="text"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Primer apellido</label>
+                <input
+                    id="surname"
+                    name="urname"
+                    ng-model="person.surname"
+                    type="text"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Segundo apellido</label>
+                <input
+                    id="secondSurname"
+                    name="secondSurname"
+                    ng-model="person.secondSurname"
+                    type="text"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Correo electronico</label>
+                <input
+                    id="email"
+                    name="email"
+                    ng-model="contactInformation.email"
+                    type="email"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Teléfono</label>
+                <input
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    class="phone-mask"
+                    placeholder="( ___ ) - ___ - __ - __"
+                    ng-model="contactInformation.phoneNumber"
+                    type="text"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Nombre de usuario</label>
+                <input
+                    id="username"
+                    name="username"
+                    ng-model="user.username"
+                    type="text"
+                >
+            </div>
+            <div class="col-4" >
+                <label>Contraseña</label>
+                <input
+                    id="password"
+                    name="password"
+                    ng-model="user.password"
+                    type="password"
+                >
+            </div>
+            <div class="col-12 mt-5" >
+                <label>Estado donde radica</label>
+                <select
+                    ng-model="contactInformation.state"
+                    ng-options="state.estado as state.estado for state in states track by state.clave"
+                >
+                    <option value="" selected >Seleccione...</option>
+                </select>
+            </div>
+
+            <div class=" mt-5 col-12" >
+                <label>Seleccione el tipo de registro</label>
+               
+                <input
+                    id="employeer"
+                    name="userType"
+                    ng-model="user.role"
+                    type="radio"
+                    value="employeer"
+                >
+                <label for="employeer" >Empleador</label>
+                <input
+                    id="employee"
+                    name="userType"
+                    ng-model="user.role"
+                    type="radio"
+                    value="employee"
+                >
+                <label for="employee" >Aplicante</label>
+
+                {{ frontVariables.userType }}
+
+            </div>
+
+            
+            
+            <div class="col-12 mt-5" ng-if="user.role === 'employeer'" >
+                <div class="row" >
+                    <div class="col-4" >
+                        <label>Nombre de la compañia</label>
+                        <input
+                            id="companyName"
+                            name="companyName"
+                            ng-model="employeer.companyName"
+                            type="text"
+                        >
+                    </div>
+                    <div class="col-4" >
+                        <label>¿Que rol funje en la empresa</label>
+                        <input
+                            id="rolInCompany"
+                            name="rolInCompany"
+                            ng-model="employeer.rolInCompany"
+                            type="text"
+                        >
+                    </div>
+                    <div class="col-4" >
+                        <label>Estado donde se encuentra la compañia</label>
+                        <select
+                            ng-model="employeer.stateTheCompanyIsIn"
+                            ng-options="state.estado as state.estado for state in states track by state.clave"
+                        >
+                            <option value="" selected >Seleccione...</option>
+                        </select>
+                    </div>
+                </div>
+                
+
+
+            </div>
+            
+            {{ person }}
+
+            {{ contactInformation }}
+
+        </div>
+
+    </div>
+    
+</div>
+
+
