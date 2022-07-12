@@ -6,6 +6,9 @@ function($scope, $http, userService) {
     $scope.modalities = ['Presencial', 'Virtual', 'Híbrida'];
     $scope.types = ['Tiempo completo', 'Medio tiempo', 'Fines de semana', 'Horarios flexibles'];
     $scope.paymentFrecuencies = ['Hora', 'Día', 'Semana', 'Quincena', 'Mes', 'Año'];
+    // $scope.benefits = [{id: 1, name: 'Uniformes gratuitos'}, {id: 1, name: 'Vales de despensa'}];
+    $scope.benefits = ['Uniformes gratuitos', 'Vales de despensa', 'Opción a base laboral', 'Caja de ahorro', 'Apoyo de transporte', 'Teléfono de la empresa', 'Estacionamiento gratuito', 'Seguro de gastos médicos', 'Seguro dental', 'Servicio de comedor', 'Seguro de vida', 'Seguro de la vista', 'Vacaciones superiores a las de la ley', 'Descuentos'];
+    $scope.benefitsToSave = [];
     $scope.frontVariables = {
         inValidVacancyForm: false
     }
@@ -13,12 +16,22 @@ function($scope, $http, userService) {
     $scope.vacancy = {};
     console.log(userService.setUser({luis: "nombre"}));
 
+    $scope.addOrRemoveBenefit = (benefit) => {
+
+        console.log('here');
+        let benefitIndex = $scope.benefitsToSave.indexOf(benefit);
+        console.log(benefitIndex);
+        if(benefitIndex === -1){
+            $scope.benefitsToSave.push(benefit);
+        }else{
+            $scope.benefitsToSave.splice(benefitIndex, 1);
+        }
+    }
 
     $scope.registerVacancy = () => {
         console.log('it\'s getting to where it should');
-        // let vacancyDTO = { vacancy: {...$scope.vacancy}, employeer: { id: 1 } };
 
-        let vacancyDTO = { ...$scope.vacancy, employeer: {id: 1}}
+        let vacancyDTO = { vacancy : {...$scope.vacancy, employeer: {id: 1}}, benefits : $scope.benefitsToSave }
 
         console.log('this is what im sending ', vacancyDTO);
 
