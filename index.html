@@ -5,11 +5,64 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="icon" href="./img/Isotipo-V3.png">
     <title>Talenting</title>
 </head>
 <body>
     
-    <div ng-view class="mt-5"  >
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">SIPET</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="principal.html">Principal</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Reclutador
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="./postulationsAdmin.html">Consultar postulaciones</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Candidato
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="./postulationsEmployee.html">Consultar vacantes</a></li>
+                    <li><a class="dropdown-item" href="./favorites.html">Favoritos</a></li>
+                    <li><a class="dropdown-item" href="./myPostulations.html">Mis postulaciones</a></li>
+                    <li><a class="dropdown-item" href="./socialNetwork.html">Red social</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="principal.html">Alertas</a>
+                </li>
+            </ul>
+            <li class="nav-item btn-group dropstart">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="./img/user.jpg" alt="hugenerd" width="20" height="20" class="rounded-circle">
+                  Usuario
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="./cv.html">CV</a></li>
+                  <li><a class="dropdown-item" href="profile.html">Perfil</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="login.html">Cerrar sesión</a></li>
+                </ul>
+            </li>
+            </div>
+        </div>
+    </nav>
+
+
+    <div ng-view class="row col-12"  >
+
 
     </div>
     
