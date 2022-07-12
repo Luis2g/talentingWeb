@@ -21,4 +21,5 @@ talenting.config(['$routeProvider', function($routeProvider){
             redirectTo: '/404'
         });
 
+
 }]);
