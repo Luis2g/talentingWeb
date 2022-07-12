@@ -1,216 +1,521 @@
-<div class="container" >
+<div class="row pe-4 ps-4 col-12">
+    <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-12 col-xs-12">
+        <h1>Vacantes registradas</h1>
+    </div>
+    <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12 text-end mt-3">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerPostulation">
+            Nueva vacante
+        </button>
+    </div>
+</div>
+<hr>
+<div class="col py-3 p-4" ng-init="retrieveUserVacancies()" >
+    <table class="table table-stiped table-responsive">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Titulo</th>
+                <th>Estado</th>
+                <th>Modalidad</th>
+                <th>Fecha de validez</th>
+                <th>Salario</th>
+                <th>Frecuencia de pago</th>
+                <th>Tipo</th>
+                <th>Fecha de inicio</th>
+                <th colspan="2" class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="vacancy in postedVacancies | orderBy : vacancy.id  " >
+                <td ng-bind="$index + 1" ></td>
+                <td ng-bind="vacancy.title" ></td>
+                <td ng-bind="vacancy.stateInWhichIsAvailable" ></td>
+                <td ng-bind="vacancy.modality" ></td>
+                <td ng-bind="vacancy.validityDate | date : 'dd/MM/yyyy'" ></td>
+                <td><span style="color: #818181" >Desde</span> {{ vacancy.minimumSalary | currency }} MX <br> <span style="color: #818181" >Hasta</span> {{vacancy.maximumSalary}} MX </td>
+                <td ng-bind="vacancy.paymentFrecuency"></td>
+                <td ng-bind="vacancy.type"></td>
+                <td ng-bind="vacancy.startDate | date : 'dd/MM/yyyy'" ></td>
+                <td> <button ng-click="loadVacancyToUpdate(vacancy)" class="btn btn-warning" style="color: white;" data-bs-toggle="modal" data-bs-target="#updatePostulation">Editar</button></td>
+                <td> <button class="btn btn-danger">Eliminar</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
-    <div class="container col-12" >
-        <div ng-form="vacancyRegistration" class="row" >
-    
-            {{ vacancy}}
+<!-- Modal for register new postulation -->
+<div class="modal fade" id="registerPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form name="vacancyRegistration" >
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Registrar vacante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="title"
+                                        name="title"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancy.title"
+                                        type="text"
+                                        required
+                                    >
+                                    <label for="title">Titulo</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.title.$error.required && vacancyRegistration.title.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="state"
+                                        name="state"
+                                        class="form-control form-select mt-2"
+                                        ng-model="vacancy.stateInWhichIsAvailable"
+                                        ng-options="state.estado as state.estado for state in states track by state.clave"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <label for="state">Estado</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.state.$error.required && vacancyRegistration.state.$touched || vacancyRegistration.state.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="modality"
+                                        name="modality"
+                                        class="form-control form-select mt-2"
+                                        ng-model="vacancy.modality" 
+                                        ng-options="modality as modality for modality in modalities track by modality"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <label for="modality">Modalidad</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.modality.$error.required && vacancyRegistration.modality.$touched || vacancyRegistration.modality.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="type"
+                                        name="type"
+                                        class="form-control form-select mt-2"
+                                        ng-model="vacancy.type" 
+                                        ng-options="type as type for type in types track by type"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <label for="type">Tipo</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.type.$error.required && vacancyRegistration.type.$touched || vacancyRegistration.type.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="startDate"
+                                        name="startDate"
+                                        class="form-control mt-2"
+                                        ng-model="vacancy.startDate"
+                                        type="date"
+                                        required
+                                    >
+                                    <label for="startDate">Fecha inicio</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.startDate.$error.required && vacancyRegistration.startDate.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="minimumSalary"
+                                        name="minimumSalary"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancy.minimumSalary"
+                                        type="number"
+                                        required
+                                    >
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.minimumSalary.$error.required && vacancyRegistration.minimumSalary.$touched || vacancyRegistration.minimumSalary.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                    <label for="minimumSalary">Salario mínimo</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="maximumSalary"
+                                        name="maximumSalary"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancy.maximumSalary"
+                                        type="number"
+                                        required
+                                    >
+                                    <label for="maximumSalary">Salario máximo</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.maximumSalary.$error.required && vacancyRegistration.maximumSalary.$touched || vacancyRegistration.maximumSalary.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="paymentFrecuency"
+                                        name="paymentFrecuency"
+                                        class="form-control mt-2"
+                                        ng-model="vacancy.paymentFrecuency"
+                                        ng-options="paymentFrecuency as paymentFrecuency for paymentFrecuency in paymentFrecuencies track by paymentFrecuency"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.paymentFrecuency.$error.required && vacancyRegistration.paymentFrecuency.$touched || vacancyRegistration.paymentFrecuency.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                    <label for="paymentFrecuency">Frecuencia de pago</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="validityDate"
+                                        name="validityDate"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancy.validityDate"
+                                        type="date"
+                                        required
+                                    >
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.validityDate.$error.required && vacancyRegistration.validityDate.$touched || vacancyRegistration.validityDate.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                    <label for="validityDate">Fecha de validez</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class=" mb-3">
+                                <label for="benefitsToSelect">Beneficios extras</label>
+                                <select 
+                                    id="benefitsToSelect"
+                                    name="benefitsToSelect"
+                                    class="form-control"
+                                    multiple
+                                    style="height: 150px"                                
+                                >
+                                    <option ng-click="addOrRemoveBenefit(option)" ng-repeat="option in benefits" ng-bind="option" ></option>
 
-                <label class="form-label" >Titulo</label>
-                <div class="col-4 input-group" >
-                    <input
-                        id="title"
-                        name="title"
-                        class="form-control"
-                        ng-model="vacancy.title"
-                        type="text"
-                        required
-                    >
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.title.$error.required && vacancyRegistration.title.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class=" mb-3">
+                                    <label for="benefitsToSelect">Beneficios seleccionados</label>
+                                    <select 
+                                        id="benefitsToSelect"
+                                        name="benefitsToSelect"
+                                        ng-model="selected"
+                                        class="form-control"
+                                        ng-options="benefit as benefit for benefit in benefitsToSave track by benefits"
+                                        multiple
+                                        style="height: 150px"
+                                    >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <label>Estado en el que esta disponible</label>
-                <div class="col-4 input-group" >
-                    <select 
-                        id="state"
-                        name="state"
-                        class="form-control"
-                        ng-model="vacancy.stateInWhichIsAvailable"
-                        ng-options="state.estado as state.estado for state in states track by state.clave"
-                        required
-                    >
-                        <option value="" selected >Seleccione...</option>
-                    </select>
-    
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.title.$error.required && vacancyRegistration.title.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" ng-if="vacancyRegistration.$valid" ng-click="registerVacancy()" class="btn btn-success">Registrar</button>
+                    <button type="button" ng-if="vacancyRegistration.$invalid" ng-click="showAlert()" class="btn btn-success">Registrar</button>
                 </div>
-                <label>Modalidad</label>
-                <div class="col-4 input-group" >
-                    <select 
-                        id="modality"
-                        name="modality"
-                        class="form-control"
-                        ng-model="vacancy.modality" 
-                        ng-options="modality as modality for modality in modalities track by modality"
-                        required
-                    >
-                        <option value="" selected >Seleccione...</option>
-                    </select>
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.modality.$error.required && vacancyRegistration.modality.$touched || vacancyRegistration.modality.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-                <label>Tipo</label>
-                <div class="col-4 input-group" >
-                    <select 
-                        id="type"
-                        name="type"
-                        class="form-control"
-                        ng-model="vacancy.type" 
-                        ng-options="type as type for type in types track by type"
-                        required
-                    >
-                        <option value="" selected >Seleccione...</option>
-                    </select>
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.type.$error.required && vacancyRegistration.type.$touched || vacancyRegistration.type.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-                <label>Fecha de inicio</label>
-                <div class="col-4 input-group" >
-                    <input
-                        id="startDate"
-                        name="startDate"
-                        class="form-control"
-                        ng-model="vacancy.startDate"
-                        type="date"
-                        required
-                    >
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.startDate.$error.required && vacancyRegistration.startDate.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-                <label>Fecha de validez</label>
-                <div class="col-4" >
-                    <input
-                        id="validityDate"
-                        name="validityDate"
-                        class="form-control"
-                        ng-model="vacancy.validityDate"
-                        type="date"
-                    >
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.validityDate.$error.required && vacancyRegistration.validityDate.$touched || vacancyRegistration.validityDate.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-                <label>Salaria mínimo</label>
-                <div class="col-4" >
-                    <input
-                        id="minimumSalary"
-                        name="minimumSalary"
-                        class="form-control"
-                        ng-model="vacancy.minimumSalary"
-                        type="number"
-                        required
-                    >
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.minimumSalary.$error.required && vacancyRegistration.minimumSalary.$touched || vacancyRegistration.minimumSalary.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-    
-                <label>Salario maximo</label>
-                <div class="col-4" >
-                    <input
-                        id="maximumSalary"
-                        name="maximumSalary"
-                        class="form-control"
-                        ng-model="vacancy.maximumSalary"
-                        type="number"
-                        required
-                    >
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.maximumSalary.$error.required && vacancyRegistration.maximumSalary.$touched || vacancyRegistration.maximumSalary.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-    
-                <label>Frecuencia de pago</label>
-                <div class="col-4" >
-                    <select 
-                        id="paymentFrecuency"
-                        name="paymentFrecuency"
-                        class="form-control"
-                        ng-model="vacancy.paymentFrecuency"
-                        ng-options="paymentFrecuency as paymentFrecuency for paymentFrecuency in paymentFrecuencies track by paymentFrecuency"
-                        required
-                    >
-                        <option value="" selected >Seleccione...</option>
-                    </select>
-                    <span 
-                        style="color: red"
-                        ng-show="vacancyRegistration.paymentFrecuency.$error.required && vacancyRegistration.paymentFrecuency.$touched || vacancyRegistration.paymentFrecuency.$error.required && frontVariables.inValidVacancyForm"
-                    >
-                        Este campo es obligatorio
-                    </span>
-                </div>
-                
-                <h3>Beneficios del trabajo</h3>
-                <label>Nombre del beneficio</label>
-                <div class="col-4">
-                    <select 
-                        id="benefitsToSelect"
-                        name="benefitsToSelect"
-                        class="form-control"
-                        multiple
-                    
-                    >
-                        <option ng-click="addOrRemoveBenefit(option)" ng-repeat="option in benefits" ng-bind="option" ></option>
-
-                    </select>
-                </div>
-
-                {{ benefitsToSave }}
-                
-
-                <label>Beneficios con los que cuenta</label>
-                <div class="col-4">
-                    <select 
-                        id="benefitsToSelect"
-                        name="benefitsToSelect"
-                        ng-model="selected"
-                        class="form-control"
-                        ng-options="benefit as benefit for benefit in benefitsToSave track by benefits"
-                        multiple
-                    >
-                        <option value="" selected >Seleccione...</option>
-                    </select>
-    
-                </div>
-    
-    
-                <div class="col-6" >
-                    <input type="button" value="enviar datos" ng-click="registerVacancy()" >
-                </div>
-    
+            </form>
         </div>
     </div>
-    
-    
-    
+</div>
+
+
+
+   <!-- Modal for update postulation -->
+<div class="modal fade" id="updatePostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form action="">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar vacante</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="title"
+                                        name="title"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancyToUpdate.title"
+                                        type="text"
+                                        required
+                                    >
+                                    <label for="title">Titulo</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.title.$error.required && vacancyRegistration.title.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="state"
+                                        name="state"
+                                        class="form-control form-select mt-2"
+                                        ng-model="vacancyToUpdate.stateInWhichIsAvailable"
+                                        ng-options="state as state.estado for state in states track by state.clave"
+                                        required
+                                    >
+                                    </select>
+                                    <label for="state">Estado</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.state.$error.required && vacancyRegistration.state.$touched || vacancyRegistration.state.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="modality"
+                                        name="modality"
+                                        class="form-control form-select mt-2"
+                                        ng-model="vacancyToUpdate.modality" 
+                                        ng-options="modality as modality for modality in modalities track by modality"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <label for="modality">Modalidad</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.modality.$error.required && vacancyRegistration.modality.$touched || vacancyRegistration.modality.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="type"
+                                        name="type"
+                                        class="form-control form-select mt-2"
+                                        ng-model="vacancyToUpdate.type" 
+                                        ng-options="type as type for type in types track by type"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <label for="type">Tipo</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.type.$error.required && vacancyRegistration.type.$touched || vacancyRegistration.type.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="startDate"
+                                        name="startDate"
+                                        class="form-control mt-2"
+                                        ng-model="vacancyToUpdate.startDate"
+                                        type="date"
+                                        required
+                                    >
+                                    <label for="startDate">Fecha inicio</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.startDate.$error.required && vacancyRegistration.startDate.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="minimumSalary"
+                                        name="minimumSalary"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancyToUpdate.minimumSalary"
+                                        type="number"
+                                        required
+                                    >
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.minimumSalary.$error.required && vacancyRegistration.minimumSalary.$touched || vacancyRegistration.minimumSalary.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                    <label for="minimumSalary">Salario mínimo</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="maximumSalary"
+                                        name="maximumSalary"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancyToUpdate.maximumSalary"
+                                        type="number"
+                                        required
+                                    >
+                                    <label for="maximumSalary">Salario máximo</label>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.maximumSalary.$error.required && vacancyRegistration.maximumSalary.$touched || vacancyRegistration.maximumSalary.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <select 
+                                        id="paymentFrecuency"
+                                        name="paymentFrecuency"
+                                        class="form-control mt-2"
+                                        ng-model="vacancyToUpdate.paymentFrecuency"
+                                        ng-options="paymentFrecuency as paymentFrecuency for paymentFrecuency in paymentFrecuencies track by paymentFrecuency"
+                                        required
+                                    >
+                                        <option value="" selected >Seleccione...</option>
+                                    </select>
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.paymentFrecuency.$error.required && vacancyRegistration.paymentFrecuency.$touched || vacancyRegistration.paymentFrecuency.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                    <label for="paymentFrecuency">Frecuencia de pago</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="form-floating mb-3">
+                                    <input
+                                        id="validityDate"
+                                        name="validityDate"
+                                        class="form-control mt-2"
+                                        placeholder=" "
+                                        ng-model="vacancyToUpdate.validityDate"
+                                        type="date"
+                                        required
+                                    >
+                                    <span 
+                                        style="color: red"
+                                        ng-show="vacancyRegistration.validityDate.$error.required && vacancyRegistration.validityDate.$touched || vacancyRegistration.validityDate.$error.required && frontVariables.inValidVacancyForm"
+                                    >
+                                        Este campo es obligatorio
+                                    </span>
+                                    <label for="validityDate">Fecha de validez</label>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class=" mb-3">
+                                <label for="benefitsToSelect">Beneficios extras</label>
+                                <select 
+                                    id="benefitsToSelect"
+                                    name="benefitsToSelect"
+                                    class="form-control"
+                                    multiple
+                                    style="height: 150px"                                
+                                >
+                                    <option ng-click="addOrRemoveBenefit(option)" ng-repeat="option in benefits" ng-bind="option" ></option>
+
+                                </select>
+                                </div>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class=" mb-3">
+                                    <label for="benefitsToSelect">Beneficios seleccionados</label>
+                                    <select 
+                                        id="benefitsToSelect"
+                                        name="benefitsToSelect"
+                                        ng-model="selected"
+                                        class="form-control"
+                                        ng-options="benefit as benefit for benefit in benefitsToSave track by benefits"
+                                        multiple
+                                        style="height: 150px"
+                                    >
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

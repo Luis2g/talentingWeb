@@ -4,7 +4,7 @@ talenting.config(['$routeProvider', function($routeProvider){
 
     $routeProvider
         .when('/', {
-            templateUrl: '/views/index.html'
+            templateUrl: '/views/general/landing.html'
         })
         .when('/userRegistration', {
             templateUrl: '/views/users/userRegistration.html',
@@ -21,9 +21,9 @@ talenting.config(['$routeProvider', function($routeProvider){
             templateUrl: '/views/login.html',
             controller: 'sesionController'
         })
-        .when('/register', {
-            templateUrl: '/views/register.html',
-            controller: 'sesionController'
+        .when('/userRegistration', {
+            templateUrl: '/views/userRegistration.html',
+            controller: 'userController'
         })
         .when('/socialMedia', {
             templateUrl: '/views/users/applier/socialMedia.html'
@@ -31,17 +31,11 @@ talenting.config(['$routeProvider', function($routeProvider){
         .when('/applierPostulation', {
             templateUrl: '/views/users/applier/applierPostulation.html'
         })
-        .when('/principal', {
-            templateUrl: '/views/general/principal.html'
-        })
         .when('/favorites', {
             templateUrl: '/views/users/applier/favorites.html'
         })
         .when('/vacancies', {
             templateUrl: '/views/users/applier/vacancies.html'
-        })
-        .when('/vacancyRegistration2', {
-            templateUrl: '/views/users/employeer/vacancyRegistration2.html'
         })
         .when('/profile', {
             templateUrl: '/views/users/profile.html'
