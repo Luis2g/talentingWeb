@@ -4,7 +4,7 @@ talenting.config(['$routeProvider', function($routeProvider){
 
     $routeProvider
         .when('/', {
-            templateUrl: '/views/index.html'
+            templateUrl: '/views/general/landing.html'
         })
         .when('/userRegistration', {
             templateUrl: '/views/users/userRegistration.html',
@@ -30,9 +30,6 @@ talenting.config(['$routeProvider', function($routeProvider){
         })
         .when('/applierPostulation', {
             templateUrl: '/views/users/applier/applierPostulation.html'
-        })
-        .when('/index', {
-            templateUrl: '/views/general/principal.html'
         })
         .when('/favorites', {
             templateUrl: '/views/users/applier/favorites.html'
