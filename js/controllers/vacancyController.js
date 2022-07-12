@@ -6,7 +6,6 @@ function($scope, $http, userService) {
     $scope.modalities = ['Presencial', 'Virtual', 'Híbrida'];
     $scope.types = ['Tiempo completo', 'Medio tiempo', 'Fines de semana', 'Horarios flexibles'];
     $scope.paymentFrecuencies = ['Hora', 'Día', 'Semana', 'Quincena', 'Mes', 'Año'];
-    // $scope.benefits = [{id: 1, name: 'Uniformes gratuitos'}, {id: 1, name: 'Vales de despensa'}];
     $scope.benefits = ['Uniformes gratuitos', 'Vales de despensa', 'Opción a base laboral', 'Caja de ahorro', 'Apoyo de transporte', 'Teléfono de la empresa', 'Estacionamiento gratuito', 'Seguro de gastos médicos', 'Seguro dental', 'Servicio de comedor', 'Seguro de vida', 'Seguro de la vista', 'Vacaciones superiores a las de la ley', 'Descuentos'];
     $scope.benefitsToSave = [];
     $scope.frontVariables = {
@@ -31,7 +30,7 @@ function($scope, $http, userService) {
     $scope.registerVacancy = () => {
         console.log('it\'s getting to where it should');
 
-        let vacancyDTO = { vacancy : {...$scope.vacancy, employeer: {id: 1}}, benefits : $scope.benefitsToSave }
+        let vacancyDTO = { vacancy : {...$scope.vacancy, employeer: {id: 1}}, benefits: $scope.benefitsToSave }
 
         console.log('this is what im sending ', vacancyDTO);
 
@@ -42,12 +41,19 @@ function($scope, $http, userService) {
         }).then( response => {
             console.log(response);
         }, err => {
-        
             console.log(err);
-    
         });
-
     }
 
+    $scope.showAlert = () => {
+        $scope.frontVariables.inValidVacancyForm = true;
+        Swal.fire({
+            title: 'Verifica',
+            text: "Necesitas llenar todos los campos de manera correcta",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Entendido'
+        });
+    }
 
 }]);
