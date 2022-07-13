@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="talenting" >
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="icon" href="./img/Isotipo-V3.png">
+    <title>Talenting</title>
+</head>
+<body ng-controller="sessionController" >
+
+<style>
+    .btn-login{
+        background-color: #bca73f;
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+    }
+    .btn-login:hover{
+        background-color: white ;
+        color: #bca73f;
+        border-color: #bca73f;
+        border: 1px solid;
+    }
+    .link-login{
+        color: #3c87c0;
+    }
+</style>
+<div ng-form="formLogin" >
+    <div class="container" >
+
+        <div class="mt-5" >
+            <a href="/" class="btn btn-outline-warning" >Regresar a la vista principal</a>
+        </div>
+
+        <div class="row justify-content-center align-items-center">
+            <div class=" col-xl-4 col-lg-4 col-md-6 col-sm-8 col-10">
+                <div class="text-center mb-4" style="margin-top: 10%;"><img src="../img/Logo-V1.png" alt="" class="text-center " width="40%" height="40%"></div>
+                <div class="form-floating mb-3">
+                    <input 
+                        id="username" 
+                        name="username"
+                        ng-model="user.username"
+                        type="text" 
+                        class="form-control mt-4" 
+                        placeholder="nombre@ejemplo.com"
+                        required
+                    >
+                    <label for="username">Usuario</label>
+                    <span 
+                        style="color: red"
+                        ng-show="formLogin.username.$error.required && formLogin.username.$touched || formLogin.username.$error.required && frontVariables.invalidForm"
+                    >
+                        Este campo es obligatorio
+                    </span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input 
+                        id="password" 
+                        name="password" 
+                        ng-model="user.password"
+                        type="password" 
+                        class="form-control" 
+                        placeholder=" "
+                        required
+                    >
+                    <label for="password">Contraseña</label>
+                    <span 
+                        style="color: red"
+                        ng-show="formLogin.password.$error.required && formLogin.password.$touched || formLogin.password.$error.required && frontVariables.invalidForm"
+                    >
+                        Este campo es obligatorio
+                    </span>
+                </div>
+                <div class="mb-4 justify-content-end text-end mt-4">
+                    <a href="/userRegistration" type="button" class="link-login">¡Registrate!</a>
+                </div>
+                <div ng-if="formLogin.$valid" class="justify-content-center text-center">
+                    <a type="button" ng-click="login()" class="btn btn-login pt-2 pe-4 ps-4 pb-2">Iniciar</a>
+                </div>
+                <div ng-if="formLogin.$invalid" class="justify-content-center text-center">
+                    <a type="button" ng-click="showAlert()" class="btn btn-login pt-2 pe-4 ps-4 pb-2">Iniciar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <script src="/js/imports/bootstrap.bundle.min.js" ></script>
+    <script src="/js/imports/angular.min.js" ></script>
+    <script src="/js/imports/angular-route.min.js" ></script>
+    <script src="/js/imports/angular-cookies.min.js" ></script>
+    <script src="/js/app.js" ></script>
+    <script src="/js/services/alertService.js" ></script>
+    <script src="/js/controllers/sessionController.js" ></script>
+    <script src="/js/imports/jquery-3.6.0.min.js" ></script>
+    <script src="/js/imports/sweetalert2@11.js" ></script>
+
+</body>
+</html>

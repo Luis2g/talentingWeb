@@ -1,4 +1,4 @@
-var talenting = angular.module('talenting',['ngRoute']);
+var talenting = angular.module('talenting',['ngRoute', 'ngCookies']);
 
 talenting.config(['$routeProvider', function($routeProvider){
 
@@ -19,11 +19,7 @@ talenting.config(['$routeProvider', function($routeProvider){
         })
         .when('/login', {
             templateUrl: '/views/login.html',
-            controller: 'sesionController'
-        })
-        .when('/userRegistration', {
-            templateUrl: '/views/userRegistration.html',
-            controller: 'userController'
+            controller: 'sessionController'
         })
         .when('/socialMedia', {
             templateUrl: '/views/users/applier/socialMedia.html'

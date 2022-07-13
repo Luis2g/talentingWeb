@@ -3,7 +3,7 @@
         <h1>Vacantes registradas</h1>
     </div>
     <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12 text-end mt-3">
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registerPostulation">
+        <button type="button" class="btn btn-success" ng-click="openModalForRegistration()">
             Nueva vacante
         </button>
     </div>
@@ -26,18 +26,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="vacancy in postedVacancies | orderBy : vacancy.id  " >
-                <td ng-bind="$index + 1" ></td>
-                <td ng-bind="vacancy.title" ></td>
-                <td ng-bind="vacancy.stateInWhichIsAvailable" ></td>
-                <td ng-bind="vacancy.modality" ></td>
-                <td ng-bind="vacancy.validityDate | date : 'dd/MM/yyyy'" ></td>
-                <td><span style="color: #818181" >Desde</span> {{ vacancy.minimumSalary | currency }} MX <br> <span style="color: #818181" >Hasta</span> {{vacancy.maximumSalary}} MX </td>
-                <td ng-bind="vacancy.paymentFrecuency"></td>
-                <td ng-bind="vacancy.type"></td>
-                <td ng-bind="vacancy.startDate | date : 'dd/MM/yyyy'" ></td>
-                <td> <button ng-click="loadVacancyToUpdate(vacancy)" class="btn btn-warning" style="color: white;" data-bs-toggle="modal" data-bs-target="#updatePostulation">Editar</button></td>
-                <td> <button class="btn btn-danger">Eliminar</button></td>
+            <tr ng-repeat="fullVacancy in postedVacancies | orderBy : vacancy.id  " >
+                <td><strong ng-bind="$index + 1" ></strong></td>
+                <td ng-bind="fullVacancy.vacancy.title" ></td>
+                <td ng-bind="fullVacancy.vacancy.stateInWhichIsAvailable" ></td>
+                <td ng-bind="fullVacancy.vacancy.modality" ></td>
+                <td ng-bind="fullVacancy.vacancy.validityDate | date : 'dd/MM/yyyy'" ></td>
+                <td><span style="color: #818181" >Desde</span> {{ fullVacancy.vacancy.minimumSalary | currency }} MX <br> <span style="color: #818181" >Hasta</span> {{fullVacancy.vacancy.maximumSalary | currency}} MX </td>
+                <td ng-bind="fullVacancy.vacancy.paymentFrecuency"></td>
+                <td ng-bind="fullVacancy.vacancy.type"></td>
+                <td ng-bind="fullVacancy.vacancy.startDate | date : 'dd/MM/yyyy'" ></td>
+                <td> <button ng-click="enableOrDisable(fullVacancy.vacancy, $index)" ng-class="fullVacancy.vacancy.status ? 'btn btn-outline-success' : 'btn btn-outline-danger'" ng-bind="fullVacancy.vacancy.status ? 'Activa' : 'Inactiva' " ></button></td>
+                <td> <button ng-click="loadVacancyToUpdate(fullVacancy, $index)" class="btn btn-outline-warning" >Editar</button></td>
             </tr>
         </tbody>
     </table>
@@ -45,10 +45,10 @@
 
 
 <!-- Modal for register new postulation -->
-<div class="modal fade" id="registerPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerVacancy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form name="vacancyRegistration" >
+            <form id="vacancyRegistration" name="vacancyRegistration" >
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Registrar vacante</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -288,7 +288,7 @@
 <div class="modal fade" id="updatePostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="">
+            <form id="vacancyUpdate" name="vacancyUpdate" >
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Actualizar vacante</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -303,14 +303,14 @@
                                         name="title"
                                         class="form-control mt-2"
                                         placeholder=" "
-                                        ng-model="vacancyToUpdate.title"
+                                        ng-model="fullVacancyToUpdate.vacancy.title"
                                         type="text"
                                         required
                                     >
                                     <label for="title">Titulo</label>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.title.$error.required && vacancyRegistration.title.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.title.$error.required && vacancyUpdate.title.$touched || vacancyUpdate.title.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -322,7 +322,7 @@
                                         id="state"
                                         name="state"
                                         class="form-control form-select mt-2"
-                                        ng-model="vacancyToUpdate.stateInWhichIsAvailable"
+                                        ng-model="fullVacancyToUpdate.vacancy.stateInWhichIsAvailable"
                                         ng-options="state as state.estado for state in states track by state.clave"
                                         required
                                     >
@@ -330,7 +330,7 @@
                                     <label for="state">Estado</label>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.state.$error.required && vacancyRegistration.state.$touched || vacancyRegistration.state.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.state.$error.required && vacancyUpdate.state.$touched || vacancyUpdate.state.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -342,7 +342,7 @@
                                         id="modality"
                                         name="modality"
                                         class="form-control form-select mt-2"
-                                        ng-model="vacancyToUpdate.modality" 
+                                        ng-model="fullVacancyToUpdate.vacancy.modality" 
                                         ng-options="modality as modality for modality in modalities track by modality"
                                         required
                                     >
@@ -351,7 +351,7 @@
                                     <label for="modality">Modalidad</label>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.modality.$error.required && vacancyRegistration.modality.$touched || vacancyRegistration.modality.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.modality.$error.required && vacancyUpdate.modality.$touched || vacancyUpdate.modality.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -363,7 +363,7 @@
                                         id="type"
                                         name="type"
                                         class="form-control form-select mt-2"
-                                        ng-model="vacancyToUpdate.type" 
+                                        ng-model="fullVacancyToUpdate.vacancy.type" 
                                         ng-options="type as type for type in types track by type"
                                         required
                                     >
@@ -372,7 +372,7 @@
                                     <label for="type">Tipo</label>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.type.$error.required && vacancyRegistration.type.$touched || vacancyRegistration.type.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.type.$error.required && vacancyUpdate.type.$touched || vacancyUpdate.type.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -384,14 +384,14 @@
                                         id="startDate"
                                         name="startDate"
                                         class="form-control mt-2"
-                                        ng-model="vacancyToUpdate.startDate"
+                                        ng-model="fullVacancyToUpdate.vacancy.startDate"
                                         type="date"
                                         required
                                     >
                                     <label for="startDate">Fecha inicio</label>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.startDate.$error.required && vacancyRegistration.startDate.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.startDate.$error.required && vacancyUpdate.startDate.$touched || vacancyUpdate.title.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -404,13 +404,13 @@
                                         name="minimumSalary"
                                         class="form-control mt-2"
                                         placeholder=" "
-                                        ng-model="vacancyToUpdate.minimumSalary"
+                                        ng-model="fullVacancyToUpdate.vacancy.minimumSalary"
                                         type="number"
                                         required
                                     >
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.minimumSalary.$error.required && vacancyRegistration.minimumSalary.$touched || vacancyRegistration.minimumSalary.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.minimumSalary.$error.required && vacancyUpdate.minimumSalary.$touched || vacancyUpdate.minimumSalary.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -424,14 +424,14 @@
                                         name="maximumSalary"
                                         class="form-control mt-2"
                                         placeholder=" "
-                                        ng-model="vacancyToUpdate.maximumSalary"
+                                        ng-model="fullVacancyToUpdate.vacancy.maximumSalary"
                                         type="number"
                                         required
                                     >
                                     <label for="maximumSalary">Salario máximo</label>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.maximumSalary.$error.required && vacancyRegistration.maximumSalary.$touched || vacancyRegistration.maximumSalary.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.maximumSalary.$error.required && vacancyUpdate.maximumSalary.$touched || vacancyUpdate.maximumSalary.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -443,7 +443,7 @@
                                         id="paymentFrecuency"
                                         name="paymentFrecuency"
                                         class="form-control mt-2"
-                                        ng-model="vacancyToUpdate.paymentFrecuency"
+                                        ng-model="fullVacancyToUpdate.vacancy.paymentFrecuency"
                                         ng-options="paymentFrecuency as paymentFrecuency for paymentFrecuency in paymentFrecuencies track by paymentFrecuency"
                                         required
                                     >
@@ -451,7 +451,7 @@
                                     </select>
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.paymentFrecuency.$error.required && vacancyRegistration.paymentFrecuency.$touched || vacancyRegistration.paymentFrecuency.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.paymentFrecuency.$error.required && vacancyUpdate.paymentFrecuency.$touched || vacancyUpdate.paymentFrecuency.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -465,13 +465,13 @@
                                         name="validityDate"
                                         class="form-control mt-2"
                                         placeholder=" "
-                                        ng-model="vacancyToUpdate.validityDate"
+                                        ng-model="fullVacancyToUpdate.vacancy.validityDate"
                                         type="date"
                                         required
                                     >
                                     <span 
                                         style="color: red"
-                                        ng-show="vacancyRegistration.validityDate.$error.required && vacancyRegistration.validityDate.$touched || vacancyRegistration.validityDate.$error.required && frontVariables.inValidVacancyForm"
+                                        ng-show="vacancyUpdate.validityDate.$error.required && vacancyUpdate.validityDate.$touched || vacancyUpdate.validityDate.$error.required && frontVariables.inValidVacancyForm"
                                     >
                                         Este campo es obligatorio
                                     </span>
@@ -485,10 +485,10 @@
                                     id="benefitsToSelect"
                                     name="benefitsToSelect"
                                     class="form-control"
-                                    multiple
                                     style="height: 150px"                                
+                                    multiple
                                 >
-                                    <option ng-click="addOrRemoveBenefit(option)" ng-repeat="option in benefits" ng-bind="option" ></option>
+                                    <option ng-click="addOrRemoveBenefitToUpdate(option)" ng-repeat="option in benefits" ng-bind="option" ></option>
 
                                 </select>
                                 </div>
@@ -501,10 +501,10 @@
                                         name="benefitsToSelect"
                                         ng-model="selected"
                                         class="form-control"
-                                        ng-options="benefit as benefit for benefit in benefitsToSave track by benefits"
-                                        multiple
                                         style="height: 150px"
+                                        multiple
                                     >
+                                        <option ng-click="addOrRemoveBenefit(option)" ng-repeat="option in benefitsToUpdate" ng-bind="option" ></option>
                                     </select>
                                 </div>
                             </div>
@@ -513,7 +513,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">Guardar</button>
+                    <button type="button" ng-click="updateVacancy()" class="btn btn-success">Actualizar</button>
                 </div>
             </form>
         </div>
