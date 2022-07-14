@@ -4,7 +4,8 @@ talenting.config(['$routeProvider', function($routeProvider){
 
     $routeProvider
         .when('/', {
-            templateUrl: '/views/general/landing.html'
+            templateUrl: '/views/general/main.html',
+            controller: 'mainController'
         })
         .when('/userRegistration', {
             templateUrl: '/views/users/userRegistration.html',
@@ -13,9 +14,6 @@ talenting.config(['$routeProvider', function($routeProvider){
         .when('/vacancyRegistration', {
             templateUrl: '/views/users/employeer/vacancyRegistration.html',
             controller: 'vacancyController'  
-        })
-        .when('/404', {
-            templateUrl: "/views/errorPages/404.html"
         })
         .when('/login', {
             templateUrl: '/views/login.html',
@@ -27,6 +25,10 @@ talenting.config(['$routeProvider', function($routeProvider){
         .when('/applierPostulation', {
             templateUrl: '/views/users/applier/applierPostulation.html'
         })
+        .when('/myVacancies', {
+            templateUrl: '/views/users/applier/myVacancies.html',
+            controller: 'applierVacanciesController'
+        })
         .when('/favorites', {
             templateUrl: '/views/users/applier/favorites.html'
         })
@@ -35,6 +37,15 @@ talenting.config(['$routeProvider', function($routeProvider){
         })
         .when('/profile', {
             templateUrl: '/views/users/profile.html'
+        })
+        .when('/404', {
+            templateUrl: "/views/errorPages/404.html"
+        })
+        .when('/401', {
+            templateUrl: "/views/errorPages/401.html"
+        })
+        .when('/403', {
+            templateUrl: "/views/errorPages/403.html"
         })
         .otherwise({
             redirectTo: '/404'
