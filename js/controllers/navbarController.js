@@ -5,9 +5,6 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
 
     if($scope.session !== undefined){
         $scope.session = JSON.parse($scope.session);
-        console.log($scope.session);
-    }else{
-
     }
 
 
@@ -24,9 +21,12 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
         toProfile: () => {
             $location.path('/profile');
         },
+        toMyVacancies: () => {
+            $location.path('/myVacancies');
+        },
         toLogin: () => {
             window.location.replace('/login');
-        }
+        },
     };
 
     $scope.closeSession = () => {
