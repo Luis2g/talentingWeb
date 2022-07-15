@@ -4,19 +4,24 @@
         background: none;
     }
 </style>
-
-<div class="col py-3" ng-init="retrieveVacancies()" >
+<div class="col py-3" ng-init="retrieveFavoriteOnes()" >
     <div class="container">
         <div class="row">
-            <div class="col-12">
-                <h1 class="display-5">Principal</h1>
-                <hr>
+            <div class="col-8">
+                <h1 class="display-5">My vacantes favoritas</h1>
+                
             </div>
+            <div class="col-4 text-end mt-3">
+                <button type="button" ng-click="switch.toMyVacancies()"  class="btn btn-success">
+                    Mis aplicaciones
+                </button>
+            </div>
+            <hr>
             <div class="col-12 justify-content-center text-center align-items-center">
                 <p style="text-align: justify;">SIPET tiene la tarea de encontrar las mejores vacantes con base a tus necesidaes, ofeciendo los mejores puestos de trabajos en empresas reconocidas a nivel mundial.
                 </p>
             </div>
-            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3" ng-repeat="fullVacancy in availableVacancies" >
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3" ng-repeat="fullVacancy in myFavoriteOnes" >
                 <div class="card" style="width: 100%;">
                     <div class="card-body position-relative">
                         <div class="row col-12">
@@ -48,7 +53,7 @@
                             </table>
 
                         </div>
-                        <hr ng-if="userSession.role === 'employee'" >
+                        <hr>
 
                         <div>
                             <button style="width: 100%" type="button" ng-if="userSession.role === 'employee' && fullVacancy.applied === 0"  ng-click="apply(fullVacancy.vacancy.id, $index)" class="btn btn-outline-success">Postularme</button>
@@ -67,6 +72,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- Modal for info postulation -->
 <div class="modal fade" id="infoPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -117,10 +123,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">¡Postularme!</button>
+                    <button type="button" class="btn btn-warning" style="color: white;">Eliminar de favoritos</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-

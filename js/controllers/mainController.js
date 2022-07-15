@@ -21,7 +21,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
         $http({
             method: "GET",
             url: 'http://localhost:8080/talenting/vacanciesAccordingToFilter',
-            params: {userId: idToSend, state: 'Morelos'}
+            params: {userId: idToSend, state: 'all'}
         }).then( response => {
 
             console.log(response);
@@ -35,7 +35,10 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
     // to apply to a vacancy
     $scope.apply = (vacancyId, index) => {
 
-        let applierInVacancy = { person: {id: $scope.userSession.person.id }, vacancy: {id: vacancyId}, status: 'En espera'}
+        let applierInVacancy = { 
+            person: {id: $scope.userSession.person.id }, 
+            vacancy: {id: vacancyId}, status: 'En espera'
+        }
 
         $http({
             method: "POST",

@@ -16,6 +16,12 @@ talenting.controller('applierVacanciesController', ['$scope', '$http', '$locatio
         }
     }
 
+    $scope.switch = {
+        toMyFavorites: () => {
+            $location.path('/myFavorites');
+        }
+    };
+
 
     $scope.retrieveUserVacancies = () => {
         $http({

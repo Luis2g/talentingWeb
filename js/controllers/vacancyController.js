@@ -138,7 +138,7 @@ function($scope, $http, userService, alertService, $cookies, $location) {
             console.log($scope.postedVacancies);
             $scope.vacancy = {};
             $scope.frontVariables.inValidVacancyForm = false;
-            
+            $scope.benefitsToSave = [];
             alertService.showAlert.success('La vacante se ha registrado correctamente');
         }, () => {
             alertService.showAlert.error('La vacante no se ha podido registrar');
