@@ -24,6 +24,12 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
         toMyVacancies: () => {
             $location.path('/myVacancies');
         },
+        toMyFavorites: () => {
+            $location.path('/myFavorites');
+        },
+        toSocialMedia: () => {
+            $location.path('/socialMedia');
+        },
         toLogin: () => {
             window.location.replace('/login');
         },
@@ -31,6 +37,7 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
 
     $scope.closeSession = () => {
         $cookies.remove('user');
+        $cookies.remove('employeer');
         window.location.replace('/login');
     }
 

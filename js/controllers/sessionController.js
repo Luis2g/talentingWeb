@@ -13,7 +13,6 @@ function($scope, $http, alertService, $cookies) {
         window.location.replace('/');
     }
     
-
     $scope.login = () => {
 
         $http({
@@ -27,17 +26,35 @@ function($scope, $http, alertService, $cookies) {
             if(user !== ""){
 
                 $cookies.put('user', JSON.stringify(user));
-                window.location.replace('/');
+                if(user.role === 'employeer'){
+                    $scope.getEmployeerInfo(user)
+                }else{
+                    window.location.replace('/');
+                }
+
 
             }else{
                 alertService.showAlert.error('El usuario y/o contraseña no son correctos');    
             }
 
-        }).catch( err => {
-            console.log(err);
+        }).catch( () => {
             alertService.showAlert.error('Ha ocurrido un error por favor intentalo mas tarde');
         });
     }
+
+    $scope.getEmployeerInfo = (userToLookForEmployeerInfo) => {
+        console.log('it comes inside')
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8080/talenting/employeers',
+            params: { personId: userToLookForEmployeerInfo.id }
+        }).then( response => {
+            $cookies.put('employeer', JSON.stringify(response.data));
+            window.location.replace('/');
+        }).catch( () => {
+            alertService.showAlert.warning('Ha ocurrido un error intentelo mas tarde');
+        });
+    };
 
     $scope.showAlert = () => {
         alertService.showAlert.warning('Ambos campos deben ser llenados');

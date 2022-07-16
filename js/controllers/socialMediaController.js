@@ -1,8 +1,8 @@
-talenting.controller('mainController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
+talenting.controller('socialMediaController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
 
 
-    $http.defaults.headers.post["Content-Type"] = "application/json";
-    $scope.availableVacancies = [];
+    $scope.sharedVacancies = [];
+
     $scope.userSession;
     
     let session = $cookies.get('user');
@@ -14,23 +14,30 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
         $scope.userSession
     }
 
-    $scope.retrieveVacancies = () => {
-        
-        let idToSend = $scope.userSession !== undefined ? $scope.userSession.person.id : 0;
-
+    $scope.retrieveSharedVacancies = () => {
         $http({
             method: "GET",
-            url: 'http://localhost:8080/talenting/vacanciesAccordingToFilter',
-            params: {userId: idToSend, state: 'all'}
+            url: 'http://localhost:8080/talenting/socialMedia',
+            params: {personId: $scope.userSession.person.id}
         }).then( response => {
 
+            $scope.sharedVacancies = response.data;
+
+            $scope.sharedVacancies.map( vacancy => {
+                vacancy.peopleWhoSharedIt.map( person => {
+                    if(person.id === $scope.userSession.id){
+                        vacancy.you = true;
+                    }else{
+                        vacancy.you = false;
+                    }
+                });
+            });
+
+
             console.log(response);
-
-            $scope.availableVacancies = response.data
-
+            
         });
     }
-
 
     // to apply to a vacancy
     $scope.apply = (vacancyId, index) => {
@@ -45,7 +52,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             url: 'http://localhost:8080/talenting/appliersInVacancies',
             data: applierInVacancy
         }).then( response => {
-            $scope.availableVacancies[index].applied = response.data.id;
+            $scope.sharedVacancies[index].applied = response.data.id;
             alertService.showAlert.info('¡Has aplicado para una vacante!');
         });
     };
@@ -58,7 +65,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             params: {vacancyId: vacancyId}
         }).then( () => {
 
-            $scope.availableVacancies[index].applied = 0;
+            $scope.sharedVacancies[index].applied = 0;
             
         });
     };
@@ -74,7 +81,8 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             data: sharedOneDTO
         }).then( response => {
 
-            $scope.availableVacancies[index].shared = response.data.id;
+            $scope.sharedVacancies[index].shared = response.data.id;
+            $scope.sharedVacancies[index].you = true;
             alertService.showAlert.info('¡Has compartido una vacante!');
 
         });
@@ -87,8 +95,8 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             url: 'http://localhost:8080/talenting/sharedVacancies',
             params: {vacancyId: vacancyId}
         }).then( () => {
-
-            $scope.availableVacancies[index].shared = 0;
+            $scope.sharedVacancies[index].you = false;
+            $scope.sharedVacancies[index].shared = 0;
 
         });
     };
@@ -103,7 +111,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             data: sharedOneDTO
         }).then( response => {
 
-            $scope.availableVacancies[index].favorite = response.data.id;
+            $scope.sharedVacancies[index].favorite = response.data.id;
 
         });
     };
@@ -116,10 +124,8 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             params: {vacancyId: vacancyId}
         }).then( () => {
 
-            $scope.availableVacancies[index].favorite = 0;
+            $scope.sharedVacancies[index].favorite = 0;
         });
     };
-    
-
 
 }]);

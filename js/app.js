@@ -20,7 +20,8 @@ talenting.config(['$routeProvider', function($routeProvider){
             controller: 'sessionController'
         })
         .when('/socialMedia', {
-            templateUrl: '/views/users/applier/socialMedia.html'
+            templateUrl: '/views/users/applier/socialMedia.html',
+            controller: 'socialMediaController'
         })
         .when('/applierPostulation', {
             templateUrl: '/views/users/applier/applierPostulation.html'
@@ -29,8 +30,9 @@ talenting.config(['$routeProvider', function($routeProvider){
             templateUrl: '/views/users/applier/myVacancies.html',
             controller: 'applierVacanciesController'
         })
-        .when('/favorites', {
-            templateUrl: '/views/users/applier/favorites.html'
+        .when('/myFavorites', {
+            templateUrl: '/views/users/applier/myFavorites.html',
+            controller: 'myFavoritesController'
         })
         .when('/vacancies', {
             templateUrl: '/views/users/applier/vacancies.html'

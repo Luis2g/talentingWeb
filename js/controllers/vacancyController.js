@@ -13,6 +13,7 @@ function($scope, $http, userService, alertService, $cookies, $location) {
     $scope.fullVacancyToUpdate = {};
     $scope.index = 0;
     $scope.userSession;
+    $scope.employeerInSession;
     $scope.frontVariables = {
         inValidVacancyForm: false
     }
@@ -24,6 +25,8 @@ function($scope, $http, userService, alertService, $cookies, $location) {
         $location.path('/401');
     }else{
         $scope.userSession = JSON.parse($cookies.get('user'));
+        $scope.employeerInSession = JSON.parse($cookies.get('employeer'));
+        console.log($scope.userSession);
         if($scope.userSession.role !== 'employeer'){
             $location.path('/403');
         }
@@ -108,7 +111,7 @@ function($scope, $http, userService, alertService, $cookies, $location) {
 
     $scope.registerVacancy = () => {
 
-        let vacancyDTO = { vacancy : {...$scope.vacancy, status: true, employeer: {id: $scope.userSession.id}}, benefits: $scope.benefitsToSave }
+        let vacancyDTO = { vacancy : {...$scope.vacancy, status: true, employeer: {id: $scope.employeerInSession.id}}, benefits: $scope.benefitsToSave }
 
 
         $http({
@@ -138,7 +141,7 @@ function($scope, $http, userService, alertService, $cookies, $location) {
             console.log($scope.postedVacancies);
             $scope.vacancy = {};
             $scope.frontVariables.inValidVacancyForm = false;
-            
+            $scope.benefitsToSave = [];
             alertService.showAlert.success('La vacante se ha registrado correctamente');
         }, () => {
             alertService.showAlert.error('La vacante no se ha podido registrar');
