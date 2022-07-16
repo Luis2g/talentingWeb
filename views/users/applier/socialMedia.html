@@ -48,17 +48,16 @@
             </div>
 
             <div class="col-8 mt-3" >
-                <div class="mb-2" ng-repeat="fullVacancy in toShow track by $index" >
+                <div class="mb-2" ng-repeat="fullVacancy in sharedVacancies track by $index" >
                     <div class="card" style="width: 100%;">
                         <div class="card-body position-relative">
                             <div class="row col-12">
                                 <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
-                                    <h4 class="card-title" >Compañia: <strong style="color: #81868b" ng-bind="fullVacancy.vacancy.employeer.companyName" ></strong></h4>
-                                    <h5 class="card-subtitle mb-2 text-muted" ng-bind="fullVacancy.vacancy.title" ></h5>
+                                    <h2 class="card-title" >Compañia: <strong style="color: #81868b" ng-bind="fullVacancy.vacancy.employeer.companyName" ></strong></h2>
+                                    <h3><span class="card-subtitle mb-2 badge rounded-pill bg-primary" style="color: white" ng-bind="fullVacancy.vacancy.title" ></span></h3>
                                 </div>
                                 <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-end">
                                     <button class="btn btn-outline-warning position-absolute top-2 end-0 borderless" ><span class="material-icons">lightbulb</span></button>
-                                    
                                 </div>
                             </div>
                             <div class="table-responsive" >
@@ -99,11 +98,19 @@
                             <div class="row mt-2 " >
 
                                 <div class="col-6 text-start mt-3" >
-                                    <p class="text-muted" style="margin:0px; font-size: 15px; font-weight: bold" ><strong>Publicado por: </strong><span ng-bind="fullVacancy.vacancy.employeer.person.name" ></span></p>
-
-                                    <p style="margin: 0px; font-size: 15px; font-weight: 200 " ><strong>Compartido por: </strong><span  ng-if="fullVacancy.personWhoSharedIt.id === userSession.person.id"  ><span class="material-icons">U</span  >sted</span></p>
-                                    <div style="margin: 0px" class="text-muted align-middle" ng-repeat="shares in fullVacancy.names track by $index"  >
-                                        <div class="mt-2" style="display: inline" ><span  class="material-icons icon-color">face</span></div><p style="margin-bottom: 0px; display: inline;" ng-bind="shares.name + ' ' + shares.surname + ' ' + shares.secondSurname" ></p>
+                                    <p class="text-muted" style="margin:0px; font-size: 15px; font-weight: bold" ><strong>Publicado por: </strong><span ng-bind="fullVacancy.vacancy.employeer.person.name + ' ' + fullVacancy.vacancy.employeer.person.surname + ' ' + fullVacancy.vacancy.employeer.person.secondSurname" ></span></p>
+                                    <p style="margin: 0px; font-size: 15px; font-weight: 200 " ><strong>Compartido por: </strong><span  ng-if="fullVacancy.you"  ><span class="material-icons">U</span  >sted</span></p>
+                                    <div style="margin: 0px" class="text-muted align-middle" ng-repeat="shares in fullVacancy.peopleWhoSharedIt track by $index"  >
+                                        <div  ng-if="shares.id !== userSession.id" >
+                                            <div class="mt-2" style="display: inline" >
+                                                <span  class="material-icons icon-color">face</span>
+                                            </div>
+                                            <p
+                                                style="margin-bottom: 0px; display: inline;" 
+                                                ng-bind="shares.name + ' ' + shares.surname + ' ' + shares.secondSurname" 
+                                            >
+                                            </p>
+                                        </div>
                                     </div>
 
                                 </div>

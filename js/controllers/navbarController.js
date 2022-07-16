@@ -37,6 +37,7 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
 
     $scope.closeSession = () => {
         $cookies.remove('user');
+        $cookies.remove('employeer');
         window.location.replace('/login');
     }
 

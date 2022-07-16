@@ -1,9 +1,7 @@
-talenting.controller('socialMediaController', ['$scope', '$http', '$location','userService', '$cookies', function($scope, $http, $location, userService, $cookies) {
+talenting.controller('socialMediaController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
 
 
     $scope.sharedVacancies = [];
-    $scope.sharedVacaniesRaw = [];
-    $scope.toShow = [];
 
     $scope.userSession;
     
@@ -23,120 +21,111 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
             params: {personId: $scope.userSession.person.id}
         }).then( response => {
 
-            $scope.sharedVacanciesRaw = [...response.data]
-            console.log($scope.sharedVacanciesRaw.length)
-            console.log(response.data);
+            $scope.sharedVacancies = response.data;
 
-            $scope.preparedSharedVacancies()
-            
-        });
-    }
-
-    $scope.preparedSharedVacancies = () => {
-        $scope.sharedVacancies = [...$scope.sharedVacanciesRaw];
-        console.log($scope.sharedVacancies);
-
-        let indexes = [];
-
-        $scope.myNumber = 0;
-
-        let counter = 0;
-
-        for(let i = 0; i < $scope.sharedVacancies.length; i++){
-
-            console.log('entra 1');
-
-            for(let j = 0; j < $scope.sharedVacanciesRaw.length; j++){
-                console.log('entra 1');
-
-                if($scope.sharedVacancies[i].vacancy.id ===  $scope.sharedVacanciesRaw[j].vacancy.id){
-                    counter ++;
-                    console.log(counter);
-                    console.log('entra 1');
-
-                    if(counter > 1){
-
-                        let personWhoSharedIt = $scope.sharedVacanciesRaw[i].personWhoSharedIt;
-                        indexes.push(
-                            {
-                                personId: personWhoSharedIt.id,
-                                repeatedIndex: i,
-                                idVacancy: $scope.sharedVacanciesRaw[j].vacancy.id,
-                                peopleWhoSharedIt: personWhoSharedIt.name + ' ' + personWhoSharedIt.surname + ' ' + personWhoSharedIt.secondSurname 
-                            }
-                        );
-
+            $scope.sharedVacancies.map( vacancy => {
+                vacancy.peopleWhoSharedIt.map( person => {
+                    if(person.id === $scope.userSession.id){
+                        vacancy.you = true;
+                    }else{
+                        vacancy.you = false;
                     }
-                }
-            }
-            counter = 0;
-        }
-        console.log(indexes);
+                });
+            });
 
-        $scope.deleteRepeatedIndexAndAddNamesFromFriends(indexes);
+
+            console.log(response);
+            
+        });
     }
 
-    $scope.deleteRepeatedIndexAndAddNamesFromFriends = (indexes) => {
+    // to apply to a vacancy
+    $scope.apply = (vacancyId, index) => {
 
-        console.log($scope.sharedVacancies);
+        let applierInVacancy = { 
+            person: {id: $scope.userSession.person.id }, 
+            vacancy: {id: vacancyId}, status: 'En espera'
+        }
 
-        let toShowToShow = [...$scope.sharedVacancies]
+        $http({
+            method: "POST",
+            url: 'http://localhost:8080/talenting/appliersInVacancies',
+            data: applierInVacancy
+        }).then( response => {
+            $scope.sharedVacancies[index].applied = response.data.id;
+            alertService.showAlert.info('¡Has aplicado para una vacante!');
+        });
+    };
+    // to disapple to a vacancy
+    $scope.disapply = (vacancyId, index) => {
 
-        let counterIn = 0;
+        $http({
+            method: "DELETE",
+            url: 'http://localhost:8080/talenting/appliersInVacancies',
+            params: {vacancyId: vacancyId}
+        }).then( () => {
 
-        let myVariable = {};
-
-
-        indexes.map(x => {
+            $scope.sharedVacancies[index].applied = 0;
             
-            if(x.personId !== $scope.userSession.person.id){
+        });
+    };
 
-                let names = $scope.sharedVacancies[x.repeatedIndex].personWhoSharedIt;
+    //to share one
+    $scope.share = (vacancyId, index) => {
 
-                console.log(names)
+        let sharedOneDTO = { vacancy: {id: vacancyId}, person: {id: $scope.userSession.person.id} };
 
-                myVariable = $scope.sharedVacancies.find( obj => obj.vacancy.id === x.idVacancy);
-                if(myVariable.names === undefined){
-                    myVariable.names = [];
-                }
-                myVariable.names.push(names);
-                console.log(myVariable);
-                toShowToShow.splice(counterIn, 1, myVariable);
+        $http({
+            method: "POST",
+            url: 'http://localhost:8080/talenting/sharedVacancies',
+            data: sharedOneDTO
+        }).then( response => {
 
-                toShowToShow.splice(x.repeatedIndex, 1, "luis");
-
-                counterIn++;
-            }
+            $scope.sharedVacancies[index].shared = response.data.id;
+            $scope.sharedVacancies[index].you = true;
+            alertService.showAlert.info('¡Has compartido una vacante!');
 
         });
+    };
 
-        console.log(toShowToShow);
+    $scope.unShare = (vacancyId, index) => {
 
-        toShowToShow = toShowToShow.filter( x => x !== "luis");
-
-        //to delete repeated names
-        toShowToShow.map( x => {
-            console.log(x.names);
-            if(x.names !== undefined){
-
-                x.names = x.names.filter((value, index, self) =>
-                    index === self.findIndex((t) => (
-                        t.place === value.place && t.name === value.name
-                    ))
-                )
-            }
+        $http({
+            method: "DELETE",
+            url: 'http://localhost:8080/talenting/sharedVacancies',
+            params: {vacancyId: vacancyId}
+        }).then( () => {
+            $scope.sharedVacancies[index].you = false;
+            $scope.sharedVacancies[index].shared = 0;
 
         });
+    };
 
-        
+    $scope.favorite = (vacancyId, index) => {
 
+        let sharedOneDTO = { vacancy: {id: vacancyId}, person: {id: $scope.userSession.person.id} };
 
-        $scope.toShow = toShowToShow
+        $http({
+            method: "POST",
+            url: 'http://localhost:8080/talenting/favoriteVacancies',
+            data: sharedOneDTO
+        }).then( response => {
 
+            $scope.sharedVacancies[index].favorite = response.data.id;
 
-       
+        });
+    };
 
-        console.log($scope.toShow)
+    $scope.unFavorite = (vacancyId, index) => {
+
+        $http({
+            method: "DELETE",
+            url: 'http://localhost:8080/talenting/favoriteVacancies',
+            params: {vacancyId: vacancyId}
+        }).then( () => {
+
+            $scope.sharedVacancies[index].favorite = 0;
+        });
     };
 
 }]);
