@@ -15,32 +15,38 @@
                 <h1 class="display-5">Red social</h1>
                 <hr>
             </div>
-            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
+            <div ng-init="getPeopleToAddAsFriends()" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
                 <div class="mb-2">
                     <input class="form-control" type="search" placeholder="Buscar amigos">
                 </div>
-                <div class="card mb-2" style="width: 100%; height: auto;">
+                <div ng-repeat="personDTO in people" class="card mb-2" style="width: 100%; height: auto;">
                     <div class="card-body">
                         <div class="row col-12">
                             <div class="col-8">
-                                <h5 class="card-title">Luis Jimenez</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Desarrollador Full Stack</h6>
+                                <h5 class="card-title" ng-bind="personDTO.person.name + ' ' + personDTO.person.surname + ' ' + personDTO.person.secondSurname" ></h5>
+                                <!-- <h6 class="card-subtitle mb-2 text-muted">Desarrollador Full Stack</h6> -->
                             </div>
-                            <div class="col-4 mt-2 text-end">
-                                <a href="#" class="btn btn-success card-link">Añadir</a>
+                            <div class="col-4 mt-2" ng-if="personDTO.whoSentIt !== null" >
+                                <div class=" text-end" ng-if="personDTO.whoSentIt === 'them'" >
+                                    te ha enviado solicitud
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <button class="btn btn-outline-success" ng-click="confirmFriendshipRequest(personDTO.id, $index)" >Aceptar</button>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <button class="btn btn-outline-danger" ng-click="rejectFriendshipRequest(personDTO.id, $index)" >Rechazar</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="text-end" ng-if="personDTO.whoSentIt === 'me'" >
+                                    <button class="btn btn-outline-danger" ng-click="cancelFriendshipRequest(personDTO.id, $index)" >Cancelar solicitud</button>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-2" style="width: 100%; height: auto;">
-                    <div class="card-body">
-                        <div class="row col-12">
-                            <div class="col-8">
-                                <h5 class="card-title">Diego Velasco</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">Desarrollador Front-End</h6>
-                            </div>
-                            <div class="col-4 mt-2 text-end">
-                                <a href="#" class="btn btn-success card-link">Añadir</a>
+                            <div class="text-end" ng-if="personDTO.whoSentIt === null" >
+                                <button class="btn btn-outline-success" ng-click="sendFriendshipRequest(personDTO.person.id, $index)" >Enviar solicitud</button>
                             </div>
                         </div>
                     </div>

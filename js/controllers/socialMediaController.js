@@ -2,6 +2,7 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
 
 
     $scope.sharedVacancies = [];
+    $scope.people = [];
 
     $scope.userSession;
     
@@ -38,6 +39,78 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
             
         });
     }
+
+    $scope.getPeopleToAddAsFriends = () => {
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8080/talenting/getPeople',
+            params: { personId: $scope.userSession.person.id }
+        }).then( response => {
+            console.log( response );
+            $scope.people = response.data;
+
+        });
+    }
+
+    $scope.sendFriendshipRequest = ( personId, index ) => {
+
+        let friendshipRequest = {person: {id: $scope.userSession.id}, friend: {id: personId}}
+
+        console.log('me envio', index);
+
+        $http({
+            method: 'POST',
+            url: 'http://localhost:8080/talenting/sendFriendshipRequest',
+            data: friendshipRequest 
+        }).then( response => {
+            $scope.people[index].id = response.data.id
+            $scope.people[index].whoSentIt = 'me';
+            alertService.showAlert.info('¡Se ha enviado la solicitud de amistad!');
+        })
+
+    };
+
+    $scope.cancelFriendshipRequest = ( requestId, index ) => {
+
+        console.log('me cancelo', index);
+
+
+        $http({
+            method: 'DELETE',
+            url: 'http://localhost:8080/talenting/cancelFriendshipRequest',
+            params: { requestId: requestId } 
+        }).then( () => {
+            $scope.people[index].whoSentIt = null 
+            alertService.showAlert.info('¡Se ha cancelado la solicitud!');
+        })
+
+    };
+
+    $scope.confirmFriendshipRequest = ( requestId, index ) => {
+
+        $http({
+            method: 'PUT',
+            url: 'http://localhost:8080/talenting/confirmFriendshipRequest',
+            params: { requestId: requestId }
+        }).then( () => {
+            $scope.people.splice(index, 1);
+            alertService.showAlert.info('¡Ahora son amigos!');
+        })
+
+    };
+
+    $scope.rejectFriendshipRequest = ( requestId, index ) => {
+
+        $http({
+            method: 'DELETE',
+            url: 'http://localhost:8080/talenting/rejectFriendshipRequest',
+            params: { requestId: requestId }
+        }).then( () => {
+            $scope.people[index].whoSentIt = null;
+            alertService.showAlert.info('¡Hecho!');
+        })
+
+    };
 
     // to apply to a vacancy
     $scope.apply = (vacancyId, index) => {
