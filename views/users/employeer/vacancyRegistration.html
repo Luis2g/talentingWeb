@@ -22,7 +22,7 @@
                 <th>Frecuencia de pago</th>
                 <th>Tipo</th>
                 <th>Fecha de inicio</th>
-                <th colspan="2" class="text-center">Acciones</th>
+                <th colspan="3" class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -35,9 +35,10 @@
                 <td><span style="color: #818181" >Desde</span> {{ fullVacancy.vacancy.minimumSalary | currency }} MX <br> <span style="color: #818181" >Hasta</span> {{fullVacancy.vacancy.maximumSalary | currency}} MX </td>
                 <td ng-bind="fullVacancy.vacancy.paymentFrecuency"></td>
                 <td ng-bind="fullVacancy.vacancy.type"></td>
-                <td ng-bind="fullVacancy.vacancy.startDate | date : 'dd/MM/yyyy'" ></td>
-                <td> <button ng-click="enableOrDisable(fullVacancy.vacancy, $index)" ng-class="fullVacancy.vacancy.status ? 'btn btn-outline-success' : 'btn btn-outline-danger'" ng-bind="fullVacancy.vacancy.status ? 'Activa' : 'Inactiva' " ></button></td>
-                <td> <button ng-click="loadVacancyToUpdate(fullVacancy, $index)" class="btn btn-outline-warning" >Editar</button></td>
+                <td ng-bind="fullVacancy.vacancy.startDate | date : 'dd/MM/yyyy'" ></td>                
+                <td><button ng-click="enableOrDisable(fullVacancy.vacancy, $index)" ng-class="fullVacancy.vacancy.status ? 'btn btn-outline-success' : 'btn btn-outline-danger'" ng-bind="fullVacancy.vacancy.status ? 'Activa' : 'Inactiva' " ></button></td>
+                <td><button ng-click="loadVacancyToUpdate(fullVacancy, $index)" class="btn btn-outline-warning" >Editar</button></td>
+                <td><button ng-click="showAppliersList(fullVacancy.vacancy)" class="btn btn-outline-primary">Postulados</button></td>
             </tr>
         </tbody>
     </table>

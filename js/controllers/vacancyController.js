@@ -72,6 +72,11 @@ function($scope, $http, userService, alertService, $cookies, $location) {
         $scope.fullVacancyToUpdate = {vacancy: {...fullVacancy.vacancy, stateInWhichIsAvailable: state, startDate: startDateValue, validityDate: validityDateValue}};
     }
 
+
+    $scope.showAppliersList = (vacancy) => {
+        localStorage.setItem('vacancy',JSON.stringify(vacancy));
+        $location.path('/appliersList');
+    }
     // $scope.vacancy = {};
 
 
@@ -113,6 +118,7 @@ function($scope, $http, userService, alertService, $cookies, $location) {
 
         let vacancyDTO = { vacancy : {...$scope.vacancy, status: true, employeer: {id: $scope.employeerInSession.id}}, benefits: $scope.benefitsToSave }
 
+        console.log(vacancyDTO.vacancy.employeer.id);
 
         $http({
             method: 'POST',
