@@ -5,9 +5,6 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
 
     if($scope.session !== undefined){
         $scope.session = JSON.parse($scope.session);
-        console.log($scope.session);
-    }else{
-
     }
 
 
@@ -24,13 +21,23 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
         toProfile: () => {
             $location.path('/profile');
         },
+        toMyVacancies: () => {
+            $location.path('/myVacancies');
+        },
+        toMyFavorites: () => {
+            $location.path('/myFavorites');
+        },
+        toSocialMedia: () => {
+            $location.path('/socialMedia');
+        },
         toLogin: () => {
             window.location.replace('/login');
-        }
+        },
     };
 
     $scope.closeSession = () => {
         $cookies.remove('user');
+        $cookies.remove('employeer');
         window.location.replace('/login');
     }
 

@@ -1,6 +1,6 @@
 talenting.controller('vacancyController', 
-['$scope', '$http', 'userService', 'alertService', '$cookies',
-function($scope, $http, userService, alertService, $cookies) {
+['$scope', '$http', 'userService', 'alertService', '$cookies', '$location',
+function($scope, $http, userService, alertService, $cookies, $location) {
 
     $scope.states = [{"clave":"1","estado":"Aguascalientes","abreviatura":"Ags."},{"clave":"10","estado":"Durango","abreviatura":"Dgo."},{"clave":"11","estado":"Guanajuato","abreviatura":"Gto."},{"clave":"12","estado":"Guerrero","abreviatura":"Gro."},{"clave":"13","estado":"Hidalgo","abreviatura":"Hgo."},{"clave":"14","estado":"Jalisco","abreviatura":"Jal."},{"clave":"15","estado":"México","abreviatura":"Mex."},{"clave":"16","estado":"Michoac","abreviatura":"Mich."},{"clave":"17","estado":"Morelos","abreviatura":"Mor."},{"clave":"18","estado":"Nayarit","abreviatura":"Nay."},{"clave":"19","estado":"Nuevo Leon","abreviatura":"NL"},{"clave":"2","estado":"Baja California","abreviatura":"BC"},{"clave":"20","estado":"Oaxaca","abreviatura":"Oax."},{"clave":"21","estado":"Puebla","abreviatura":"Pue."},{"clave":"22","estado":"Queretaro","abreviatura":"Qro."},{"clave":"23","estado":"Quintana Roo","abreviatura":"Q. Roo"},{"clave":"24","estado":"San Luis Potosi","abreviatura":"SLP"},{"clave":"25","estado":"Sinaloa","abreviatura":"Sin."},{"clave":"26","estado":"Sonora","abreviatura":"Son."},{"clave":"27","estado":"Tabasco","abreviatura":"Tab."},{"clave":"28","estado":"Tamaulipas","abreviatura":"Tamps."},{"clave":"29","estado":"Tlaxcala","abreviatura":"Tlax."},{"clave":"3","estado":"Baja California Sur","abreviatura":"BCS"},{"clave":"30","estado":"Veracruz de Ignacio de la Llave","abreviatura":"Ver."},{"clave":"31","estado":"Yucatan","abreviatura":"Yuc."},{"clave":"32","estado":"Zacatecas","abreviatura":"Zac."},{"clave":"4","estado":"Campeche","abreviatura":"Camp."},{"clave":"5","estado":"Coahuila de Zaragoza","abreviatura":"Coah."},{"clave":"6","estado":"Colima","abreviatura":"Col."},{"clave":"7","estado":"Chiapas","abreviatura":"Chis."},{"clave":"8","estado":"Chihuahua","abreviatura":"Chih."},{"clave":"9","estado":"Ciudad de M","abreviatura":"CDMX"}];
     $scope.modalities = ['Presencial', 'Virtual', 'Híbrida'];
@@ -13,16 +13,23 @@ function($scope, $http, userService, alertService, $cookies) {
     $scope.fullVacancyToUpdate = {};
     $scope.index = 0;
     $scope.userSession;
+    $scope.employeerInSession;
     $scope.frontVariables = {
         inValidVacancyForm: false
     }
 
-    
+    let session = $cookies.get('user');
 
-    if(!$cookies.get('user')){
-        window.location.replace('/login');
+
+    if(!session){
+        $location.path('/401');
     }else{
         $scope.userSession = JSON.parse($cookies.get('user'));
+        $scope.employeerInSession = JSON.parse($cookies.get('employeer'));
+        console.log($scope.userSession);
+        if($scope.userSession.role !== 'employeer'){
+            $location.path('/403');
+        }
     }
 
     $scope.loadVacancyToUpdate = (fullVacancy, indexIn) => {
@@ -65,6 +72,11 @@ function($scope, $http, userService, alertService, $cookies) {
         $scope.fullVacancyToUpdate = {vacancy: {...fullVacancy.vacancy, stateInWhichIsAvailable: state, startDate: startDateValue, validityDate: validityDateValue}};
     }
 
+
+    $scope.showAppliersList = (vacancy) => {
+        localStorage.setItem('vacancy',JSON.stringify(vacancy));
+        $location.path('/appliersList');
+    }
     // $scope.vacancy = {};
 
 
@@ -104,8 +116,9 @@ function($scope, $http, userService, alertService, $cookies) {
 
     $scope.registerVacancy = () => {
 
-        let vacancyDTO = { vacancy : {...$scope.vacancy, status: true, employeer: {id: $scope.userSession.id}}, benefits: $scope.benefitsToSave }
+        let vacancyDTO = { vacancy : {...$scope.vacancy, status: true, employeer: {id: $scope.employeerInSession.id}}, benefits: $scope.benefitsToSave }
 
+        console.log(vacancyDTO.vacancy.employeer.id);
 
         $http({
             method: 'POST',
@@ -134,7 +147,7 @@ function($scope, $http, userService, alertService, $cookies) {
             console.log($scope.postedVacancies);
             $scope.vacancy = {};
             $scope.frontVariables.inValidVacancyForm = false;
-            
+            $scope.benefitsToSave = [];
             alertService.showAlert.success('La vacante se ha registrado correctamente');
         }, () => {
             alertService.showAlert.error('La vacante no se ha podido registrar');

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" ng-controller="navbarController" >
     <div class="container-fluid">
-        <a class="navbar-brand" type="button" ng-click="switch.toUserRegistration()">SIPET</a>
+        <a class="navbar-brand" href="/">SIPET</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,6 +29,12 @@
                         <li><a class="dropdown-item" href="./myPostulations.html">Mis postulaciones</a></li>
                         <li><a class="dropdown-item" href="./socialNetwork.html">Red social</a></li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" ng-if="session !== undefined && session.role === 'employee'" aria-current="page" type="button" ng-click="switch.toMyVacancies()" >Mis aplicaciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" ng-if="session !== undefined && session.role === 'employee'" aria-current="page" type="button" ng-click="switch.toSocialMedia()" >Mis publicaciones</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="principal.html">Alertas</a>

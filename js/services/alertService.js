@@ -31,6 +31,15 @@ talenting.factory('alertService', function myFactoryFunction() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'Entendido'
                 });
+            },
+            info: (message) => {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             }
         }
     }

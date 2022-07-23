@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/bootstrap.min.css" >
     <link rel="icon" href="./img/Isotipo-V3.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Talenting</title>
 </head>
 <body>
     
-    <div ng-include src="'views/layouts/navbar.html'"></div>
+    <div class="sticky-top" ng-include src="'views/layouts/navbar.html'"></div>
     
     <div ng-view class="row col-12"  >
 
@@ -27,13 +28,20 @@
     <script src="/js/controllers/vacancyController.js" ></script>
     <script src="/js/controllers/navbarController.js" ></script>
     <script src="/js/controllers/sessionController.js" ></script>
+    <script src="/js/controllers/mainController.js" ></script>
+    <script src="/js/controllers/applierVacanciesController.js" ></script>
+    <script src="/js/controllers/myFavoritesController.js" ></script>
+    <script src="/js/controllers/socialMediaController.js" ></script>
+    <script src="/js/controllers/appliersController.js" ></script>
     <script src="/js/imports/jquery-3.6.0.min.js" ></script>
     <script src="/js/imports/jquery.mask.min.js" ></script>
     <script src="/js/imports/sweetalert2@11.js" ></script>
+   
     <script>
         $(document).ready(function () {
             $('.phone-mask').mask('(000)000-00-00');
         });
     </script>
+
 </body>
 </html>
