@@ -1,0 +1,297 @@
+<style>
+    .borderless{
+        border: none;
+        background: none;
+    }
+    .icon-color{
+        color: #4f84b8
+    }
+    textarea {
+        resize:none;
+    }
+    h6{
+        color: #395f85;
+    }
+</style>
+<div class="col py-3">
+    <div class="container">
+        <div class="row">
+            <div style="display: inline;" class="col-xxl-8 col-xl-8 col-lg-8 col-md-6 col-sm-6 col-xs-6 col-6">
+                <h1 class="display-6" style="display: inline;">Curriculum Vitae</h1>
+            </div>
+            <div style="display: inline;" class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-6 col-6 text-end mt-2 mb-2">
+                <button class="btn btn-dark" ng-click="generateCV()">Generar PDF</button>
+            </div>
+            <hr>
+            <!-- <h6 class=" text-end mb-3">General</h6>
+            <hr> -->
+            <div class="row" ng-form="formResume">
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control mt-2" id="title" name="title" placeholder=" " ng-model="resume.title" maxlength="250" required>
+                        <label for="names">Titulo <span class="text-danger"> * </span> </label>
+                    </div>
+                    <span style="color: red; margin-top: 0px;" ng-show="formResume.title.$error.required && formResume.title.$touched">
+                        Este campo es obligatorio 
+                     </span>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label for="" class="mb-1">Agregar curriculum vitae en formato pdf</label><br>
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="resumeOnPDF" name="resumeOnPDF">
+                      </div>
+                </div>
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control mt-2" id="description" name="description" placeholder=" " ng-model="resume.professionalDescription" style="height: 120px" maxlength="250" required></textarea>
+                        <label for="description">Descripción profesional <span class="text-danger"> * </span> </label>
+                    </div>
+                    <span style="color: red; margin-top: 0px;" ng-show="formResume.description.$error.required && formResume.description.$touched">
+                        Este campo es obligatorio 
+                     </span>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-4">
+                    <div class="text-end" style="display:inline; text-align: right;" >
+                        <h6  style="display:inline;" >¿Cuenta con experiencia laboral?</h6>
+                    </div>
+                    <div style="display:inline; padding-left: 2%;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="hasExperience" ng-model="resume.hasExperience" ng-value="true" id="inlineRadio1" ng-true-value="true" required>
+                            <label class="form-check-label" for="inlineRadio1">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="hasExperience" ng-model="resume.hasExperience" ng-value="false" id="inlineRadio2"  ng-false-value="false" required>
+                            <label class="form-check-label" for="inlineRadio2">No</label>
+                        </div>
+                    </div>
+                    <span style="color: red; margin-top: 0px;" ng-show="formResume.hasExperience.$error.required && formResume.hasExperience.$touched">
+                        Este campo es obligatorio 
+                     </span>
+                    <div>
+                        <hr>
+                        <div  class="form-floating mb-3">
+                            <textarea type="Experiencia" class="form-control mt-2" id="expertise" name="expertise" placeholder=" " ng-model="resume.expertise" style="height: 150px" maxlength="250" required></textarea>
+                            <label for="expertise">Experiencia <span class="text-danger"> * </span> </label>
+                        </div>
+                        <span style="color: red; margin-top: 0px;" ng-show="formResume.expertise.$error.required && formResume.expertise.$touched">
+                            Este campo es obligatorio 
+                         </span>
+                    </div>
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-4">
+                    <h6 class=" text-start mb-4">Historial académico</h6>
+                    <hr>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control mt-2" id="schoolPreparation" name="schoolPreparation" placeholder=" " ng-model="resume.school_preparation" style="height: 150px" maxlength="250" required></textarea>
+                        <label for="schoolPreparation">Preparación escolar <span class="text-danger"> * </span> </label>
+                    </div>
+                    <span style="color: red; margin-top: 0px;" ng-show="formResume.schoolPreparation.$error.required && formResume.schoolPreparation.$touched">
+                        Este campo es obligatorio 
+                     </span>
+                </div>
+            </div>
+            
+            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 text-start mt-4">
+                <h6>Habilidades</h6>
+                <hr>
+                <div class="text-start">
+                    <div class="row mb-2" ng-form="formHability">
+                        <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 col-8">
+                            <div class="form-floating">
+                                <input type="text" class="form-control mt-2" id="hability" name="hability" placeholder=" " ng-change="statusInputHability()" ng-model="hability.hability" required>
+                                <label for="names">Habilidad <span class="text-danger"> * </span> </label>
+                            </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="listHabilities.length <= 2 ? (formHability.hability.$error.required && formHability.hability.$touched) : ''">
+                                Este campo es obligatorio, añade minimo 3
+                             </span>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4 col-4 text-center mt-4 mb-3">
+                            <button class="btn btn-outline-success" ng-click="addHability(hability)" >Agregar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" ng-show="showHabilities">
+                    <table class="table align-middle">
+                        <thead class="table-dark">
+                            <tr class="text-center">
+                                <th></th>
+                                <th>Habilidad</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="hability in listHabilities" class="text-center">
+                                <td ng-bind="$index + 1"></td>
+                                <td ng-bind="hability.hability"></td>
+                                <td><button class="btn btn-danger" ng-click="deleteHability(hability)">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 text-start mt-4">
+                <h6>Idiomas</h6>
+                <hr>
+                <div class="text-start">
+                    <div class="row mb-2" ng-form="formLanguage">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-6 col-6">
+                            <div class="form-floating">
+                                <select class="form-select mt-2"  name="language" id="language" ng-model="language.name" required="true" ng-options="l for l in languages">
+                                    <option value="" disabled>Seleccione...</option>
+                                </select>
+                                <label for="name">Idioma <span class="text-danger"> * </span> </label>
+                            </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="listLanguages.length < 1 ? (formLanguage.language.$error.required && formLanguage.language.$touched) : ''">
+                                Este campo es obligatorio 
+                             </span>
+                             <span style="color: red; margin-top: 0px;" ng-show="alertLanguageValidation">
+                                Idioma repetido
+                             </span>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-6 col-6">
+                            <div class="form-floating">
+                                <select class="form-select mt-2"  name="level" id="level" ng-model="language.level" required="true" ng-options="l for l in languagesLevel">
+                                    <option value="" disabled>Seleccione...</option>
+                                </select>
+                                <label for="level">Nivel</label>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12 col-12 text-center mt-4 mb-3">
+                            <button class="btn btn-outline-success" ng-click="addLanguage(language)" >Agregar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive" ng-show="showLanguages">
+                    <table class="table align-middle">
+                        <thead class="table-dark">
+                            <tr class="text-center">
+                                <th>#</th>
+                                <th>Idioma</th>
+                                <th>Nivel</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="language in listLanguages" class="text-center">
+                                <td ng-bind="$index + 1"></td>
+                                <td ng-bind="language.name"></td>
+                                <td ng-bind="language.level === undefined ? 'Sin nivel' : language.level"></td>
+                                <td><button class="btn btn-danger" ng-click="deleteLanguage(language)">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-start mt-4">
+                <div style="display:inline;">
+                    <h6 style="display:inline;">¿Cuentas con certificaciones y/o cursos?</h6>
+                </div>
+                <div style="display:inline; padding-left: 2%;">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" ng-true-value="true" ng-click="hasCourses(true)">
+                        <label class="form-check-label" for="inlineRadio1">Sí</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" ng-false-value="false" ng-click="hasCourses(false)">
+                        <label class="form-check-label" for="inlineRadio2">No</label>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-start" ng-show="showModuleCourses">
+                    <div class="row mb-2" ng-form="formCourse">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control mt-2" name="nameCourse" id="nameCourse" placeholder=" " ng-model="course.name"  required>
+                                <label for="name">Nombre <span class="text-danger"> * </span> </label>
+                            </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="formCourse.nameCourse.$error.required && formCourse.nameCourse.$touched">
+                               Este campo es obligatorio 
+                            </span>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control mt-2" name="institute" id="institute" placeholder=" " ng-model="course.institute" required>
+                                <label for="institute">Instituto <span class="text-danger"> * </span> </label>
+                            </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="formCourse.institute.$error.required && formCourse.institute.$touched">
+                                Este campo es obligatorio 
+                             </span>
+                        </div>
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <div class="form-floating">
+                                <select class="form-select mt-2"  name="type" id="type" ng-model="course.type" ng-options="c for c in typeCourse" required="true">
+                                    <option value="" disabled>Seleccione...</option>
+                                </select>
+                                <label for="type">Tipo <span class="text-danger"> * </span> </label>
+                            </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="formCourse.type.$error.required && formCourse.type.$touched">
+                                Este campo es obligatorio 
+                             </span>
+                        </div>
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="form-floating">
+                                <input type="date" class="form-control mt-2" id="expedition" name="expedition" placeholder=" " ng-model="course.expedition" required>
+                                <label for="expedition">Expedición <span class="text-danger"> * </span> </label>
+                            </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="formCourse.expedition.$error.required && formCourse.expedition.$touched">
+                                Este campo es obligatorio 
+                             </span>
+                        </div>
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="form-floating">
+                                <input type="date" class="form-control mt-2" id="expiration" placeholder=" " ng-model="course.expiration">
+                                <label for="expiration">Expiración</label>
+                            </div>
+                        </div>
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="form-floating">
+                                <input type="number" class="form-control mt-2" id="hours" placeholder=" " ng-model="course.hours">
+                                <label for="hours">Horas</label>
+                            </div>
+                        </div>
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center mt-4 mb-3">
+                            <button class="btn btn-outline-success" ng-click="addCourse(course)" >Agregar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" ng-show="showCourses">
+                    <table class="table align-middle">
+                        <thead class="table-dark">
+                            <tr class="text-center">
+                                <th>#</th>
+                                <th>Nombre</th>
+                                <th>Instituto</th>
+                                <th>Tipo</th>
+                                <th>Horas</th>
+                                <th>Expedición</th>
+                                <th>Expiración</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="course in listCourses" class="text-center">
+                                <td ng-bind="$index + 1"></td>
+                                <td ng-bind="course.name"></td>
+                                <td ng-bind="course.institute"></td>
+                                <td ng-bind="course.type"></td>
+                                <td ng-bind="course.hours === undefined ? 'Sin no. de horas' : course.hours + 'hrs'"></td>
+                                <td ng-bind="course.expedition | date:'dd/MM/yyyy'"></td>
+                                <td ng-bind="course.expiration === undefined ? 'No expira' : course.expiration | date:'dd/MM/yyyy'"></td>
+                                <td><button class="btn btn-danger" ng-click="deleteCourse(course)">Eliminar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="justify-content-end text-end">
+                <button type="button" ng-click="switch.toMyVacancies()" class="btn btn-danger pt-2 pe-4 ps-4 pb-2">Cancelar</button>
+                <button type="button" class="btn btn-success pt-2 pe-4 ps-4 pb-2" ng-click="addResume()">Guardar CV</button>
+            </div>
+        </div>
+    </div>
+</div>

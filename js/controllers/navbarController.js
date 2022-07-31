@@ -30,6 +30,9 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
         toSocialMedia: () => {
             $location.path('/socialMedia');
         },
+        toResume: () => {
+            $location.path('/resume');
+        },
         toLogin: () => {
             window.location.replace('/login');
         },
