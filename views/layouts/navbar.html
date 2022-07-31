@@ -46,7 +46,7 @@
                     <strong ng-bind="session.person.name"></strong>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item"  ng-if="session !== undefined && session.role === 'employee'" ng-click="switch.toResume()">CV</a></li>
+                <li><a class="dropdown-item" href="./cv.html">CV</a></li>
                 <li><a class="dropdown-item" type="button" ng-click="switch.toProfile()" >Perfil</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a ng-click="closeSession()" class="dropdown-item" type="button" >Cerrar sesión</a></li>
