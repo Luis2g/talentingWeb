@@ -1,5 +1,5 @@
 talenting.controller('resumeController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
-
+    $http.defaults.headers.post["Content-Type"] = "application/json";
     $scope.userSession;
     $scope.myFavoriteOnes = [];
 
@@ -31,6 +31,8 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     $scope.alertLanguageValidation = false;
 
     let session = $cookies.get('user');
+
+    $scope.sesion = JSON.parse(session);
 
     if(!session){
         $location.path('/401');
@@ -75,22 +77,21 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         })
         $scope.session = JSON.parse(session);
 
-        console.log($scope.session.person)
         $scope.resume.person = $scope.session.person;
         let resumeDTO = {
-          resume: {
+            resume: {
             ...$scope.resume,
-            courses: { 
+            },
+            certificationOrCourse: [
                 ...$scope.listCourses,
-            },
-            languages: { 
+            ],
+            language: [
                 ...$scope.listLanguages,
-            },
-            habilities: { 
+            ],
+            skill: [
             ...$scope.listHabilities,
-            },
-          }
-        };
+            ] 
+          };
         return resumeDTO;
       }
 
@@ -145,6 +146,10 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
             $scope.showModuleCourses = true;
         }else{
             $scope.showModuleCourses = false;
+            $scope.listCourses = []
+            if($scope.listCourses.length === 0){
+                $scope.showCourses = false;
+            }
         }
     }
 
@@ -287,79 +292,13 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
 
                 if (isConfirm.value){
 
-                    // var file = document.getElementById('resumeOnPDF').files[0],
-                    // r = new FileReader();
-
-                    // r.onloadend = function(e) {
-                    //     var data = e.target.result;
-                    //     $scope.resume.Pdf = data;
-                    // }
-                    // r.readAsBinaryString(file);
-
-                    var listCoursesObject = [];
-                    var listHabilitiesObject = [];
-                    var listLanguagesObject = [];
-                    listCoursesObject = $scope.listCourses;
-                    listHabilitiesObject = $scope.listHabilities;
-                    listLanguagesObject = $scope.listLanguages;
-            
-                    $scope.resume.course = listCoursesObject;
-                    $scope.resume.hability = listHabilitiesObject;
-                    $scope.resume.language = listLanguagesObject;
+                    let resumeDTO = $scope.prepareDTO();
+                    console.log(resumeDTO);
                     $scope.formResume.title.$error.required
                     $scope.formResume.description.$error.required
                     $scope.formResume.hasExperience.$error.required
                     $scope.formResume.expertise.$error.required
                     $scope.formResume.schoolPreparation.$error.required
-                    Swal.fire({
-                        title: '¡Listo!',
-                        text: 'Guardando información...',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 5000
-                    });
-                    console.log($scope.resume);
-                } else {
-                    Swal.fire({
-                        title: 'Guardado cancelado',
-                        text: "Registra tus cursos/certificaciones",
-                        icon: 'info',
-                        confirmButtonColor: '#3085d6',
-                        confirmButtonText: 'Entendido'
-                    });
-                }
-            });
-        }else{
-            console.log($scope.prepareDTO());
-            swal.fire({
-                title: "Guardar información",
-                text: "¿Desea guardar los datos de su Curriculum Vitae?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: 'Si',
-                confirmButtonColor: '#3085d6',
-                cancelButtonText: 'No'
-            }).then((isConfirm) => {
-
-                if (isConfirm.value){
-
-                    // var listCoursesObject = [];
-                    // var listHabilitiesObject = [];
-                    // var listLanguagesObject = [];
-                    // listCoursesObject = $scope.listCourses;
-                    // listHabilitiesObject = $scope.listHabilities;
-                    // listLanguagesObject = $scope.listLanguages;
-            
-                    // $scope.resume.course = listCoursesObject;
-                    // $scope.resume.hability = listHabilitiesObject;
-                    // $scope.resume.language = listLanguagesObject;
-
-                    let resumeDTO = $scope.prepareDTO();
-                    // $scope.formResume.title.$error.required
-                    // $scope.formResume.description.$error.required
-                    // $scope.formResume.hasExperience.$error.required
-                    // $scope.formResume.expertise.$error.required
-                    // $scope.formResume.schoolPreparation.$error.required
 
                     $http({
                         method: 'POST',
@@ -374,9 +313,8 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                             showConfirmButton: false,
                             timer: 5000
                         }).then( () => {
-                  
-                          window.location.replace('/login');
-                          $scope.$apply();
+                        //   window.location.replace('/');
+                        //   $scope.$apply();
                         });
                       }, err => {
                         
@@ -389,43 +327,68 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                         });
                   
                       });
-
-                    // var file = document.getElementById('resumeOnPDF').files[0],
-                    // r = new FileReader();
-
-                    // r.onloadend = function(e) {
-                    //     var data = e.target.result;
-                    //     $scope.resume.Pdf = data;
-                    // }
-                    // r.readAsBinaryString(file);
-
-                    // var listCoursesObject = [];
-                    // var listHabilitiesObject = [];
-                    // var listLanguagesObject = [];
-                    // listCoursesObject = $scope.listCourses;
-                    // listHabilitiesObject = $scope.listHabilities;
-                    // listLanguagesObject = $scope.listLanguages;
-            
-                    // $scope.resume.course = listCoursesObject;
-                    // $scope.resume.hability = listHabilitiesObject;
-                    // $scope.resume.language = listLanguagesObject;
-                    // $scope.formResume.title.$error.required
-                    // $scope.formResume.description.$error.required
-                    // $scope.formResume.hasExperience.$error.required
-                    // $scope.formResume.expertise.$error.required
-                    // $scope.formResume.schoolPreparation.$error.required
-                    // Swal.fire({
-                    //     title: '¡Listo!',
-                    //     text: 'Guardando información...',
-                    //     icon: 'success',
-                    //     showConfirmButton: false,
-                    //     timer: 5000
-                    // });
-                    // console.log($scope.resume);
                 } else {
                     Swal.fire({
                         title: 'Guardado cancelado',
                         text: "Registra tus cursos/certificaciones",
+                        icon: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Entendido'
+                    });
+                }
+            });
+        }else{
+            swal.fire({
+                title: "Guardar información",
+                text: "¿Desea guardar los datos de su Curriculum Vitae?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Si',
+                confirmButtonColor: '#3085d6',
+                cancelButtonText: 'No'
+            }).then((isConfirm) => {
+
+                if (isConfirm.value){
+
+                    let resumeDTO = $scope.prepareDTO();
+                    $scope.formResume.title.$error.required
+                    $scope.formResume.description.$error.required
+                    $scope.formResume.hasExperience.$error.required
+                    $scope.formResume.expertise.$error.required
+                    $scope.formResume.schoolPreparation.$error.required
+                    
+                    console.log(resumeDTO);
+                    $http({
+                        method: 'POST',
+                        url: 'http://localhost:8080/talenting/resumes',
+                        data: resumeDTO
+                      }).then( () => {
+                  
+                        Swal.fire({
+                            title: '¡Listo!',
+                            text: 'Guardando información...',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 5000
+                        }).then( () => {
+                        //   window.location.replace('/');
+                        //   $scope.$apply();
+                        });
+                      }, err => {
+                        
+                        Swal.fire({
+                          title: 'Error',
+                          text: "Parece que ha ocurrido un error, intenta mas tarde",
+                          icon: 'warning',
+                          confirmButtonColor: '#3085d6',
+                          confirmButtonText: 'Entendido'
+                        });
+                  
+                      });
+                } else {
+                    Swal.fire({
+                        title: 'Guardado cancelado',
+                        text: "Puedes verificar que tus datos sean correctos",
                         icon: 'info',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Entendido'
@@ -449,124 +412,123 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     $scope.generateCV = () => {
         var pdfObject = jsPDFInvoiceTemplate.default(props)
 
-        console.log("Object created: ", pdfObject);
     }
 
-    var props = {
-        outputType: jsPDFInvoiceTemplate.OutputType.Save,
-        returnJsPDFDocObject: true,
-        fileName: "Invoice 2021",
-        orientationLandscape: false,
-        compress: true,
-        logo: {
-            src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
-            type: 'PNG', //optional, when src= data:uri (nodejs case)
-            width: 53.33, //aspect ratio = width/height
-            height: 26.66,
-            margin: {
-                top: 0, //negative or positive num, from the current position
-                left: 0 //negative or positive num, from the current position
-            }
-        },
-        stamp: {
-            inAllPages: true, //by default = false, just in the last page
-            src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
-            type: 'JPG', //optional, when src= data:uri (nodejs case)
-            width: 20, //aspect ratio = width/height
-            height: 20,
-            margin: {
-                top: 0, //negative or positive num, from the current position
-                left: 0 //negative or positive num, from the current position
-            }
-        },
-        business: {
-            name: "Business Name",
-            address: "Albania, Tirane ish-Dogana, Durres 2001",
-            phone: "(+355) 069 11 11 111",
-            email: "email@example.com",
-            email_1: "info@example.al",
-            website: "www.example.al",
-        },
-        contact: {
-            label: "Invoice issued for:",
-            name: "Client Name",
-            address: "Albania, Tirane, Astir",
-            phone: "(+355) 069 22 22 222",
-            email: "client@website.al",
-            otherInfo: "www.website.al",
-        },
-        invoice: {
-            label: "Invoice #: ",
-            num: 19,
-            invDate: "Payment Date: 01/01/2021 18:12",
-            invGenDate: "Invoice Date: 02/02/2021 10:17",
-            headerBorder: false,
-            tableBodyBorder: false,
-            header: [
-              {
-                title: "#", 
-                style: { 
-                  width: 10 
-                } 
-              }, 
-              { 
-                title: "Title",
-                style: {
-                  width: 30
-                } 
-              }, 
-              { 
-                title: "Description",
-                style: {
-                  width: 80
-                } 
-              }, 
-              { title: "Price"},
-              { title: "Quantity"},
-              { title: "Unit"},
-              { title: "Total"}
-            ],
-            table: Array.from(Array(10), (item, index)=>([
-                index + 1,
-                "There are many variations ",
-                "Lorem Ipsum is simply dummy text dummy text ",
-                200.5,
-                4.5,
-                "m2",
-                400.5
-            ])),
-            additionalRows: [{
-                col1: 'Total:',
-                col2: '145,250.50',
-                col3: 'ALL',
-                style: {
-                    fontSize: 14 //optional, default 12
-                }
-            },
-            {
-                col1: 'VAT:',
-                col2: '20',
-                col3: '%',
-                style: {
-                    fontSize: 10 //optional, default 12
-                }
-            },
-            {
-                col1: 'SubTotal:',
-                col2: '116,199.90',
-                col3: 'ALL',
-                style: {
-                    fontSize: 10 //optional, default 12
-                }
-            }],
-            invDescLabel: "Invoice Note",
-            invDesc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
-        },
-        footer: {
-            text: "The invoice is created on a computer and is valid without the signature and stamp.",
-        },
-        pageEnable: true,
-        pageLabel: "Page ",
-    };
+    // var props = {
+    //     outputType: jsPDFInvoiceTemplate.OutputType.Save,
+    //     returnJsPDFDocObject: true,
+    //     fileName: "Invoice 2021",
+    //     orientationLandscape: false,
+    //     compress: true,
+    //     logo: {
+    //         src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
+    //         type: 'PNG', //optional, when src= data:uri (nodejs case)
+    //         width: 53.33, //aspect ratio = width/height
+    //         height: 26.66,
+    //         margin: {
+    //             top: 0, //negative or positive num, from the current position
+    //             left: 0 //negative or positive num, from the current position
+    //         }
+    //     },
+    //     stamp: {
+    //         inAllPages: true, //by default = false, just in the last page
+    //         src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
+    //         type: 'JPG', //optional, when src= data:uri (nodejs case)
+    //         width: 20, //aspect ratio = width/height
+    //         height: 20,
+    //         margin: {
+    //             top: 0, //negative or positive num, from the current position
+    //             left: 0 //negative or positive num, from the current position
+    //         }
+    //     },
+    //     business: {
+    //         name: "Business Name",
+    //         address: "Albania, Tirane ish-Dogana, Durres 2001",
+    //         phone: "(+355) 069 11 11 111",
+    //         email: "email@example.com",
+    //         email_1: "info@example.al",
+    //         website: "www.example.al",
+    //     },
+    //     contact: {
+    //         label: "Invoice issued for:",
+    //         name: "Client Name",
+    //         address: "Albania, Tirane, Astir",
+    //         phone: "(+355) 069 22 22 222",
+    //         email: "client@website.al",
+    //         otherInfo: "www.website.al",
+    //     },
+    //     invoice: {
+    //         label: "Invoice #: ",
+    //         num: 19,
+    //         invDate: "Payment Date: 01/01/2021 18:12",
+    //         invGenDate: "Invoice Date: 02/02/2021 10:17",
+    //         headerBorder: false,
+    //         tableBodyBorder: false,
+    //         header: [
+    //           {
+    //             title: "#", 
+    //             style: { 
+    //               width: 10 
+    //             } 
+    //           }, 
+    //           { 
+    //             title: "Title",
+    //             style: {
+    //               width: 30
+    //             } 
+    //           }, 
+    //           { 
+    //             title: "Description",
+    //             style: {
+    //               width: 80
+    //             } 
+    //           }, 
+    //           { title: "Price"},
+    //           { title: "Quantity"},
+    //           { title: "Unit"},
+    //           { title: "Total"}
+    //         ],
+    //         table: Array.from(Array(10), (item, index)=>([
+    //             index + 1,
+    //             "There are many variations ",
+    //             "Lorem Ipsum is simply dummy text dummy text ",
+    //             200.5,
+    //             4.5,
+    //             "m2",
+    //             400.5
+    //         ])),
+    //         additionalRows: [{
+    //             col1: 'Total:',
+    //             col2: '145,250.50',
+    //             col3: 'ALL',
+    //             style: {
+    //                 fontSize: 14 //optional, default 12
+    //             }
+    //         },
+    //         {
+    //             col1: 'VAT:',
+    //             col2: '20',
+    //             col3: '%',
+    //             style: {
+    //                 fontSize: 10 //optional, default 12
+    //             }
+    //         },
+    //         {
+    //             col1: 'SubTotal:',
+    //             col2: '116,199.90',
+    //             col3: 'ALL',
+    //             style: {
+    //                 fontSize: 10 //optional, default 12
+    //             }
+    //         }],
+    //         invDescLabel: "Invoice Note",
+    //         invDesc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
+    //     },
+    //     footer: {
+    //         text: "The invoice is created on a computer and is valid without the signature and stamp.",
+    //     },
+    //     pageEnable: true,
+    //     pageLabel: "Page ",
+    // };
 
 }]);
