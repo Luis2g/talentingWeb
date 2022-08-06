@@ -2,8 +2,9 @@ talenting.controller('applierVacanciesController', ['$scope', '$http', '$locatio
 
     $scope.appliedVacancies = [];
     $scope.userSession;
-
-
+    
+    let tkn = $cookies.get('tkn');
+    $http.defaults.headers.common.Authorization ="Bearer "+tkn;
     let session = $cookies.get('user');
 
 

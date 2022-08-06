@@ -1,6 +1,7 @@
 talenting.controller('socialMediaController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
 
-
+    let tkn = $cookies.get('tkn');
+    $http.defaults.headers.common.Authorization ="Bearer "+tkn;
     $scope.sharedVacancies = [];
     $scope.people = [];
 

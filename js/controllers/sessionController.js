@@ -21,11 +21,13 @@ function($scope, $http, alertService, $cookies) {
             params: { username: $scope.user.username, password: $scope.user.password }
         }).then( response => {
 
-            let user = response.data;
-
+            let user = response.data.user;
+            let tkn = response.data.accessToken;
             if(user !== ""){
 
                 $cookies.put('user', JSON.stringify(user));
+                $cookies.put('tkn', tkn);
+                $http.defaults.headers.common.Authorization ="Bearer "+tkn;
                 if(user.role === 'employeer'){
                     $scope.getEmployeerInfo(user)
                 }else{
