@@ -1,13 +1,15 @@
 talenting.controller('mainController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
 
-
+    let tkn = $cookies.get('tkn');
+    $http.defaults.headers.common.Authorization ="Bearer "+tkn;
     $http.defaults.headers.post["Content-Type"] = "application/json";
+    
     $scope.availableVacancies = [];
     $scope.userSession;
     
     let session = $cookies.get('user');
 
-    if(session){
+      if(session){
         $scope.userSession = JSON.parse($cookies.get('user'));
         console.log($scope.userSession);
     }else{
@@ -17,7 +19,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
     $scope.retrieveVacancies = () => {
         
         let idToSend = $scope.userSession !== undefined ? $scope.userSession.person.id : 0;
-
+        
         $http({
             method: "GET",
             url: 'http://localhost:8080/talenting/vacanciesAccordingToFilter',
