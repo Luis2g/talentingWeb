@@ -52,17 +52,29 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         }   
     }
 
-    $scope.uploadCV = function() {
-        var file = document.getElementById('resumeOnPDF').files[0],
-        r = new FileReader();
+    $scope.consultarResume = () => {
+        $scope.session = JSON.parse(session);
 
-        r.onloadend = function(e) {
-            var data = e.target.result;
-            console.log(data);
-        }
-
-        r.readAsBinaryString(file);
-        console.log();
+        $scope.resume.person = $scope.session.person;
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8080/talenting/resumes/',
+            data: $scope.resume.person.id
+          }).then( response => {
+            console.log("Antes de la consulta");
+            console.log(response.data);
+            console.log("Ya hizo la constulta");
+          }, err => {
+            
+            Swal.fire({
+              title: 'Error',
+              text: "Parece que ha ocurrido un error, intenta mas tarde",
+              icon: 'warning',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'Entendido'
+            });
+      
+          });
     }
 
     $scope.prepareDTO = () => {
@@ -242,7 +254,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         }
     }
 
-    $scope.addResume = () => {
+    $scope.addResume = async() => {
         if($scope.formResume.title.$error.required){
             $scope.alertEmptyInputs();
             $scope.formResume.title.$error.required = true;
@@ -288,7 +300,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                 confirmButtonText: 'Si',
                 confirmButtonColor: '#3085d6',
                 cancelButtonText: 'No'
-            }).then((isConfirm) => {
+            }).then(async (isConfirm) => {
 
                 if (isConfirm.value){
 
@@ -300,6 +312,8 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                     $scope.formResume.expertise.$error.required
                     $scope.formResume.schoolPreparation.$error.required
 
+                    await this.uploadProfileImage();
+                    await this.uploadPDFResume(); 
                     $http({
                         method: 'POST',
                         url: 'http://localhost:8080/talenting/resumes',
@@ -346,7 +360,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                 confirmButtonText: 'Si',
                 confirmButtonColor: '#3085d6',
                 cancelButtonText: 'No'
-            }).then((isConfirm) => {
+            }).then(async(isConfirm) => {
 
                 if (isConfirm.value){
 
@@ -358,6 +372,8 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                     $scope.formResume.schoolPreparation.$error.required
                     
                     console.log(resumeDTO);
+                    await this.uploadProfileImage();
+                    await this.uploadPDFResume(); 
                     $http({
                         method: 'POST',
                         url: 'http://localhost:8080/talenting/resumes',
@@ -371,7 +387,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                             showConfirmButton: false,
                             timer: 5000
                         }).then( () => {
-                        //   window.location.replace('/');
+                            window.location.replace('/');
                         //   $scope.$apply();
                         });
                       }, err => {
@@ -408,6 +424,34 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
             confirmButtonText: 'Entendido'
         });
     }
+
+    this.uploadProfileImage = async() => {
+        let picture = document.getElementById("profileImage").files[0];
+        var formData = new FormData();
+        if (picture) {
+            formData.append("file", picture);
+            let res = await fetch("http://localhost:8080/talenting/upload/profileImage", {
+                method: "POST",
+                body: formData,
+            }).then((r) => {
+                $scope.uploadedPic = true;
+            });
+        }
+    };
+
+    this.uploadPDFResume = async() => {
+        let picture = document.getElementById("PDFResume").files[0];
+        var formData = new FormData();
+        if (picture) {
+            formData.append("file", picture);
+            let res = await fetch("http://localhost:8080/talenting/upload/PDFResume", {
+                method: "POST",
+                body: formData,
+            }).then((r) => {
+                $scope.uploadedPic = true;
+            });
+        }
+    };
 
     $scope.generateCV = () => {
         var pdfObject = jsPDFInvoiceTemplate.default(props)
