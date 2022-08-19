@@ -16,6 +16,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     var generateIdHability = 0;
     $scope.listLanguages = [];
     var generateIdLanguage = 0;
+    $scope.isUpdating = false;
 
 
     $scope.showCourses = false;
@@ -58,12 +59,27 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         $scope.resume.person = $scope.session.person;
         $http({
             method: 'GET',
-            url: 'http://localhost:8080/talenting/resumes/',
-            data: $scope.resume.person.id
+            url: 'http://localhost:8080/talenting/resumes/'+$scope.resume.person.id,
           }).then( response => {
-            console.log("Antes de la consulta");
             console.log(response.data);
-            console.log("Ya hizo la constulta");
+            if(response.data.resume === null){
+                $scope.isUpdating = false;
+            }else{
+                $scope.isUpdating = true;
+                $scope.showModuleCourses = true;
+                $scope.listLanguages = response.data.language;
+                $scope.listHabilities = response.data.skill;
+                $scope.resume = response.data.resume;
+                $scope.showHabilities = true;
+                $scope.showLanguages = true;
+                if(response.data.certificationOrCourse !== null){
+                    $scope.listCourses = response.data.certificationOrCourse;
+                    $scope.showCourses = true;
+                }else{
+                    $scope.showCourses = false;
+                }
+            }
+            
           }, err => {
             
             Swal.fire({
@@ -387,7 +403,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                             showConfirmButton: false,
                             timer: 5000
                         }).then( () => {
-                            window.location.replace('/');
+                            //window.location.replace('/');
                         //   $scope.$apply();
                         });
                       }, err => {
