@@ -5,7 +5,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
 
     $scope.languages = ["Español","Inglés", "Francés", "Alemán", "Chino", "Portugués", "Ruso", "Italiano", "Indu", "Árabe", "Japonés", "Coreano", "Otro"];
     
-    $scope.languagesLevel = ["A1","A2", "B1", "B2", "C1","C2"];
+    $scope.languagesLevel = ["A1","A2", "B1", "B2","C1","C2","Nativo"];
 
     $scope.typeCourse= ["Curso","Certificación"];
 
@@ -403,8 +403,8 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                             showConfirmButton: false,
                             timer: 5000
                         }).then( () => {
-                            //window.location.replace('/');
-                        //   $scope.$apply();
+                            window.location.replace('/');
+                            $scope.$apply();
                         });
                       }, err => {
                         
