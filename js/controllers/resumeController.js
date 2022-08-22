@@ -64,6 +64,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
             console.log(response.data);
             if(response.data.resume === null){
                 $scope.isUpdating = false;
+                document.getElementById("viewProfileImg").src = "../../../img/user.jpg";
             }else{
                 $scope.isUpdating = true;
                 $scope.showModuleCourses = true;
@@ -73,9 +74,15 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                 $scope.showHabilities = true;
                 $scope.showLanguages = true;
                 
-                    document.getElementById("ProfileImagePreview").src = "data:image/png;base64," + response.data.resume.profileImage;
+                if(response.data.resume.profileImage == null){
+                    document.getElementById("viewProfileImg").src = "../../../img/user.jpg";
+                }else{
+                    document.getElementById("viewProfileImg").src = "data:image/png;base64," + response.data.resume.profileImage;
+                }
 
-                    document.getElementById("previewPDF").src = "data:application/pdf;base64," + response.data.resume.pdfresume;
+                document.getElementById("ProfileImagePreview").src = "data:image/png;base64," + response.data.resume.profileImage;
+
+                document.getElementById("previewPDF").src = "data:application/pdf;base64," + response.data.resume.pdfresume;
 
                 if(response.data.certificationOrCourse !== null ){
                     $scope.listCourses = response.data.certificationOrCourse;

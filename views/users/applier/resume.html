@@ -24,8 +24,8 @@
         <div class="col-xxl-3 col-xl-3 col-lg-3 d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block">
             <div class="sticky-top sticky-top-user">
                 <div class="card" style="width: auto;">
-                    <div class="text-center" ng-click="updatePhoto()">
-                        <img src="../../../img/user.jpg" class="card-img-top" alt="..." style="border-radius: 50%;width: 30%;">
+                    <div class="text-center mt-3" ng-click="updatePhoto()">
+                        <img src="" class="card-img-top" id="viewProfileImg" alt="..." style="border-radius: 5%;width: 30%;">
                     </div>
                     <div class="card-body">
                       <h5 class="card-title text-center" ng-bind="sesion.person.name +' '+sesion.person.surname+' '+sesion.person.secondSurname"></h5>
@@ -60,17 +60,17 @@
                 
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-center">
                     <label for="" class="mb-1 text-start" style="font-weight: 700;">Foto de perfil</label><br>
-                    <div class="input-group">
+                    <div class="input-group mb-2">
                         <input type="file" class="form-control" id="profileImage" name="profileImage">
                     </div>
-                    <img id="ProfileImagePreview" src="" height="250px">
+                    <img id="ProfileImagePreview" src="" height="250px" style="border-radius: 5px">
                 </div>
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-center">
                     <label for="" class="mb-1" style="font-weight: 700;">Curriculum Vitae en PDF</label>
-                    <div class="input-group">
+                    <div class="input-group mb-2">
                         <input type="file" class="form-control" id="PDFResume" name="PDFResume">
                     </div>
-                    <iframe id="previewPDF" src="" width="100%" height="250px"></iframe>
+                    <iframe id="previewPDF" src="" width="100%" height="250px" style="border-radius: 5px"></iframe>
                 </div>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-floating">
