@@ -48,8 +48,8 @@
                 <div style="display: inline;" class="col-xxl-8 col-xl-8 col-lg-8 col-md-8 col-sm-6 col-xs-6 col-6">
                     <h1 class="display-6" style="display: inline;color: #395f85;">Curriculum Vitae</h1>
                 </div>
-                <div style="display: inline;" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 text-end">
-                    <button class="btn btn-dark" disabled>Generar CV</button>
+                <div ng-show="isUpdating" style="display: inline;" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 text-end">
+                    <button class="btn btn-dark" ng-click="generateResume()">Generar CV</button>
                 </div>
 
                 <hr>
@@ -58,22 +58,24 @@
             <hr> -->
             <div class="row" ng-form="formResume">
                 
-                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <label for="" class="mb-1">Foto de perfil</label><br>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-center">
+                    <label for="" class="mb-1 text-start" style="font-weight: 700;">Foto de perfil</label><br>
                     <div class="input-group">
                         <input type="file" class="form-control" id="profileImage" name="profileImage">
-                      </div>
+                    </div>
+                    <img id="ProfileImagePreview" src="" height="250px">
                 </div>
-                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <label for="" class="mb-1">Curriculum Vitae PDF</label><br>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-center">
+                    <label for="" class="mb-1" style="font-weight: 700;">Curriculum Vitae en PDF</label>
                     <div class="input-group">
                         <input type="file" class="form-control" id="PDFResume" name="PDFResume">
-                      </div>
+                    </div>
+                    <iframe id="previewPDF" src="" width="100%" height="250px"></iframe>
                 </div>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="form-floating">
-                        <input type="text" class="form-control mt-2" id="title" name="title" placeholder=" " ng-model="resume.title" maxlength="250" required>
-                        <label for="names">Titulo <span class="text-danger"> * </span> </label>
+                        <input type="text" class="form-control mt-2" id="title" name="title" placeholder=" " ng-model="resume.title" maxlength="100" required>
+                        <label for="names">Titulo<span class="text-danger"> * </span> </label>
                     </div>
                     <span style="color: red; margin-top: 0px;" ng-show="formResume.title.$error.required && formResume.title.$touched">
                         Este campo es obligatorio 
@@ -214,7 +216,7 @@
                             <tr ng-repeat="language in listLanguages" class="text-center">
                                 <td ng-bind="$index + 1"></td>
                                 <td ng-bind="language.name"></td>
-                                <td ng-bind="language.level === undefined ? 'Sin nivel' : language.level"></td>
+                                <td ng-bind="(language.level === undefined || language.level === null) ? 'Sin nivel' : language.level"></td>
                                 <td><button class="btn btn-outline-danger" ng-click="deleteLanguage(language)">Eliminar</button></td>
                             </tr>
                         </tbody>
@@ -268,8 +270,8 @@
                             <div class="form-floating">
                                 <select class="form-select mt-2"  name="type" id="type" ng-model="course.type"  required="true">
                                     <option value="" disabled>Seleccione...</option>
-                                    <option value="false" >Curso</option>
-                                    <option value="true" >Certificacion</option>
+                                    <option value="false">Curso</option>
+                                    <option value="true">Certificacion</option>
                                 </select>
                                 <label for="type">Tipo <span class="text-danger"> * </span> </label>
                             </div>
@@ -323,9 +325,9 @@
                                 <td ng-bind="course.name"></td>
                                 <td ng-bind="course.nameOfTheInstitudeThatIssuesIt"></td>
                                 <td ng-bind="course.type === true ? 'Certificación' : 'Curso'"></td>
-                                <td ng-bind="course.hours === undefined ? 'Sin no. de horas' : course.hours + 'hrs'"></td>
+                                <td ng-bind="(course.hours === undefined || course.hours === null) ? 'Sin no. de horas' : course.hours + 'hrs'"></td>
                                 <td ng-bind="course.expeditionDate | date:'dd/MM/yyyy'"></td>
-                                <td ng-bind="course.expirationDate === undefined ? 'No expira' : course.expirationDate | date:'dd/MM/yyyy'"></td>
+                                <td ng-bind="(course.expirationDate === undefined || course.expirationDate === null) ? 'No expira' : course.expirationDate | date:'dd/MM/yyyy'"></td>
                                 <td><button class="btn btn-outline-danger" ng-click="deleteCourse(course)">Eliminar</button></td>
                             </tr>
                         </tbody>
