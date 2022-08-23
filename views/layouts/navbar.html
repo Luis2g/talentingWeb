@@ -1,13 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" ng-controller="navbarController" >
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top shadow p-3 bg-body " ng-controller="navbarController" >
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">SIPET</a>
+        <a class="navbar-brand" type="button" ng-click="switch.toLandingPage()" >SIPET</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" type="button" ng-click="switch.toLandingPage()" aria-current="page">Principal</a>
+                    <a class="nav-link active" type="button" ng-click="switch.toMainView()" aria-current="page">Principal</a>
                 </li>
                 <li class="nav-item" ng-if="session !== undefined && session.role === 'employeer'" >
                     <a class="nav-link active" type="button" ng-click="switch.toVacancyRegistration()" aria-current="page">Consultar vacantes</a>

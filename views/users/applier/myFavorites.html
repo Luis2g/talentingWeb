@@ -4,7 +4,7 @@
         background: none;
     }
 </style>
-<div class="col py-3" ng-init="retrieveFavoriteOnes()" >
+<div class="col py-3 mt-5" ng-init="retrieveFavoriteOnes()" >
     <div class="container">
         <div class="row">
             <div class="col-8">
@@ -22,7 +22,7 @@
                 </p>
             </div>
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3" ng-repeat="fullVacancy in myFavoriteOnes" >
-                <div class="card" style="width: 100%;">
+                <div class="card h-100" style="width: 100%;">
                     <div class="card-body position-relative">
                         <div class="row col-12">
                             <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
@@ -37,18 +37,20 @@
                         <div class="table-responsive" >
                             <table class="table table-borderless">
                                 <tr>
-                                    <th><div class="text-muted" >Modalidad: </div></th>
-                                    <th class="table-warning align-middle" ><div class="text-muted text-center"  ng-bind="fullVacancy.vacancy.modality" ></div></th>
-                                    <th>&nbsp;&nbsp;&nbsp;</th>
-                                    <th><div class="text-muted" >Estado: </div></th>
-                                    <th class="table-warning align-middle" ><div class="text-muted text-center " ng-bind="fullVacancy.vacancy.stateInWhichIsAvailable" ></div></th>
+                                    <th><div style="line-height:10pt;" class="text-muted" >Modalidad: </div></th>
+                                    <th class="table-warning align-middle" ><div class="text-muted text-center" style="line-height:10pt;"  ng-bind="fullVacancy.vacancy.modality" ></div></th>                                    
                                 </tr>
                                 <tr>
-                                    <th><div class="text-muted" >Salario minimo: </div></th>
-                                    <th class="table-warning align-middle" ><div class="text-muted text-center" ng-bind="fullVacancy.vacancy.minimumSalary | currency " ></div></th>
-                                    <th></th>
-                                    <th><div class="text-muted align-middle" >Salario máximo: </div></th>
-                                    <th class="table-warning" ><div class="text-muted text-center " ng-bind="fullVacancy.vacancy.maximumSalary | currency" ></div></th>
+                                    <th><div style="line-height:10pt;" class="text-muted" >Estado: </div></th>
+                                    <th class="table-warning align-middle" ><div class="text-muted text-center " style="line-height:10pt;" ng-bind="fullVacancy.vacancy.stateInWhichIsAvailable" ></div></th>
+                                </tr>
+                                <tr>
+                                    <th><div style="line-height:10pt;" class="text-muted" >Salario minimo: </div></th>
+                                    <th class="table-warning align-middle" ><div class="text-muted text-center" style="line-height:10pt;" ng-bind="fullVacancy.vacancy.minimumSalary | currency " ></div></th>
+                                </tr>
+                                <tr>
+                                    <th><div style="line-height:10pt;" class="text-muted align-middle" >Salario máximo: </div></th>
+                                    <th class="table-warning" ><div class="text-muted text-center " style="line-height:10pt;" ng-bind="fullVacancy.vacancy.maximumSalary | currency" ></div></th>
                                 </tr>
                             </table>
 
