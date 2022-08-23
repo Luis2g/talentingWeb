@@ -21,6 +21,9 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
         toProfile: () => {
             $location.path('/profile');
         },
+        toResume: () => {
+            $location.path('/resume');
+        },
         toMyVacancies: () => {
             $location.path('/myVacancies');
         },
