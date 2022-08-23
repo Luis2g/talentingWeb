@@ -14,8 +14,6 @@ talenting.controller('appliersController',
                 inValidInterviewForm: false
             }
             $http.defaults.headers.post["Content-Type"] = "application/json";
-            let tkn = $cookies.get('tkn');
-            $http.defaults.headers.common.Authorization ="Bearer "+tkn;
 
             $scope.loadAppliersByVacancy = () => {
                 if ($scope.vacancy.id === undefined) {
