@@ -31,7 +31,6 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
         });
     }
 
-
     // to apply to a vacancy
     $scope.apply = (vacancyId, index) => {
 
