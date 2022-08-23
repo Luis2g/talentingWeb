@@ -226,9 +226,12 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     $scope.addLanguage = (language) => {
         $scope.alertLanguageValidation = false;
         if($scope.formLanguage.language.$error.required){
-            $scope.alertEmptyInputs();
             $scope.formLanguage.language.$error.required = true;
             $scope.formLanguage.language.$touched = true;
+        }else if($scope.formLanguage.level.$error.required){
+            $scope.formLanguage.level.$error.required = true;
+            $scope.formLanguage.level.$touched = true;
+            $scope.alertEmptyInputs();
         }else{
             if($scope.listLanguages.length >= 1){
                 for(i = 0; i < $scope.listLanguages.length; i++){
