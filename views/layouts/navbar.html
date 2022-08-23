@@ -9,26 +9,8 @@
                 <li class="nav-item">
                     <a class="nav-link active" type="button" ng-click="switch.toLandingPage()" aria-current="page">Principal</a>
                 </li>
-                <li ng-if="session.role === 'employeer'" class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Reclutador
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li>
-                            <a class="dropdown-item" type="button" ng-click="switch.toVacancyRegistration()" >Consultar postulaciones</a>
-                        </li>
-                    </ul>
-                </li>
-                <li ng-if="session.role === 'employee'" class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Candidato
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="./postulationsEmployee.html">Consultar vacantes</a></li>
-                        <li><a class="dropdown-item" href="./favorites.html">Favoritos</a></li>
-                        <li><a class="dropdown-item" href="./myPostulations.html">Mis postulaciones</a></li>
-                        <li><a class="dropdown-item" href="./socialNetwork.html">Red social</a></li>
-                    </ul>
+                <li class="nav-item" ng-if="session !== undefined && session.role === 'employeer'" >
+                    <a class="nav-link active" type="button" ng-click="switch.toVacancyRegistration()" aria-current="page">Consultar vacantes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" ng-if="session !== undefined && session.role === 'employee'" aria-current="page" type="button" ng-click="switch.toMyVacancies()" >Mis aplicaciones</a>
@@ -36,9 +18,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" ng-if="session !== undefined && session.role === 'employee'" aria-current="page" type="button" ng-click="switch.toSocialMedia()" >Mis publicaciones</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="principal.html">Alertas</a>
-                </li>
+
             </ul>
             <li ng-if="session !== undefined" class="nav-item btn-group dropstart">
                 <a  class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,7 +26,7 @@
                     <strong ng-bind="session.person.name"></strong>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="./cv.html">CV</a></li>
+                    <li><a class="dropdown-item"  ng-if="session !== undefined && session.role === 'employee'" ng-click="switch.toResume()">CV</a></li>
                 <li><a class="dropdown-item" type="button" ng-click="switch.toProfile()" >Perfil</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a ng-click="closeSession()" class="dropdown-item" type="button" >Cerrar sesión</a></li>

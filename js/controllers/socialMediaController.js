@@ -201,4 +201,13 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
         });
     };
 
+
+    $scope.openModalInformation = (fullVacancy) => {
+    
+        console.log(fullVacancy);
+        $scope.vacancies = angular.copy(fullVacancy);
+        $("#infoPostulation").modal("show");
+
+    };
+
 }]);

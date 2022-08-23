@@ -2,6 +2,8 @@ talenting.controller('myFavoritesController', ['$scope', '$http', '$location','u
 
     $scope.userSession;
     $scope.myFavoriteOnes = [];
+    $scope.vacancies = {};
+    $scope.retrievedBenefits = [];
 
     let session = $cookies.get('user');
 
@@ -126,6 +128,15 @@ talenting.controller('myFavoritesController', ['$scope', '$http', '$location','u
             $scope.myFavoriteOnes[index].applied = 0;
             
         });
+    };
+
+
+    $scope.openModalInformation = (fullVacancy) => {
+
+        console.log(fullVacancy);
+        $scope.vacancies = angular.copy(fullVacancy);
+        $("#infoPostulation").modal("show");
+
     };
 
 }]);
