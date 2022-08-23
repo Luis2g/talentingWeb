@@ -63,7 +63,7 @@
                                     <h3><span class="card-subtitle mb-2 badge rounded-pill bg-primary" style="color: white" ng-bind="fullVacancy.vacancy.title" ></span></h3>
                                 </div>
                                 <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-end">
-                                    <button class="btn btn-outline-warning position-absolute top-2 end-0 borderless" ><span class="material-icons">lightbulb</span></button>
+                                    <button class="btn btn-outline-warning position-absolute top-2 end-0 borderless" ng-click="openModalInformation(fullVacancy)" ><span class="material-icons">lightbulb</span></button>
                                 </div>
                             </div>
                             <div class="table-responsive" >
@@ -141,6 +141,103 @@
 <!-- Modal for info postulation -->
 <div class="modal fade" id="infoPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
+
+    <div class="modal-content">
+        <form action="">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Información de la empresa </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Compañia:</h6>
+                                <p ng-bind="vacancies.vacancy.employeer.companyName"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Nombre del contratador:</h6>
+                                <p ng-bind="vacancies.vacancy.employeer.person.name +' '+vacancies.vacancy.employeer.person.surname +' '+vacancies.vacancy.employeer.person.secondSurname"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Rol del contratador:</h6>
+                                <p ng-bind="vacancies.vacancy.employeer.rolInCompany"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Correo:</h6>
+                                <p ng-bind="vacancies.vacancy.employeer.person.contactInformation.email"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Número de teléfono:</h6>
+                                <p ng-bind="vacancies.vacancy.employeer.person.contactInformation.phoneNumber"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Estado de residencia:</h6>
+                                <p ng-bind="vacancies.vacancy.employeer.person.contactInformation.state"></p>
+                            </div>
+                            <br>
+                            <h5>Información de la vacante</h5>
+                            <hr>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
+                                <h6>Puesto:</h6>
+                                <p ng-bind="vacancies.vacancy.title"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Estado disponible:</h6>
+                                <p ng-bind="vacancies.vacancy.stateInWhichIsAvailable"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Modalidad:</h6>
+                                <p ng-bind="vacancies.vacancy.modality"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Tipo:</h6>
+                                <p ng-bind="vacancies.vacancy.type"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Fecha de postulacion:</h6>
+                                <p ng-bind="vacancies.vacancy.startDate | date : 'dd/MM/yyyy'"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Pago por:</h6>
+                                <p ng-bind="vacancies.vacancy.paymentFrecuency"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Salario mínimo:</h6>
+                                <p ng-bind="vacancies.vacancy.minimumSalary | currency"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Salario máximo:</h6>
+                                <p ng-bind="vacancies.vacancy.maximumSalary | currency"></p>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <h6>Fecha de validez:</h6>
+                                <p ng-bind="vacancies.vacancy.validityDate | date : 'dd/MM/yyyy'"></p>
+                            </div>
+                            <br>
+                            <h5>Beneficios</h5>
+                            <hr>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6" ng-repeat="benefits in vacancies.retrievedBenefits">
+                                <span class="material-icons">done</span><span ng-bind="benefits.name"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">¡Postularme!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal for info postulation -->
+<div class="modal fade" id="infoPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <form action="">
             <div class="modal-header">
@@ -150,44 +247,67 @@
             <div class="modal-body">
                     <div class="col-12">
                         <div class="row">
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                                <h5>Puesto:</h5>
-                                <p> Analista Programador</p>
+                            <div class="form-group col-12 col-lg-6 col-md-6 col-sm-6 col-xl-6">
+                                <label style="font-weight: bold; color: #636f81;">Compañia:</label><br>
+                                <span ng-bind="vacancies.vacancy.employeer.companyName"></span>
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <h5>Estado disponible:</h5>
-                                <p>Morelos</p>
+                            <div class="form-group col-12 col-lg-6 col-md-6 col-sm-6 col-xl-6">
+                                <label style="font-weight: bold; color: #636f81;">Estado:</label><br>
+                                <span ng-bind="vacancies.vacancy.employeer.stateTheCompanyIsIn"></span>
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <h5>Modalidad:</h5>
-                                <p> Mixta</p>
+                        </div>
+                        <hr width="100%" style="height: 2px; color: rgb(0, 143, 7); background-color: rgb(0, 143, 7);"/>
+                        <div class="row">
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Puesto:</label><br>
+                                <span ng-bind="vacancies.vacancy.title"></span>
+                                <!-- {{vacancies.retrievedBenefits | json}} -->
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <h5>Tipo:</h5>
-                                <p>Tipo 1</p>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Estado disponible:</label><br>
+                                <span ng-bind="vacancies.vacancy.stateInWhichIsAvailable"></sp>
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                                <h5>Fecha de postulacion:</h5>
-                                <p> 23/06/2022</p>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Modalidad:</label><br>
+                                <span ng-bind="vacancies.vacancy.modality"></span>
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                                <h5>Salario:</h5>
-                                <p>$5,000 - $9,000</p>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Tipo:</label><br>
+                                <span ng-bind="vacancies.vacancy.type"></span>
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <h5>Pago:</h5>
-                                <p>Quincenal</p>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Fecha de postulación:</label><br>
+                                <span ng-bind="vacancies.vacancy.startDate | date : 'dd/MM/yyyy'"></span>
                             </div>
-                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <h5>Fecha de validez:</h5>
-                                <p>30/06/2022</p>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Salario mínimo:</label><br>
+                                <span ng-bind="vacancies.vacancy.minimumSalary | currency"></span>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Salario máximo:</label><br>
+                                <span ng-bind="vacancies.vacancy.maximumSalary | currency"></span>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Pago:</label><br>
+                                <span ng-bind="vacancies.vacancy.paymentFrecuency"></span>
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Fecha de validez:</label><br>
+                                <span ng-bind="vacancies.vacancy.validityDate | date : 'dd/MM/yyyy'"></span>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <label style="font-weight: bold; color: #636f81;">Beneficios:</label><br>
+                                <span ng-repeat="benefit in retrievedBenefits">
+                                    <span>■</span>
+                                    <span ng-bind="benefit.name"></span>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">¡Postularme!</button>
+                    <button type="button" class="btn btn-warning" style="color: white;">Eliminar de favoritos</button>
                 </div>
             </form>
         </div>

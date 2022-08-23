@@ -123,14 +123,11 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
         });
     };
     
-    $scope.openModalInformation = (index) => {
-        console.log(index);
-        console.log($scope.availableVacancies);;
+    $scope.openModalInformation = (fullVacancy) => {
+        console.log(fullVacancy);
+        $scope.vacancies = angular.copy(fullVacancy);
         $("#infoPostulation").modal("show");
-        $scope.vacancies = angular.copy($scope.availableVacancies.find(e =>
-                e.vacancy.id === index
-            ));
-        console.log($scope.vacancies);
+
     };
 
     $scope.filterVacancy = () => {
@@ -181,5 +178,6 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             });
         }
     };
+
 
 }]);
