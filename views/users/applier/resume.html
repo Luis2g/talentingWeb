@@ -12,37 +12,78 @@
     h6{
         color: #395f85;
     }
+    hr {
+        color: #1677d8;
+        background-color:#1677d8; 
+    }
+    .sticky-top-user { top: 5em; }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 <div class="col py-3">
-    <div class="container">
-        <div class="row">
-            <div style="display: inline;" class="col-xxl-8 col-xl-8 col-lg-8 col-md-6 col-sm-6 col-xs-6 col-6">
-                <h1 class="display-6" style="display: inline;">Curriculum Vitae</h1>
+    <div class="container" ng-init="consultarResume()">
+        <div class=" row col-12">
+        <div class="col-xxl-3 col-xl-3 col-lg-3 d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block">
+            <div class="sticky-top sticky-top-user">
+                <div class="card" style="width: auto;">
+                    <div class="text-center mt-3" ng-click="updatePhoto()">
+                        <img src="" class="card-img-top" id="viewProfileImg" alt="..." style="border-radius: 5%;width: 30%;">
+                    </div>
+                    <div class="card-body">
+                      <h5 class="card-title text-center" ng-bind="sesion.person.name +' '+sesion.person.surname+' '+sesion.person.secondSurname"></h5>
+                      <p class="text-center" style="font-weight: 500;" ng-bind="sesion.person.dateOfBirth | date: 'dd/MM/yyyy'"></p>
+                      <hr style="background-color: #000; color: #000;">
+                      <div style="font-weight: 700;">Correo</div>
+                      <div ng-bind="sesion.person.contactInformation.email"></div>
+                      <div style="font-weight: 700;">Teléfono</div>
+                      <div ng-bind="sesion.person.contactInformation.phoneNumber"></div>
+                      <div style="font-weight: 700;">Estado</div>
+                      <div ng-bind="sesion.person.contactInformation.state"></div>
+                      <p style="font-style: italic; font-weight: 200; margin-bottom: 10px;" ng-bind="'Usuario @'+sesion.username"></p>
+                      <a href="#" ng-click="switch.toProfile()" style="font-style: italic;">Editar perfil</a><br>
+                    </div>
+                  </div>
             </div>
-            <div style="display: inline;" class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-6 col-6 text-end mt-2 mb-2">
-                <button class="btn btn-dark" ng-click="generateCV()">Generar PDF</button>
+        </div>
+        <div class="col-xxl-9 col-xl-9 col-lg-9 col-md-12 col-sm-12 col-xs-12 col-12">
+            <div class="row col-12">
+                <div style="display: inline;" class="col-xxl-8 col-xl-8 col-lg-8 col-md-8 col-sm-6 col-xs-6 col-6">
+                    <h1 class="display-6" style="display: inline;color: #395f85;">Curriculum Vitae</h1>
+                </div>
+                <div ng-show="isUpdating" style="display: inline;" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 text-end">
+                    <button class="btn btn-dark" ng-click="generateResume()">Generar CV</button>
+                </div>
+
+                <hr>
             </div>
-            <hr>
             <!-- <h6 class=" text-end mb-3">General</h6>
             <hr> -->
             <div class="row" ng-form="formResume">
-                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control mt-2" id="title" name="title" placeholder=" " ng-model="resume.title" maxlength="250" required>
-                        <label for="names">Titulo <span class="text-danger"> * </span> </label>
+                
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-center">
+                    <label for="" class="mb-1 text-start" style="font-weight: 700;">Foto de perfil</label><br>
+                    <div class="input-group mb-2">
+                        <input type="file" class="form-control" id="profileImage" name="profileImage">
+                    </div>
+                    <img id="ProfileImagePreview" src="" height="250px" style="border-radius: 5px">
+                </div>
+                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-center">
+                    <label for="" class="mb-1" style="font-weight: 700;">Curriculum Vitae en PDF</label>
+                    <div class="input-group mb-2">
+                        <input type="file" class="form-control" id="PDFResume" name="PDFResume">
+                    </div>
+                    <iframe id="previewPDF" src="" width="100%" height="250px" style="border-radius: 5px"></iframe>
+                </div>
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-floating">
+                        <input type="text" class="form-control mt-2" id="title" name="title" placeholder=" " ng-model="resume.title" maxlength="100" required>
+                        <label for="names">Titulo<span class="text-danger"> * </span> </label>
                     </div>
                     <span style="color: red; margin-top: 0px;" ng-show="formResume.title.$error.required && formResume.title.$touched">
                         Este campo es obligatorio 
                      </span>
                 </div>
-                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                    <label for="" class="mb-1">Agregar curriculum vitae en formato pdf</label><br>
-                    <div class="input-group mb-3">
-                        <input type="file" class="form-control" id="resumeOnPDF" name="resumeOnPDF">
-                      </div>
-                </div>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="form-floating mb-3">
+                    <div class="form-floating">
                         <textarea class="form-control mt-2" id="description" name="description" placeholder=" " ng-model="resume.professionalDescription" style="height: 120px" maxlength="250" required></textarea>
                         <label for="description">Descripción profesional <span class="text-danger"> * </span> </label>
                     </div>
@@ -69,7 +110,7 @@
                      </span>
                     <div>
                         <hr>
-                        <div  class="form-floating mb-3">
+                        <div  class="form-floating">
                             <textarea type="Experiencia" class="form-control mt-2" id="expertise" name="expertise" placeholder=" " ng-model="resume.expertise" style="height: 150px" maxlength="250" required></textarea>
                             <label for="expertise">Experiencia <span class="text-danger"> * </span> </label>
                         </div>
@@ -81,7 +122,7 @@
                 <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 mt-4">
                     <h6 class=" text-start mb-4">Historial académico</h6>
                     <hr>
-                    <div class="form-floating mb-3">
+                    <div class="form-floating">
                         <textarea class="form-control mt-2" id="schoolPreparation" name="schoolPreparation" placeholder=" " ng-model="resume.school_preparation" style="height: 150px" maxlength="250" required></textarea>
                         <label for="schoolPreparation">Preparación escolar <span class="text-danger"> * </span> </label>
                     </div>
@@ -89,32 +130,33 @@
                         Este campo es obligatorio 
                      </span>
                 </div>
-            </div>
             
             <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 text-start mt-4">
                 <h6>Habilidades</h6>
                 <hr>
                 <div class="text-start">
-                    <div class="row mb-2" ng-form="formHability">
-                        <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-8 col-sm-8 col-xs-8 col-8">
-                            <div class="form-floating">
-                                <input type="text" class="form-control mt-2" id="hability" name="hability" placeholder=" " ng-change="statusInputHability()" ng-model="hability.hability" required>
-                                <label for="names">Habilidad <span class="text-danger"> * </span> </label>
+                    <form action="">
+                        <div ng-form="formHability" class="row">
+                            <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control mt-2" id="hability" name="hability" placeholder=" " ng-change="statusInputHability()" ng-model="hability.name" required maxlength="50">
+                                    <label for="names">Habilidad <span class="text-danger"> * </span> </label>
+                                </div>
+                                <span style="color: red; margin-top: 0px;" ng-show="listHabilities.length <= 2 ? (formHability.hability.$error.required && formHability.hability.$touched) : ''">
+                                    Mínimo 3 habilidades
+                                 </span>
                             </div>
-                            <span style="color: red; margin-top: 0px;" ng-show="listHabilities.length <= 2 ? (formHability.hability.$error.required && formHability.hability.$touched) : ''">
-                                Este campo es obligatorio, añade minimo 3
-                             </span>
+                            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-center mt-4 mb-3">
+                                <button class="btn btn-outline-success" ng-click="addHability(hability)" > <i class="bi bi-plus-circle"></i> </button>
+                            </div>
                         </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4 col-4 text-center mt-4 mb-3">
-                            <button class="btn btn-outline-success" ng-click="addHability(hability)" >Agregar</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="table-responsive" ng-show="showHabilities">
                     <table class="table align-middle">
-                        <thead class="table-dark">
+                        <thead class="table-light">
                             <tr class="text-center">
-                                <th></th>
+                                <th>#</th>
                                 <th>Habilidad</th>
                                 <th>Eliminar</th>
                             </tr>
@@ -122,8 +164,8 @@
                         <tbody>
                             <tr ng-repeat="hability in listHabilities" class="text-center">
                                 <td ng-bind="$index + 1"></td>
-                                <td ng-bind="hability.hability"></td>
-                                <td><button class="btn btn-danger" ng-click="deleteHability(hability)">Eliminar</button></td>
+                                <td ng-bind="hability.name"></td>
+                                <td><button class="btn btn-outline-danger" ng-click="deleteHability(hability)"> <i class="bi bi-trash"></i> </button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -135,37 +177,40 @@
                 <hr>
                 <div class="text-start">
                     <div class="row mb-2" ng-form="formLanguage">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-6 col-6">
+                        <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-5 col-xs-5 col-5">
                             <div class="form-floating">
                                 <select class="form-select mt-2"  name="language" id="language" ng-model="language.name" required="true" ng-options="l for l in languages">
-                                    <option value="" disabled>Seleccione...</option>
+                                    <option value="">Idioma...</option>
                                 </select>
                                 <label for="name">Idioma <span class="text-danger"> * </span> </label>
                             </div>
                             <span style="color: red; margin-top: 0px;" ng-show="listLanguages.length < 1 ? (formLanguage.language.$error.required && formLanguage.language.$touched) : ''">
-                                Este campo es obligatorio 
+                                Mínimo 1 idioma
                              </span>
                              <span style="color: red; margin-top: 0px;" ng-show="alertLanguageValidation">
                                 Idioma repetido
                              </span>
                         </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-6 col-6">
+                        <div class="col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-5 col-xs-5 col-5">
                             <div class="form-floating">
                                 <select class="form-select mt-2"  name="level" id="level" ng-model="language.level" required="true" ng-options="l for l in languagesLevel">
-                                    <option value="" disabled>Seleccione...</option>
+                                    <option value="">Nivel...</option>
                                 </select>
-                                <label for="level">Nivel</label>
+                                <label for="level">Nivel<span class="text-danger"> * </span> </label>
                             </div>
+                            <span style="color: red; margin-top: 0px;" ng-show="listLanguages.length < 1 ? (formLanguage.level.$error.required && formLanguage.level.$touched) : ''">
+                                Seleccione el nivel
+                             </span>
                         </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-12 col-12 text-center mt-4 mb-3">
-                            <button class="btn btn-outline-success" ng-click="addLanguage(language)" >Agregar</button>
+                        <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-center mt-4 mb-3">
+                            <button class="btn btn-outline-success" ng-click="addLanguage(language)" ><i class="bi bi-plus-circle"></i></button>
                         </div>
                     </div>
                 </div>
 
                 <div class="table-responsive" ng-show="showLanguages">
                     <table class="table align-middle">
-                        <thead class="table-dark">
+                        <thead class="table-light">
                             <tr class="text-center">
                                 <th>#</th>
                                 <th>Idioma</th>
@@ -177,8 +222,8 @@
                             <tr ng-repeat="language in listLanguages" class="text-center">
                                 <td ng-bind="$index + 1"></td>
                                 <td ng-bind="language.name"></td>
-                                <td ng-bind="language.level === undefined ? 'Sin nivel' : language.level"></td>
-                                <td><button class="btn btn-danger" ng-click="deleteLanguage(language)">Eliminar</button></td>
+                                <td ng-bind="(language.level === undefined || language.level === null) ? 'Sin nivel' : language.level"></td>
+                                <td><button class="btn btn-outline-danger" ng-click="deleteLanguage(language)"><i class="bi bi-trash"></i></button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -186,25 +231,33 @@
             </div>
 
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-start mt-4">
-                <div style="display:inline;">
-                    <h6 style="display:inline;">¿Cuentas con certificaciones y/o cursos?</h6>
-                </div>
-                <div style="display:inline; padding-left: 2%;">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" ng-true-value="true" ng-click="hasCourses(true)">
-                        <label class="form-check-label" for="inlineRadio1">Sí</label>
+                <div ng-hide="isUpdating">
+                    <div style="display:inline;">
+                        <h6 style="display:inline;">¿Cuentas con certificaciones y/o cursos?</h6>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" ng-false-value="false" ng-click="hasCourses(false)">
-                        <label class="form-check-label" for="inlineRadio2">No</label>
+                    <div style="display:inline; padding-left: 2%;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" ng-true-value="true" ng-click="hasCourses(true)">
+                            <label class="form-check-label" for="inlineRadio1">Sí</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" ng-false-value="false" ng-click="hasCourses(false)">
+                            <label class="form-check-label" for="inlineRadio2">No</label>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="isUpdating">
+                    <div style="display:inline;">
+                        <h6 style="display:inline;">Certificaciones y/o cursos</h6>
                     </div>
                 </div>
                 <hr>
                 <div class="text-start" ng-show="showModuleCourses">
+                    <form action="">
                     <div class="row mb-2" ng-form="formCourse">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="form-floating">
-                                <input type="text" class="form-control mt-2" name="nameCourse" id="nameCourse" placeholder=" " ng-model="course.name"  required>
+                                <input type="text" class="form-control mt-2" name="nameCourse" id="nameCourse" placeholder=" " ng-model="course.name"  required maxlength="50">
                                 <label for="name">Nombre <span class="text-danger"> * </span> </label>
                             </div>
                             <span style="color: red; margin-top: 0px;" ng-show="formCourse.nameCourse.$error.required && formCourse.nameCourse.$touched">
@@ -213,7 +266,7 @@
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="form-floating">
-                                <input type="text" class="form-control mt-2" name="institute" id="institute" placeholder=" " ng-model="course.institute" required>
+                                <input type="text" class="form-control mt-2" name="institute" id="institute" placeholder=" " ng-model="course.nameOfTheInstitudeThatIssuesIt" required maxlength="50">
                                 <label for="institute">Instituto <span class="text-danger"> * </span> </label>
                             </div>
                             <span style="color: red; margin-top: 0px;" ng-show="formCourse.institute.$error.required && formCourse.institute.$touched">
@@ -222,8 +275,10 @@
                         </div>
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                             <div class="form-floating">
-                                <select class="form-select mt-2"  name="type" id="type" ng-model="course.type" ng-options="c for c in typeCourse" required="true">
+                                <select class="form-select mt-2"  name="type" id="type" ng-model="course.type"  required="true">
                                     <option value="" disabled>Seleccione...</option>
+                                    <option value="false">Curso</option>
+                                    <option value="true">Certificacion</option>
                                 </select>
                                 <label for="type">Tipo <span class="text-danger"> * </span> </label>
                             </div>
@@ -233,7 +288,7 @@
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="form-floating">
-                                <input type="date" class="form-control mt-2" id="expedition" name="expedition" placeholder=" " ng-model="course.expedition" required>
+                                <input type="date" class="form-control mt-2" id="expedition" name="expedition" placeholder=" " ng-model="course.expeditionDate" required>
                                 <label for="expedition">Expedición <span class="text-danger"> * </span> </label>
                             </div>
                             <span style="color: red; margin-top: 0px;" ng-show="formCourse.expedition.$error.required && formCourse.expedition.$touched">
@@ -242,7 +297,7 @@
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <div class="form-floating">
-                                <input type="date" class="form-control mt-2" id="expiration" placeholder=" " ng-model="course.expiration">
+                                <input type="date" class="form-control mt-2" id="expiration" placeholder=" " ng-model="course.expirationDate">
                                 <label for="expiration">Expiración</label>
                             </div>
                         </div>
@@ -253,13 +308,14 @@
                             </div>
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center mt-4 mb-3">
-                            <button class="btn btn-outline-success" ng-click="addCourse(course)" >Agregar</button>
+                            <button class="btn btn-outline-success" ng-click="addCourse(course)" ><i class="bi bi-plus-circle"></i></button>
                         </div>
                     </div>
+                    </form>
                 </div>
                 <div class="table-responsive" ng-show="showCourses">
                     <table class="table align-middle">
-                        <thead class="table-dark">
+                        <thead class="table-light">
                             <tr class="text-center">
                                 <th>#</th>
                                 <th>Nombre</th>
@@ -275,16 +331,18 @@
                             <tr ng-repeat="course in listCourses" class="text-center">
                                 <td ng-bind="$index + 1"></td>
                                 <td ng-bind="course.name"></td>
-                                <td ng-bind="course.institute"></td>
-                                <td ng-bind="course.type"></td>
-                                <td ng-bind="course.hours === undefined ? 'Sin no. de horas' : course.hours + 'hrs'"></td>
-                                <td ng-bind="course.expedition | date:'dd/MM/yyyy'"></td>
-                                <td ng-bind="course.expiration === undefined ? 'No expira' : course.expiration | date:'dd/MM/yyyy'"></td>
-                                <td><button class="btn btn-danger" ng-click="deleteCourse(course)">Eliminar</button></td>
+                                <td ng-bind="course.nameOfTheInstitudeThatIssuesIt"></td>
+                                <td ng-bind="course.type === true ? 'Certificación' : 'Curso'"></td>
+                                <td ng-bind="(course.hours === undefined || course.hours === null) ? 'Sin no. de horas' : course.hours + 'hrs'"></td>
+                                <td ng-bind="course.expeditionDate | date:'dd/MM/yyyy'"></td>
+                                <td ng-bind="(course.expirationDate === undefined || course.expirationDate === null) ? 'No expira' : course.expirationDate | date:'dd/MM/yyyy'"></td>
+                                <td><button class="btn btn-outline-danger" ng-click="deleteCourse(course)"><i class="bi bi-trash"></i></button></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+            
             </div>
 
 
@@ -292,6 +350,7 @@
                 <button type="button" ng-click="switch.toMyVacancies()" class="btn btn-danger pt-2 pe-4 ps-4 pb-2">Cancelar</button>
                 <button type="button" class="btn btn-success pt-2 pe-4 ps-4 pb-2" ng-click="addResume()">Guardar CV</button>
             </div>
+        </div>
         </div>
     </div>
 </div>

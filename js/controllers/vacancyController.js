@@ -81,14 +81,16 @@ function($scope, $http, userService, alertService, $cookies, $location) {
 
 
     $scope.retrieveUserVacancies = () => {
+
+        let employeer = JSON.parse($cookies.get('employeer'));
+
         $http({
             method: 'GET',
             url: 'http://localhost:8080/talenting/vacancies',
-            params: { params: $scope.userSession.id }
+            params: { params: employeer.id }
         }).then( response => {
 
             $scope.postedVacancies = response.data;
-            
         }, err => {
             console.log('This is the error ', err);
         });
