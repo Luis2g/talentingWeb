@@ -12,6 +12,7 @@ talenting.controller('userController', ['$scope', '$http', '$location','userServ
   $scope.enableSendButton = false;
   $scope.enableChangePassword = false;
   $scope.isEmployeer=false;
+
   $scope.frontVariables = {
     userType: "",
     passwordConfirmation: "",

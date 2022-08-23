@@ -1,8 +1,5 @@
 talenting.controller('myFavoritesController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
 
-    let tkn = $cookies.get('tkn');
-    $http.defaults.headers.common.Authorization ="Bearer "+tkn;
-
     $scope.userSession;
     $scope.myFavoriteOnes = [];
 
