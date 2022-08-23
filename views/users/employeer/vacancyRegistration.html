@@ -13,6 +13,29 @@
 
         <hr>
 
+        <div class="row">
+            <div class="col-3">
+                <div class="mb-3"><strong>Buscar vacantes por región</strong></div>
+                <div class="mb-3">
+                    <select class="form-control" ng-model="stateSelected" ng-change="filterVacancy()"
+                        ng-options="state.estado as state.estado for state in states track by state.clave">
+                        <option value="" selected>Seleccione...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6"></div>
+            <div class="col-3">
+                <div class="mb-3"><strong>Buscar vacantes por puesto</strong></div>
+                <div class="mb-3 row">
+                    <div class="col-10"><input class="form-control" ng-model="vacancyTitle"
+                            placeholder="Analista Programador"></input></div>
+                    <div class="col-2"><button ng-click="filterVacancy()"
+                            class="btn btn-outline-primary borderless"><span
+                                class="material-icons">search</span></button></div>
+                </div>
+            </div>
+        </div>
+
         <div class="col py-3 p-4" ng-init="retrieveUserVacancies()">
             <table class="table table-stiped table-responsive">
                 <thead>

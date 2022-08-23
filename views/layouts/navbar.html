@@ -10,7 +10,7 @@
                     <a class="nav-link active" type="button" ng-click="switch.toLandingPage()" aria-current="page">Principal</a>
                 </li>
                 <li class="nav-item" ng-if="session !== undefined && session.role === 'employeer'" >
-                    <a class="nav-link active" type="button" ng-click="switch.toVacancyRegistration()" aria-current="page">Consultar postulaciones</a>
+                    <a class="nav-link active" type="button" ng-click="switch.toVacancyRegistration()" aria-current="page">Consultar vacantes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" ng-if="session !== undefined && session.role === 'employee'" aria-current="page" type="button" ng-click="switch.toMyVacancies()" >Mis aplicaciones</a>
