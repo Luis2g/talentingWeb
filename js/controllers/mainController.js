@@ -4,6 +4,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
     $http.defaults.headers.post["Content-Type"] = "application/json";
     $scope.availableVacancies = [];
     $scope.userSession;
+    $scope.vacancies = {};
     
     let session = $cookies.get('user');
 
@@ -120,6 +121,14 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
         });
     };
     
-
+    $scope.openModalInformation = (index) => {
+        console.log(index);
+        console.log($scope.availableVacancies);;
+        $("#infoPostulation").modal("show");
+        $scope.vacancies = angular.copy($scope.availableVacancies.find(e =>
+                e.vacancy.id === index
+            ));
+        console.log($scope.vacancies);
+    }
 
 }]);
