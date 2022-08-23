@@ -4,9 +4,6 @@ talenting.controller('userController', ['$scope', '$http', '$location','userServ
   $scope.user = {};
   $scope.contactInformation = {};
   $scope.employeer = {};
-
-  
-  
   $scope.frontVariables = {
     userType: "",
     passwordConfirmation: "",
