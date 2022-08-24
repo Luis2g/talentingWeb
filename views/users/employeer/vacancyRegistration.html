@@ -149,14 +149,11 @@
                                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="form-floating mb-3">
                                             <input id="startDate" name="startDate" class="form-control mt-2"
-                                                ng-model="vacancy.startDate" type="date" min="{{currentDate}}" required>
+                                                ng-model="vacancy.startDate" type="date" required>
                                             <label for="startDate">Fecha inicio</label>
                                             <span style="color: red"
                                                 ng-show="vacancyRegistration.startDate.$error.required && vacancyRegistration.startDate.$touched || vacancyRegistration.title.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
-                                            </span>
-                                            <span style="color: red;" ng-show="vacancyRegistration.startDate.$error.min">
-                                                La fecha no puede ser menor a la actual
                                             </span>
                                         </div>
                                     </div>
@@ -168,25 +165,17 @@
                                                 ng-show="vacancyRegistration.minimumSalary.$error.required && vacancyRegistration.minimumSalary.$touched || vacancyRegistration.minimumSalary.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
                                             </span>
-                                            <span style="color: red"
-                                                ng-show="vacancyRegistration.maximumSalary.$error.min">
-                                                El salario mínimo no puede ser mayor al salario máximo
-                                            </span>
                                             <label for="minimumSalary">Salario mínimo</label>
                                         </div>
                                     </div>
                                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="form-floating mb-3">
                                             <input id="maximumSalary" name="maximumSalary" class="form-control mt-2"
-                                                placeholder=" " ng-model="vacancy.maximumSalary" min="{{vacancy.minimumSalary}}" type="number" required>
+                                                placeholder=" " ng-model="vacancy.maximumSalary" type="number" required>
                                             <label for="maximumSalary">Salario máximo</label>
                                             <span style="color: red"
                                                 ng-show="vacancyRegistration.maximumSalary.$error.required && vacancyRegistration.maximumSalary.$touched || vacancyRegistration.maximumSalary.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
-                                            </span>
-                                            <span style="color: red"
-                                                ng-show="vacancyRegistration.maximumSalary.$error.min">
-                                                El salario máximo no puede ser menor al salario mínimo
                                             </span>
                                         </div>
                                     </div>
@@ -208,18 +197,15 @@
                                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                         <div class="form-floating mb-3">
                                             <input id="validityDate" name="validityDate" class="form-control mt-2"
-                                                placeholder=" " ng-model="vacancy.validityDate" type="date" min="{{currentDate}}" required>
+                                                placeholder=" " ng-model="vacancy.validityDate" type="date" required>
                                             <span style="color: red"
                                                 ng-show="vacancyRegistration.validityDate.$error.required && vacancyRegistration.validityDate.$touched || vacancyRegistration.validityDate.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
                                             </span>
-                                            <span style="color: red;" ng-show="vacancyRegistration.validityDate.$error.min">
-                                                La fecha no puede ser menor a la actual
-                                            </span>
                                             <label for="validityDate">Fecha de validez</label>
                                         </div>
                                     </div>
-                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                         <div class=" mb-3">
                                             <label for="benefitsToSelect">Beneficios extras</label>
                                             <select id="benefitsToSelect" name="benefitsToSelect" class="form-control"
@@ -230,7 +216,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                         <div class=" mb-3">
                                             <label for="benefitsToSelect">Beneficios seleccionados</label>
                                             <select id="benefitsToSelect" name="benefitsToSelect" ng-model="selected"
@@ -327,14 +313,11 @@
                                     <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
                                         <div class="form-floating mb-3">
                                             <input id="startDate" name="startDate" class="form-control mt-2"
-                                                ng-model="fullVacancyToUpdate.vacancy.startDate" type="date" min="{{currentDate}}" required>
+                                                ng-model="fullVacancyToUpdate.vacancy.startDate" type="date" required>
                                             <label for="startDate">Fecha inicio</label>
                                             <span style="color: red"
                                                 ng-show="vacancyUpdate.startDate.$error.required && vacancyUpdate.startDate.$touched || vacancyUpdate.title.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
-                                            </span>
-                                            <span style="color: red;" ng-show="vacancyUpdate.startDate.$error.min">
-                                                La fecha no puede ser menor a la actual
                                             </span>
                                         </div>
                                     </div>
@@ -347,10 +330,6 @@
                                                 ng-show="vacancyUpdate.minimumSalary.$error.required && vacancyUpdate.minimumSalary.$touched || vacancyUpdate.minimumSalary.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
                                             </span>
-                                            <span style="color: red"
-                                                ng-show="vacancyUpdate.maximumSalary.$error.min">
-                                                El salario mínimo no puede ser mayor al salario máximo
-                                            </span>
                                             <label for="minimumSalary">Salario mínimo</label>
                                         </div>
                                     </div>
@@ -358,15 +337,11 @@
                                         <div class="form-floating mb-3">
                                             <input id="maximumSalary" name="maximumSalary" class="form-control mt-2"
                                                 placeholder=" " ng-model="fullVacancyToUpdate.vacancy.maximumSalary"
-                                                type="number" min="{{fullVacancyToUpdate.vacancy.minimumSalary}}" required>
+                                                type="number" required>
                                             <label for="maximumSalary">Salario máximo</label>
                                             <span style="color: red"
                                                 ng-show="vacancyUpdate.maximumSalary.$error.required && vacancyUpdate.maximumSalary.$touched || vacancyUpdate.maximumSalary.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
-                                            </span>
-                                            <span style="color: red"
-                                                ng-show="vacancyUpdate.maximumSalary.$error.min">
-                                                El salario máximo no puede ser menor al salario mínimo
                                             </span>
                                         </div>
                                     </div>
@@ -390,13 +365,10 @@
                                         <div class="form-floating mb-3">
                                             <input id="validityDate" name="validityDate" class="form-control mt-2"
                                                 placeholder=" " ng-model="fullVacancyToUpdate.vacancy.validityDate"
-                                                type="date" min="{{currentDate}}" required>
+                                                type="date" required>
                                             <span style="color: red"
                                                 ng-show="vacancyUpdate.validityDate.$error.required && vacancyUpdate.validityDate.$touched || vacancyUpdate.validityDate.$error.required && frontVariables.inValidVacancyForm">
                                                 Este campo es obligatorio
-                                            </span>
-                                            <span style="color: red;" ng-show="vacancyUpdate.validityDate.$error.min">
-                                                La fecha no puede ser menor a la actual
                                             </span>
                                             <label for="validityDate">Fecha de validez</label>
                                         </div>

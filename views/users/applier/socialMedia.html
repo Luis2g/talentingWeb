@@ -1,220 +1,144 @@
 <style>
-    .borderless {
+    .borderless{
         border: none;
         background: none;
     }
-
-    .icon-color {
+    .icon-color{
         color: #4f84b8
     }
 </style>
 
-<div class="col py-3 mt-5" ng-init="retrieveSharedVacancies()">
+<div class="col py-3 mt-5" ng-init="retrieveSharedVacancies()" >
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <h1 class="display-5">Red social</h1>
                 <hr>
             </div>
-            <div ng-init="getPeopleToAddAsFriends()"
-                class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
-                <h4 class="card-title mb-2 text-muted fw-normal">Sugerencia de amigos</h4>
-                <div ng-repeat="personDTO in people | limitTo: 3" class="card mb-2" style="width: 100%; height: auto;">
+            <div ng-init="getPeopleToAddAsFriends()" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
+                <!-- <div class="mb-2">
+                    <input class="form-control" type="search" placeholder="Buscar amigos">
+                </div> -->
+                <div ng-repeat="personDTO in people" class="card mb-2" style="width: 100%; height: auto;">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row" >
                             <div class="col-6">
-                                <h5 class="card-title"
-                                    ng-bind="personDTO.person.name + ' ' + personDTO.person.surname + ' ' + personDTO.person.secondSurname">
-                                </h5>
+                                <h5 class="card-title" ng-bind="personDTO.person.name + ' ' + personDTO.person.surname + ' ' + personDTO.person.secondSurname" ></h5>
                             </div>
-                            <div class="col-6 mt-2" ng-if="personDTO.whoSentIt !== null">
-                                <div class=" text-end" ng-if="personDTO.whoSentIt === 'them'">
+                            <div class="col-6 mt-2" ng-if="personDTO.whoSentIt !== null" >
+                                <div class=" text-end" ng-if="personDTO.whoSentIt === 'them'" >
                                     Solicitud de amistad
-                                    <button class="btn btn-outline-success"
-                                        ng-click="confirmFriendshipRequest(personDTO.id, $index)">Aceptar</button>
-                                    <button class="btn btn-outline-danger"
-                                        ng-click="rejectFriendshipRequest(personDTO.id, $index)">Rechazar</button>
+                                    <button class="btn btn-outline-success" ng-click="confirmFriendshipRequest(personDTO.id, $index)" >Aceptar</button>
+                                    <button class="btn btn-outline-danger" ng-click="rejectFriendshipRequest(personDTO.id, $index)" >Rechazar</button>
                                 </div>
-                                <div class="text-end" ng-if="personDTO.whoSentIt === 'me'">
-                                    <button class="btn btn-outline-danger"
-                                        ng-click="cancelFriendshipRequest(personDTO.id, $index)">Cancelar
-                                        solicitud</button>
+                                <div class="text-end" ng-if="personDTO.whoSentIt === 'me'" >
+                                    <button class="btn btn-outline-danger" ng-click="cancelFriendshipRequest(personDTO.id, $index)" >Cancelar solicitud</button>
                                 </div>
                             </div>
-                            <div class="text-end" ng-if="personDTO.whoSentIt === null">
-                                <button class="btn btn-outline-success"
-                                    ng-click="sendFriendshipRequest(personDTO.person.id, $index)">Enviar
-                                    solicitud</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <h4 ng-if="friends.length > 0" class="card-title mb-2 text-muted fw-normal">Amigos agregados</h4>
-                <div ng-repeat="friend in friends | limitTo: 3" class="card mb-2" style="width: 100%; height: auto;">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <h5 class="card-title"
-                                    ng-bind="friend.name + ' ' + friend.surname + ' ' + friend.secondSurname">
-                                </h5>
-                            </div>
-                            <div class="text-end">
-                                <button class="btn btn-outline-danger"
-                                    ng-click="deleteFriend(friend.id)">Eliminar amigo</button>
+                            <div class="text-end" ng-if="personDTO.whoSentIt === null" >
+                                <button class="btn btn-outline-success" ng-click="sendFriendshipRequest(personDTO.person.id, $index)" >Enviar solicitud</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-8 mt-3">
-            <div class="mb-2" ng-repeat="fullVacancy in sharedVacancies track by $index">
-                <div class="card" style="width: 100%;">
-                    <div class="card-body position-relative">
-                        <div class="row col-12">
-                            <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
-                                <h2 class="card-title">Compañia: <strong style="color: #81868b"
-                                        ng-bind="fullVacancy.vacancy.employeer.companyName"></strong></h2>
-                                <h3><span class="card-subtitle mb-2 badge rounded-pill bg-primary" style="color: white"
-                                        ng-bind="fullVacancy.vacancy.title"></span></h3>
-                            </div>
-                            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-end">
-                                <button class="btn btn-outline-warning position-absolute top-2 end-0 borderless"
-                                    ng-click="openModalInformation(fullVacancy)"><span
-                                        class="material-icons">lightbulb</span></button>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th>
-                                        <div class="text-muted">Modalidad: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center" ng-bind="fullVacancy.vacancy.modality">
-                                        </div>
-                                    </th>
-                                    <!-- <th>&nbsp;&nbsp;&nbsp;</th> -->
-                                    <th>
-                                        <div class="text-muted">Estado: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center "
-                                            ng-bind="fullVacancy.vacancy.stateInWhichIsAvailable"></div>
-                                    </th>
-                                    <th>
-                                        <div class="text-muted">Salario minimo: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center"
-                                            ng-bind="fullVacancy.vacancy.minimumSalary | currency "></div>
-                                    </th>
-                                </tr>
-                                <tr>
 
-                                    <!-- <th></th> -->
-                                    <th>
-                                        <div class="text-muted align-middle">Salario máximo: </div>
-                                    </th>
-                                    <th class="table-warning">
-                                        <div class="text-muted text-center "
-                                            ng-bind="fullVacancy.vacancy.maximumSalary | currency"></div>
-                                    </th>
-
-                                    <th>
-                                        <div class="text-muted">Fecha de validez: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center"
-                                            ng-bind="fullVacancy.vacancy.validityDate | date :'dd/MM/yyyy'"></div>
-                                    </th>
-                                    <!-- <th></th> -->
-                                    <th>
-                                        <div class="text-muted align-middle">Fecha de inicio: </div>
-                                    </th>
-                                    <th class="table-warning">
-                                        <div class="text-muted text-center "
-                                            ng-bind="fullVacancy.vacancy.startDate | date :'dd/MM/yyyy'"></div>
-                                    </th>
-                                </tr>
-                                <!-- <tr>
+            <div class="col-8 mt-3" >
+                <div class="mb-2" ng-repeat="fullVacancy in sharedVacancies track by $index" >
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body position-relative">
+                            <div class="row col-12">
+                                <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
+                                    <h2 class="card-title" >Compañia: <strong style="color: #81868b" ng-bind="fullVacancy.vacancy.employeer.companyName" ></strong></h2>
+                                    <h3><span class="card-subtitle mb-2 badge rounded-pill bg-primary" style="color: white" ng-bind="fullVacancy.vacancy.title" ></span></h3>
+                                </div>
+                                <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-end">
+                                    <button class="btn btn-outline-warning position-absolute top-2 end-0 borderless" ng-click="openModalInformation(fullVacancy)" ><span class="material-icons">lightbulb</span></button>
+                                </div>
+                            </div>
+                            <div class="table-responsive" >
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th><div class="text-muted" >Modalidad: </div></th>
+                                        <th class="table-warning align-middle" ><div class="text-muted text-center"  ng-bind="fullVacancy.vacancy.modality" ></div></th>
+                                        <!-- <th>&nbsp;&nbsp;&nbsp;</th> -->
+                                        <th><div class="text-muted" >Estado: </div></th>
+                                        <th class="table-warning align-middle" ><div class="text-muted text-center " ng-bind="fullVacancy.vacancy.stateInWhichIsAvailable" ></div></th>
+                                        <th><div class="text-muted" >Salario minimo: </div></th>
+                                        <th class="table-warning align-middle" ><div class="text-muted text-center" ng-bind="fullVacancy.vacancy.minimumSalary | currency " ></div></th>
+                                    </tr>
+                                    <tr>
+                                        
+                                        <!-- <th></th> -->
+                                        <th><div class="text-muted align-middle" >Salario máximo: </div></th>
+                                        <th class="table-warning" ><div class="text-muted text-center " ng-bind="fullVacancy.vacancy.maximumSalary | currency" ></div></th>
+                                    
+                                        <th><div class="text-muted" >Fecha de validez: </div></th>
+                                        <th class="table-warning align-middle" ><div class="text-muted text-center" ng-bind="fullVacancy.vacancy.validityDate | date :'dd/MM/yyyy'" ></div></th>
+                                        <!-- <th></th> -->
+                                        <th><div class="text-muted align-middle" >Fecha de inicio: </div></th>
+                                        <th class="table-warning" ><div class="text-muted text-center " ng-bind="fullVacancy.vacancy.startDate | date :'dd/MM/yyyy'" ></div></th>
+                                    </tr>
+                                    <!-- <tr>
                                         
                                     </tr> -->
-                            </table>
+                                </table>
+    
+                            </div>
+                            <hr>
+    
+                            <div>
+                                <button style="width: 100%" type="button" ng-if="fullVacancy.applied === 0"  ng-click="apply(fullVacancy.vacancy.id, $index)" class="btn btn-outline-success">Postularme</button>
+                                <button style="width: 100%" type="button" ng-if="fullVacancy.applied > 0"  ng-click="disapply(fullVacancy.applied, $index)" class="btn btn-outline-danger">Retirar postulación</button>
+                            </div>
+                            <div class="row mt-2 " >
 
-                        </div>
-                        <hr>
-
-                        <div>
-                            <button style="width: 100%" type="button" ng-if="fullVacancy.applied === 0"
-                                ng-click="apply(fullVacancy.vacancy.id, $index)"
-                                class="btn btn-outline-success">Postularme</button>
-                            <button style="width: 100%" type="button" ng-if="fullVacancy.applied > 0"
-                                ng-click="disapply(fullVacancy.applied, $index)" class="btn btn-outline-danger">Retirar
-                                postulación</button>
-                        </div>
-                        <div class="row mt-2 ">
-
-                            <div class="col-6 text-start mt-3">
-                                <p class="text-muted" style="margin:0px; font-size: 15px; font-weight: bold">
-                                    <strong>Publicado por: </strong><span
-                                        ng-bind="fullVacancy.vacancy.employeer.person.name + ' ' + fullVacancy.vacancy.employeer.person.surname + ' ' + fullVacancy.vacancy.employeer.person.secondSurname"></span>
-                                </p>
-                                <p style="margin: 0px; font-size: 15px; font-weight: 200 "><strong>Compartido por:
-                                    </strong><span ng-if="fullVacancy.you"><span
-                                            class="material-icons">U</span>sted</span></p>
-                                <div style="margin: 0px" class="text-muted align-middle"
-                                    ng-repeat="shares in fullVacancy.peopleWhoSharedIt track by $index">
-                                    <div ng-if="shares.id !== userSession.id">
-                                        <div class="mt-2" style="display: inline">
-                                            <span class="material-icons icon-color">face</span>
+                                <div class="col-6 text-start mt-3" >
+                                    <p class="text-muted" style="margin:0px; font-size: 15px; font-weight: bold" ><strong>Publicado por: </strong><span ng-bind="fullVacancy.vacancy.employeer.person.name + ' ' + fullVacancy.vacancy.employeer.person.surname + ' ' + fullVacancy.vacancy.employeer.person.secondSurname" ></span></p>
+                                    <p style="margin: 0px; font-size: 15px; font-weight: 200 " ><strong>Compartido por: </strong><span  ng-if="fullVacancy.you"  ><span class="material-icons">U</span  >sted</span></p>
+                                    <div style="margin: 0px" class="text-muted align-middle" ng-repeat="shares in fullVacancy.peopleWhoSharedIt track by $index"  >
+                                        <div  ng-if="shares.id !== userSession.id" >
+                                            <div class="mt-2" style="display: inline" >
+                                                <span  class="material-icons icon-color">face</span>
+                                            </div>
+                                            <p
+                                                style="margin-bottom: 0px; display: inline;" 
+                                                ng-bind="shares.name + ' ' + shares.surname + ' ' + shares.secondSurname" 
+                                            >
+                                            </p>
                                         </div>
-                                        <p style="margin-bottom: 0px; display: inline;"
-                                            ng-bind="shares.name + ' ' + shares.surname + ' ' + shares.secondSurname">
-                                        </p>
                                     </div>
+
+                                </div>
+                                <div class="col-6 text-end " >
+                                    <button ng-if="fullVacancy.shared === 0" ng-click="share(fullVacancy.vacancy.id, $index)" class="btn btn-outline-primary borderless" >Compartir</button>
+                                    <button ng-if="fullVacancy.shared > 0" ng-click="unShare(fullVacancy.shared, $index)" class="btn btn-outline-primary borderless" ><span class="material-icons">share</span></button>
+                                    <button ng-if="fullVacancy.favorite === 0" ng-click="favorite(fullVacancy.vacancy.id, $index)" class="btn btn-outline-danger borderless">Marcar como favorito</button>
+                                    <button ng-if="fullVacancy.favorite > 0" ng-click="unFavorite(fullVacancy.favorite, $index)" class="btn btn-outline-danger borderless"><span class="material-icons ">favorite</span></button>
                                 </div>
 
+                                
                             </div>
-                            <div class="col-6 text-end ">
-                                <button ng-if="fullVacancy.shared === 0"
-                                    ng-click="share(fullVacancy.vacancy.id, $index)"
-                                    class="btn btn-outline-primary borderless">Compartir</button>
-                                <button ng-if="fullVacancy.shared > 0" ng-click="unShare(fullVacancy.shared, $index)"
-                                    class="btn btn-outline-primary borderless"><span
-                                        class="material-icons">share</span></button>
-                                <button ng-if="fullVacancy.favorite === 0"
-                                    ng-click="favorite(fullVacancy.vacancy.id, $index)"
-                                    class="btn btn-outline-danger borderless">Marcar como favorito</button>
-                                <button ng-if="fullVacancy.favorite > 0"
-                                    ng-click="unFavorite(fullVacancy.favorite, $index)"
-                                    class="btn btn-outline-danger borderless"><span
-                                        class="material-icons ">favorite</span></button>
-                            </div>
-
-
+    
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 
 <!-- Modal for info postulation -->
 <div class="modal fade" id="infoPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
 
-        <div class="modal-content">
-            <form action="">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Información de la empresa </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+    <div class="modal-content">
+        <form action="">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Información de la empresa </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
                     <div class="col-12">
                         <div class="row">
@@ -224,9 +148,7 @@
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <h6>Nombre del contratador:</h6>
-                                <p
-                                    ng-bind="vacancies.vacancy.employeer.person.name +' '+vacancies.vacancy.employeer.person.surname +' '+vacancies.vacancy.employeer.person.secondSurname">
-                                </p>
+                                <p ng-bind="vacancies.vacancy.employeer.person.name +' '+vacancies.vacancy.employeer.person.surname +' '+vacancies.vacancy.employeer.person.secondSurname"></p>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <h6>Rol del contratador:</h6>
@@ -306,13 +228,13 @@
 <!-- Modal for info postulation -->
 <div class="modal fade" id="infoPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form action="">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Información</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+      <div class="modal-content">
+        <form action="">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Información</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                     <div class="col-12">
                         <div class="row">
                             <div class="form-group col-12 col-lg-6 col-md-6 col-sm-6 col-xl-6">
@@ -324,8 +246,7 @@
                                 <span ng-bind="vacancies.vacancy.employeer.stateTheCompanyIsIn"></span>
                             </div>
                         </div>
-                        <hr width="100%"
-                            style="height: 2px; color: rgb(0, 143, 7); background-color: rgb(0, 143, 7);" />
+                        <hr width="100%" style="height: 2px; color: rgb(0, 143, 7); background-color: rgb(0, 143, 7);"/>
                         <div class="row">
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 mb-2">
                                 <label style="font-weight: bold; color: #636f81;">Puesto:</label><br>

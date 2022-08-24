@@ -20,8 +20,6 @@ talenting.controller('vacancyController',
                 inValidVacancyForm: false
             }
 
-            $scope.currentDate = new Date().toISOString().split('T')[0];
-
             let session = $cookies.get('user');
 
 
@@ -315,7 +313,7 @@ talenting.controller('vacancyController',
                 let registrationVacancy = new bootstrap.Modal(document.getElementById("updatePostulation"), {});
                 $scope.vacancyUpdate.$setUntouched();
                 $scope.vacancyUpdate.$setPristine();
-                
+
                 registrationVacancy.show();
             }
             $scope.closeModalForRegistration = () => {
@@ -331,5 +329,6 @@ talenting.controller('vacancyController',
                 var modal = bootstrap.Modal.getInstance(myModalEl)
                 modal.hide();
             }
+
 
         }]);
