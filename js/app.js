@@ -38,7 +38,8 @@ talenting.config(['$routeProvider', function($routeProvider){
             templateUrl: '/views/users/applier/vacancies.html'
         })
         .when('/profile', {
-            templateUrl: '/views/users/profile.html'
+            templateUrl: '/views/users/profile.html',
+            controller: 'userController'
         })
         .when('/resume', {
             templateUrl: '/views/users/applier/resume.html',

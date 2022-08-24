@@ -39,6 +39,23 @@ talenting.controller('appliersController',
                         params: { status: status, id: id, vacancy: applier.vacancy.id }
                     }).then(response => {
                         $scope.loadAppliersByVacancy();
+                        let company = $scope.vacancy.employeer.companyName
+                        $scope.email = $scope.vacancy.employeer.companyName
+                        
+                        let mail = {
+                            to: applier.person.contactInformation.email,
+                            subject: 'Notificación Talenting.',
+                            content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                        }
+
+                        $http({
+                            method: 'POST',
+                            url: 'http://localhost:8080/talenting/sendNotification',
+                            data: mail
+                        }).then(response => {
+
+                        }, err => {
+                        });
                     }, err => {
                     });
                 }
@@ -89,6 +106,50 @@ talenting.controller('appliersController',
                         }).then(response => {
                             alertService.showAlert.success('Se ha modificado el estado de la solicitud exitosamente');
                             $scope.loadAppliersByVacancy();
+                            let company = $scope.vacancy.employeer.companyName
+                            if(status === 'Rechazado'){
+                                let mail = {
+                                    to: applier.person.contactInformation.email,
+                                    subject: 'Notificación Talenting.',
+                                    content: 'Tu solicitud para la vacante de la empresa '+company+' a la cual te has postulado, ha sido rechazada.', 
+                                }
+                                $http({
+                                    method: 'POST',
+                                    url: 'http://localhost:8080/talenting/sendNotification',
+                                    data: mail
+                                }).then(response => {
+    
+                                }, err => {
+                                });
+                            }else if(status ==='Contratado'){
+                                let mail = {
+                                    to: applier.person.contactInformation.email,
+                                    subject: 'Notificación Talenting.',
+                                    content: '¡Felicidades!, te informamos que la empresa '+company+' te ha contratado, se contactarán contigo lo más pronto posible', 
+                                }
+                                $http({
+                                    method: 'POST',
+                                    url: 'http://localhost:8080/talenting/sendNotification',
+                                    data: mail
+                                }).then(response => {
+    
+                                }, err => {
+                                });
+                            }else if(status === 'Idoneo'){
+                                let mail = {
+                                    to: applier.person.contactInformation.email,
+                                    subject: 'Notificación Talenting.',
+                                    content: 'Hola hay buenas noticias, estas cerca de conseguir un nuevo empleo, la empresa '+company+' te ha considerado un candidato idóneo para formar parte de su equipo se trabajo', 
+                                }
+                                $http({
+                                    method: 'POST',
+                                    url: 'http://localhost:8080/talenting/sendNotification',
+                                    data: mail
+                                }).then(response => {
+    
+                                }, err => {
+                                });
+                            }
                         }, err => {
                             alertService.showAlert.error('Ocurrio un error al cambiar el estado de la solicitud');
                         });
@@ -110,9 +171,17 @@ talenting.controller('appliersController',
                 $scope.modal = new bootstrap.Modal(document.getElementById("interviewModal"), {});
                 $scope.interviewModalRegister.$setUntouched();
                 $scope.interviewModalRegister.$setPristine();
-
+                $scope.email = applier.person.contactInformation.email;
                 $scope.modal.show();
             };
+
+            $scope.formatDate = (date) => {
+                let ye = new Intl.DateTimeFormat('en', {year: 'numeric'}).format(date);
+                let mo = new Intl.DateTimeFormat('en', {month: '2-digit'}).format(date);
+                let da = new Intl.DateTimeFormat('en', {day: '2-digit'}).format(date);
+                return  ye + "-" + mo + "-" + da;
+            }
+
 
             $scope.setInterviewDate = () => {
                 let date = new Date($scope.interviewDate);
@@ -126,6 +195,22 @@ talenting.controller('appliersController',
                     alertService.showAlert.success('Se ha registrado la entrevista exitosamente');
                     $scope.interviewDate = "";
                     $scope.modal.hide();
+                        let company = $scope.vacancy.employeer.companyName
+                        let fechaAgendada = $scope.formatDate($scope.interviewDate)
+                        console.log()
+                        let mail = {
+                            to: $scope.email,
+                            subject: 'Notificación Talenting.',
+                            content: 'La empresa '+company+' ha agendado una entravista de trabajo para la fecha: '+fechaAgendada, 
+                        }
+                        $http({
+                            method: 'POST',
+                            url: 'http://localhost:8080/talenting/sendNotification',
+                            data: mail
+                        }).then(response => {
+
+                        }, err => {
+                        });
                 }, err => {
                     alertService.showAlert.error('Ocurrio un error al registrar la entrevista');
                 });
