@@ -9,8 +9,11 @@ talenting.controller('navbarController', ['$scope', '$location','userService', '
 
 
     $scope.switch = {
-        toLandingPage: () => {
+        toMainView: () => {
             $location.path('/');
+        },
+        toLandingPage: () => {
+            $location.path('/landingPage');
         },
         toUserRegistration: () => {
             $location.path('/userRegistration');
