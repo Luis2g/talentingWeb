@@ -15,28 +15,52 @@
                 <h1 class="display-5">Red social</h1>
                 <hr>
             </div>
-            <div ng-init="getPeopleToAddAsFriends()" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
-                <!-- <div class="mb-2">
-                    <input class="form-control" type="search" placeholder="Buscar amigos">
-                </div> -->
-                <div ng-repeat="personDTO in people" class="card mb-2" style="width: 100%; height: auto;">
+            <div ng-init="getPeopleToAddAsFriends()"
+                class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
+                <h4 class="card-title mb-2 text-muted fw-normal">Sugerencia de amigos</h4>
+                <div ng-repeat="personDTO in people | limitTo: 3" class="card mb-2" style="width: 100%; height: auto;">
                     <div class="card-body">
-                        <div class="row" >
+                        <div class="row">
                             <div class="col-6">
-                                <h5 class="card-title" ng-bind="personDTO.person.name + ' ' + personDTO.person.surname + ' ' + personDTO.person.secondSurname" ></h5>
+                                <h5 class="card-title"
+                                    ng-bind="personDTO.person.name + ' ' + personDTO.person.surname + ' ' + personDTO.person.secondSurname">
+                                </h5>
                             </div>
-                            <div class="col-6 mt-2" ng-if="personDTO.whoSentIt !== null" >
-                                <div class=" text-end" ng-if="personDTO.whoSentIt === 'them'" >
+                            <div class="col-6 mt-2" ng-if="personDTO.whoSentIt !== null">
+                                <div class=" text-end" ng-if="personDTO.whoSentIt === 'them'">
                                     Solicitud de amistad
-                                    <button class="btn btn-outline-success" ng-click="confirmFriendshipRequest(personDTO.id, $index)" >Aceptar</button>
-                                    <button class="btn btn-outline-danger" ng-click="rejectFriendshipRequest(personDTO.id, $index)" >Rechazar</button>
+                                    <button class="btn btn-outline-success"
+                                        ng-click="confirmFriendshipRequest(personDTO.id, $index)">Aceptar</button>
+                                    <button class="btn btn-outline-danger"
+                                        ng-click="rejectFriendshipRequest(personDTO.id, $index)">Rechazar</button>
                                 </div>
-                                <div class="text-end" ng-if="personDTO.whoSentIt === 'me'" >
-                                    <button class="btn btn-outline-danger" ng-click="cancelFriendshipRequest(personDTO.id, $index)" >Cancelar solicitud</button>
+                                <div class="text-end" ng-if="personDTO.whoSentIt === 'me'">
+                                    <button class="btn btn-outline-danger"
+                                        ng-click="cancelFriendshipRequest(personDTO.id, $index)">Cancelar
+                                        solicitud</button>
                                 </div>
                             </div>
-                            <div class="text-end" ng-if="personDTO.whoSentIt === null" >
-                                <button class="btn btn-outline-success" ng-click="sendFriendshipRequest(personDTO.person.id, $index)" >Enviar solicitud</button>
+                            <div class="text-end" ng-if="personDTO.whoSentIt === null">
+                                <button class="btn btn-outline-success"
+                                    ng-click="sendFriendshipRequest(personDTO.person.id, $index)">Enviar
+                                    solicitud</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <h4 ng-if="friends.length > 0" class="card-title mb-2 text-muted fw-normal">Amigos agregados</h4>
+                <div ng-repeat="friend in friends | limitTo: 3" class="card mb-2" style="width: 100%; height: auto;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 class="card-title"
+                                    ng-bind="friend.name + ' ' + friend.surname + ' ' + friend.secondSurname">
+                                </h5>
+                            </div>
+                            <div class="text-end">
+                                <button class="btn btn-outline-danger"
+                                    ng-click="deleteFriend(friend.id)">Eliminar amigo</button>
                             </div>
                         </div>
                     </div>
