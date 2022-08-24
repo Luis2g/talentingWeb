@@ -36,7 +36,7 @@ talenting.controller('appliersController',
                     $http({
                         method: 'POST',
                         url: 'http://localhost:8080/talenting/changeAppliersStatus',
-                        params: { status: status, id: id }
+                        params: { status: status, id: id, vacancy: applier.vacancy.id }
                     }).then(response => {
                         $scope.loadAppliersByVacancy();
                     }, err => {
@@ -61,7 +61,7 @@ talenting.controller('appliersController',
                         $http({
                             method: 'POST',
                             url: 'http://localhost:8080/talenting/changeAppliersStatus',
-                            params: { status: status, id: id }
+                            params: { status: status, id: id, vacancy: applier.vacancy.id }
                         }).then(response => {
                             alertService.showAlert.success('Se ha modificado el estado de la solicitud exitosamente');
                             $scope.loadAppliersByVacancy();
@@ -82,6 +82,7 @@ talenting.controller('appliersController',
 
             $scope.openModalInterview = (applier) => {
                 $scope.applierInterview = applier;
+                $scope.interviewDate = new Date (applier.interviewDate + " 00:00:00");
                 $scope.modal = new bootstrap.Modal(document.getElementById("interviewModal"), {});
                 $scope.interviewModalRegister.$setUntouched();
                 $scope.interviewModalRegister.$setPristine();

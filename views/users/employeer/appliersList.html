@@ -4,99 +4,124 @@
         background: none;
     }
 </style>
-
-<div class="col py-3 mt-5" ng-init="loadAppliersByVacancy()">
-    <div class="row pe-4 ps-4 col-12">
-        <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12">
-            <h3 ng-bind="vacancy.title"></h3>
-        </div>
-        <div class="text-end col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12">
-            <h3 ng-bind="vacancy.stateInWhichIsAvailable"></h3>
-        </div>
-    </div>
-    <hr>
+<div class="col py-3" ng-init="loadAppliersByVacancy()">
     <div class="container">
         <div class="row">
-            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3" ng-repeat="applier in appliers">
-                <div class="card" style="width: 100%;">
-                    <div class="card-body position-relative">
-                        <div class="row col-12">
-                            <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-10 col-sm-10 col-xs-10 col-10">
-                                <h4 class="card-title">Nombre: <strong ng-if="applier.status !== 'Rechazado'" style="color: #81868b"
-                                        ng-bind="applier.person.name + ' ' + applier.person.surname + ' ' + applier.person.secondSurname "></strong>
-                                        <strong ng-if="applier.status === 'Rechazado'" style="color: #e65858"
-                                        ng-bind="applier.person.name + ' ' + applier.person.surname + ' ' + applier.person.secondSurname "></strong>
-                                </h4>
-                                <h5 class="card-subtitle mb-2 text-muted" ng-bind="fullVacancy.vacancy.title"></h5>
+            <div class="col-xxl-7 col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12 display-5">
+                <h1 class="display-5" ng-bind="vacancy.title"></h1>
+            </div>
+            <div class="text-end col-xxl-5 col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12 display-5 mb-3">
+                <h1 class="display-5" ng-bind="vacancy.stateInWhichIsAvailable"></h1>
+            </div>
+            <hr>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3"
+                        ng-repeat="applier in appliers">
+                        <div class="card" style="width: 100%;">
+                            <div class="card-body position-relative">
+                                <div class="row"
+                                    ng-if="applier.status === 'Rechazado' || applier.status === 'Contratado'">
+                                    <div class="col-9">
+                                        <h4 class="card-title"> <strong style="color: #81868b"
+                                                ng-bind="applier.person.name + ' ' + applier.person.surname + ' ' + applier.person.secondSurname ">
+                                            </strong>
+                                        </h4>
+                                    </div>
+                                    <div class="col-2 text-end mb-2 mt-1 ">
+                                        <span ng-if="applier.status === 'Rechazado'"
+                                            class="card-subtitle badge rounded-pill bg-danger" style="color: white"
+                                            ng-bind="applier.status"></span>
+                                    </div>
+                                </div>
+                                <div class="row"
+                                    ng-if="applier.status !== 'Rechazado' && applier.status !== 'Contratado'">
+                                    <div class="col-9">
+                                        <h4 class="card-title"> <strong style="color: #81868b"
+                                                ng-bind="applier.person.name + ' ' + applier.person.surname + ' ' + applier.person.secondSurname ">
+                                            </strong>
+                                        </h4>
+                                    </div>
+                                    <div class="col-2 text-end ms-4 row justify-content-end">
+                                        <button ng-click="changeOtherStatus('Rechazado', applier)"
+                                            class="btn btn-outline-danger text-center borderless"><span
+                                                class="material-icons text-center"
+                                                style="vertical-align: middle;">close</span></button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-xs-2 col-2 text-end">
-                                <button ng-if="applier.status !== 'Rechazado'" ng-click="changeOtherStatus('Rechazado', applier)" class="btn btn-outline-danger top-2 end-0 borderless"><span
-                                        class="material-icons">close</span></button>
-
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>
+                                            <div class="text-muted">Número telefónico: </div>
+                                        </th>
+                                        <th class="table-warning align-middle">
+                                            <div class="text-muted text-center"
+                                                ng-bind="applier.person.contactInformation.phoneNumber"></div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="text-muted">Correo electrónico: </div>
+                                        </th>
+                                        <th class="table-warning align-middle">
+                                            <div class="text-muted text-center "
+                                                ng-bind="applier.person.contactInformation.email"></div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <div class="text-muted">Estado donde radica: </div>
+                                        </th>
+                                        <th class="table-warning align-middle">
+                                            <div class="text-muted text-center"
+                                                ng-bind="applier.person.contactInformation.state"></div>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th ng-init="checkDate(applier)" ng-if="applier.interviewDate != null">
+                                            <div class="text-muted">Fecha de entrevista: </div>
+                                        </th>
+                                        <th ng-if="applier.interviewDate != null" class="table-warning align-middle">
+                                            <div class="text-muted text-center"
+                                                ng-bind="applier.interviewDate | date : 'dd/MM/yyyy'"></div>
+                                        </th>
+                                    </tr>
+                                </table>
                             </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-borderless">
-                                <tr>
-                                    <th>
-                                        <div class="text-muted">Número telefónico: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center"
-                                            ng-bind="applier.person.contactInformation.phoneNumber"></div>
-                                    </th>
-                                    <th>&nbsp;&nbsp;&nbsp;</th>
-                                    <th>
-                                        <div class="text-muted">Correo electrónico: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center "
-                                            ng-bind="applier.person.contactInformation.email"></div>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <div class="text-muted">Estado donde radica: </div>
-                                    </th>
-                                    <th class="table-warning align-middle">
-                                        <div class="text-muted text-center"
-                                            ng-bind="applier.person.contactInformation.state"></div>
-                                    </th>
-                                    <th>&nbsp;&nbsp;&nbsp;</th>
-                                    <th ng-init="checkDate(applier)" ng-if="applier.interviewDate != null">
-                                        <div class="text-muted">Fecha de entrevista: </div>
-                                    </th>
-                                    <th ng-if="applier.interviewDate != null" class="table-warning align-middle">
-                                        <div class="text-muted text-center"
-                                            ng-bind="applier.interviewDate | date : 'dd/MM/yyyy'"></div>
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-6 text-start">
-                                <button ng-show="applier.status === 'Rechazado'"
-                                    class="text-center mt-2 btn btn-outline-danger borderless">Solicitud
-                                    Rechazada</button>
-                                <button ng-click="openModalInterview(applier)" ng-show="applier.status === 'CV visto'"
-                                    class="text-center mt-2 btn btn-outline-primary borderless">Agendar
-                                    Entrevista</button>
-                                <button ng-click="openModalInterview(applier)"
-                                    ng-show="applier.status === 'Entrevista' && applier.interviewDate > today"
-                                    class="text-center mt-2 btn btn-outline-primary borderless">Cambiar
-                                    Entrevista</button>
-                                <button ng-click="changeOtherStatus('Idoneo', applier)"
-                                    ng-show="applier.status === 'Entrevista' && today > applier.interviewDate"
-                                    class="text-center mt-2 btn btn-outline-primary borderless">Marcar Idóneo</button>
-                                <button ng-click="changeOtherStatus('Contratado', applier)"
-                                    ng-show="applier.status === 'Idoneo'"
-                                    class="text-center mt-2 btn btn-outline-success borderless">Contratar</button>
-                            </div>
-                            <div class="col-6 text-end">
-                                <button ng-click="changeStatus('CV visto', applier)"
-                                    class="text-center mt-2 mr-2 btn btn-outline-warning borderless"><span
-                                        class="material-icons">CV</span></button>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6 text-start">
+                                    <button ng-show="applier.status === 'Rechazado'"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-danger borderless">Solicitud
+                                        Rechazada</button>
+                                    <button ng-click="openModalInterview(applier)"
+                                        ng-show="applier.status === 'CV visto'"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-primary borderless">Agendar
+                                        Entrevista</button>
+                                    <button ng-click="openModalInterview(applier)"
+                                        ng-show="applier.status === 'Entrevista' && applier.interviewDate > today"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-primary borderless">Cambiar
+                                        Entrevista</button>
+                                    <button ng-click="changeOtherStatus('Idoneo', applier)"
+                                        ng-show="applier.status === 'Entrevista' && today > applier.interviewDate"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-primary borderless">Marcar
+                                        Idóneo</button>
+                                    <button ng-click="changeOtherStatus('Contratado', applier)"
+                                        ng-show="applier.status === 'Idoneo'"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-success borderless">Contratar</button>
+                                    <button ng-show="applier.status === 'En espera'"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-primary borderless">En
+                                        espera</button>
+                                    <button ng-show="applier.status === 'Contratado'"
+                                        class="text-center mt-2 ms-2 mb-2 btn btn-outline-success borderless">Contratado</button>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <button ng-click="changeStatus('CV visto', applier)"
+                                        class="text-center mt-2 me-2 mb-2 btn btn-outline-warning borderless"><span
+                                            class="material-icons">CV</span></button>
+                                </div>
                             </div>
                         </div>
                     </div>
