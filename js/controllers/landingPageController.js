@@ -1,5 +1,7 @@
-talenting.controller('mainController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
+talenting.controller('landingPageController', ['$scope', '$http', 'alertService', '$cookies', 
+function($scope, $http, alertService, $cookies) {
 
+    
 
     $http.defaults.headers.post["Content-Type"] = "application/json";
     $scope.availableVacancies = [];
@@ -20,6 +22,8 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
 
     $scope.retrieveVacancies = () => {
         
+        console.log('it gets into the function');
+
         let idToSend = $scope.userSession !== undefined ? $scope.userSession.person.id : 0;
 
         $http({
@@ -28,9 +32,10 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             params: {userId: idToSend, state: 'all'}
         }).then( response => {
 
-            console.log(response);
 
             $scope.availableVacancies = response.data
+            $scope.availableVacancies.splice(0, $scope.availableVacancies.length - 3);
+
 
         });
     }
@@ -191,6 +196,5 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             });
         }
     };
-
 
 }]);

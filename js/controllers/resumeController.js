@@ -1,11 +1,11 @@
 talenting.controller('resumeController', ['$scope', '$http', '$location','userService', '$cookies', 'alertService', function($scope, $http, $location, userService, $cookies, alertService) {
-
+    $http.defaults.headers.post["Content-Type"] = "application/json";
     $scope.userSession;
     $scope.myFavoriteOnes = [];
 
     $scope.languages = ["Español","Inglés", "Francés", "Alemán", "Chino", "Portugués", "Ruso", "Italiano", "Indu", "Árabe", "Japonés", "Coreano", "Otro"];
     
-    $scope.languagesLevel = ["A1","A2", "B1", "B2", "C1","C2"];
+    $scope.languagesLevel = ["Nativo","A1","A2", "B1", "B2","C1","C2"];
 
     $scope.typeCourse= ["Curso","Certificación"];
 
@@ -16,6 +16,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     var generateIdHability = 0;
     $scope.listLanguages = [];
     var generateIdLanguage = 0;
+    $scope.isUpdating = false;
 
 
     $scope.showCourses = false;
@@ -31,6 +32,8 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     $scope.alertLanguageValidation = false;
 
     let session = $cookies.get('user');
+
+    $scope.sesion = JSON.parse(session);
 
     if(!session){
         $location.path('/401');
@@ -50,17 +53,56 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         }   
     }
 
-    $scope.uploadCV = function() {
-        var file = document.getElementById('resumeOnPDF').files[0],
-        r = new FileReader();
+    $scope.consultarResume = () => {
+        $scope.session = JSON.parse(session);
 
-        r.onloadend = function(e) {
-            var data = e.target.result;
-            console.log(data);
-        }
+        $scope.resume.person = $scope.session.person;
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8080/talenting/resumes/'+$scope.resume.person.id,
+          }).then( response => {
+            console.log(response.data);
+            if(response.data.resume === null){
+                $scope.isUpdating = false;
+                document.getElementById("viewProfileImg").src = "../../../img/user.jpg";
+            }else{
+                $scope.isUpdating = true;
+                $scope.showModuleCourses = true;
+                $scope.listLanguages = response.data.language;
+                $scope.listHabilities = response.data.skill;
+                $scope.resume = response.data.resume;
+                $scope.showHabilities = true;
+                $scope.showLanguages = true;
+                
+                if(response.data.resume.profileImage == null){
+                    document.getElementById("viewProfileImg").src = "../../../img/user.jpg";
+                }else{
+                    document.getElementById("viewProfileImg").src = "data:image/png;base64," + response.data.resume.profileImage;
+                }
 
-        r.readAsBinaryString(file);
-        console.log();
+                document.getElementById("ProfileImagePreview").src = "data:image/png;base64," + response.data.resume.profileImage;
+
+                document.getElementById("previewPDF").src = "data:application/pdf;base64," + response.data.resume.pdfresume;
+
+                if(response.data.certificationOrCourse !== null ){
+                    $scope.listCourses = response.data.certificationOrCourse;
+                    $scope.showCourses = true;
+                }else{
+                    $scope.showCourses = false;
+                }
+            }
+            
+          }, err => {
+            
+            Swal.fire({
+              title: 'Error',
+              text: "Parece que ha ocurrido un error, intenta mas tarde",
+              icon: 'warning',
+              confirmButtonColor: '#3085d6',
+              confirmButtonText: 'Entendido'
+            });
+      
+          });
     }
 
     $scope.prepareDTO = () => {
@@ -75,22 +117,21 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         })
         $scope.session = JSON.parse(session);
 
-        console.log($scope.session.person)
         $scope.resume.person = $scope.session.person;
         let resumeDTO = {
-          resume: {
+            resume: {
             ...$scope.resume,
-            courses: { 
+            },
+            certificationOrCourse: [
                 ...$scope.listCourses,
-            },
-            languages: { 
+            ],
+            language: [
                 ...$scope.listLanguages,
-            },
-            habilities: { 
+            ],
+            skill: [
             ...$scope.listHabilities,
-            },
-          }
-        };
+            ] 
+          };
         return resumeDTO;
       }
 
@@ -145,6 +186,10 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
             $scope.showModuleCourses = true;
         }else{
             $scope.showModuleCourses = false;
+            $scope.listCourses = []
+            if($scope.listCourses.length === 0){
+                $scope.showCourses = false;
+            }
         }
     }
 
@@ -181,9 +226,12 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
     $scope.addLanguage = (language) => {
         $scope.alertLanguageValidation = false;
         if($scope.formLanguage.language.$error.required){
-            $scope.alertEmptyInputs();
             $scope.formLanguage.language.$error.required = true;
             $scope.formLanguage.language.$touched = true;
+        }else if($scope.formLanguage.level.$error.required){
+            $scope.formLanguage.level.$error.required = true;
+            $scope.formLanguage.level.$touched = true;
+            $scope.alertEmptyInputs();
         }else{
             if($scope.listLanguages.length >= 1){
                 for(i = 0; i < $scope.listLanguages.length; i++){
@@ -237,7 +285,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         }
     }
 
-    $scope.addResume = () => {
+    $scope.addResume = async() => {
         if($scope.formResume.title.$error.required){
             $scope.alertEmptyInputs();
             $scope.formResume.title.$error.required = true;
@@ -250,18 +298,14 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
             $scope.alertEmptyInputs();
             $scope.formResume.hasExperience.$error.required = true;
             $scope.formResume.hasExperience.$touched = true;
-        }else if($scope.formResume.expertise.$error.required){
-            $scope.alertEmptyInputs();
-            $scope.formResume.expertise.$error.required = true;
-            $scope.formResume.expertise.$touched = true;
         }else if($scope.formResume.schoolPreparation.$error.required){
             $scope.alertEmptyInputs();
             $scope.formResume.schoolPreparation.$error.required = true;
             $scope.formResume.schoolPreparation.$touched = true;
-        }else if($scope.listHabilities.length < 3){
+        }else if($scope.listHabilities.length < 2){
             Swal.fire({
                 title: 'Sin habilidades',
-                text: "Necesitas agregar almenos 3 habilidades",
+                text: "Necesitas agregar almenos 2 habilidades",
                 icon: 'info',
                 showConfirmButton: false,
                 timer:5000
@@ -283,42 +327,45 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                 confirmButtonText: 'Si',
                 confirmButtonColor: '#3085d6',
                 cancelButtonText: 'No'
-            }).then((isConfirm) => {
+            }).then(async (isConfirm) => {
 
                 if (isConfirm.value){
 
-                    // var file = document.getElementById('resumeOnPDF').files[0],
-                    // r = new FileReader();
-
-                    // r.onloadend = function(e) {
-                    //     var data = e.target.result;
-                    //     $scope.resume.Pdf = data;
-                    // }
-                    // r.readAsBinaryString(file);
-
-                    var listCoursesObject = [];
-                    var listHabilitiesObject = [];
-                    var listLanguagesObject = [];
-                    listCoursesObject = $scope.listCourses;
-                    listHabilitiesObject = $scope.listHabilities;
-                    listLanguagesObject = $scope.listLanguages;
-            
-                    $scope.resume.course = listCoursesObject;
-                    $scope.resume.hability = listHabilitiesObject;
-                    $scope.resume.language = listLanguagesObject;
+                    let resumeDTO = $scope.prepareDTO();
+                    console.log(resumeDTO);
                     $scope.formResume.title.$error.required
                     $scope.formResume.description.$error.required
                     $scope.formResume.hasExperience.$error.required
-                    $scope.formResume.expertise.$error.required
                     $scope.formResume.schoolPreparation.$error.required
-                    Swal.fire({
-                        title: '¡Listo!',
-                        text: 'Guardando información...',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 5000
-                    });
-                    console.log($scope.resume);
+
+                    // await this.uploadProfileImage();
+                    // await this.uploadPDFResume(); 
+                    $http({
+                        method: 'POST',
+                        url: 'http://localhost:8080/talenting/resumes',
+                        data: resumeDTO
+                      }).then( () => {
+                  
+                        Swal.fire({
+                            title: '¡Listo!',
+                            text: 'Guardando información...',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 5000
+                        }).then( () => {
+                            window.location.reload();
+                        });
+                      }, err => {
+                        
+                        Swal.fire({
+                          title: 'Error',
+                          text: "Parece que ha ocurrido un error, intenta mas tarde",
+                          icon: 'warning',
+                          confirmButtonColor: '#3085d6',
+                          confirmButtonText: 'Entendido'
+                        });
+                  
+                      });
                 } else {
                     Swal.fire({
                         title: 'Guardado cancelado',
@@ -330,7 +377,6 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                 }
             });
         }else{
-            console.log($scope.prepareDTO());
             swal.fire({
                 title: "Guardar información",
                 text: "¿Desea guardar los datos de su Curriculum Vitae?",
@@ -339,27 +385,19 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                 confirmButtonText: 'Si',
                 confirmButtonColor: '#3085d6',
                 cancelButtonText: 'No'
-            }).then((isConfirm) => {
+            }).then(async(isConfirm) => {
 
                 if (isConfirm.value){
 
-                    // var listCoursesObject = [];
-                    // var listHabilitiesObject = [];
-                    // var listLanguagesObject = [];
-                    // listCoursesObject = $scope.listCourses;
-                    // listHabilitiesObject = $scope.listHabilities;
-                    // listLanguagesObject = $scope.listLanguages;
-            
-                    // $scope.resume.course = listCoursesObject;
-                    // $scope.resume.hability = listHabilitiesObject;
-                    // $scope.resume.language = listLanguagesObject;
-
                     let resumeDTO = $scope.prepareDTO();
-                    // $scope.formResume.title.$error.required
-                    // $scope.formResume.description.$error.required
-                    // $scope.formResume.hasExperience.$error.required
-                    // $scope.formResume.expertise.$error.required
-                    // $scope.formResume.schoolPreparation.$error.required
+                    $scope.formResume.title.$error.required
+                    $scope.formResume.description.$error.required
+                    $scope.formResume.hasExperience.$error.required
+                    
+                    $scope.formResume.schoolPreparation.$error.required
+                    
+                    console.log(resumeDTO);
+
 
                     $http({
                         method: 'POST',
@@ -374,9 +412,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                             showConfirmButton: false,
                             timer: 5000
                         }).then( () => {
-                  
-                          window.location.replace('/login');
-                          $scope.$apply();
+                            window.location.reload();
                         });
                       }, err => {
                         
@@ -389,43 +425,10 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                         });
                   
                       });
-
-                    // var file = document.getElementById('resumeOnPDF').files[0],
-                    // r = new FileReader();
-
-                    // r.onloadend = function(e) {
-                    //     var data = e.target.result;
-                    //     $scope.resume.Pdf = data;
-                    // }
-                    // r.readAsBinaryString(file);
-
-                    // var listCoursesObject = [];
-                    // var listHabilitiesObject = [];
-                    // var listLanguagesObject = [];
-                    // listCoursesObject = $scope.listCourses;
-                    // listHabilitiesObject = $scope.listHabilities;
-                    // listLanguagesObject = $scope.listLanguages;
-            
-                    // $scope.resume.course = listCoursesObject;
-                    // $scope.resume.hability = listHabilitiesObject;
-                    // $scope.resume.language = listLanguagesObject;
-                    // $scope.formResume.title.$error.required
-                    // $scope.formResume.description.$error.required
-                    // $scope.formResume.hasExperience.$error.required
-                    // $scope.formResume.expertise.$error.required
-                    // $scope.formResume.schoolPreparation.$error.required
-                    // Swal.fire({
-                    //     title: '¡Listo!',
-                    //     text: 'Guardando información...',
-                    //     icon: 'success',
-                    //     showConfirmButton: false,
-                    //     timer: 5000
-                    // });
-                    // console.log($scope.resume);
                 } else {
                     Swal.fire({
                         title: 'Guardado cancelado',
-                        text: "Registra tus cursos/certificaciones",
+                        text: "Puedes verificar que tus datos sean correctos",
                         icon: 'info',
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'Entendido'
@@ -446,127 +449,83 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         });
     }
 
-    $scope.generateCV = () => {
-        var pdfObject = jsPDFInvoiceTemplate.default(props)
+    let inputImage = document.getElementById("profileImage")
+    let inputPFDResume = document.getElementById("PDFResume")
+    
 
-        console.log("Object created: ", pdfObject);
+    inputImage.addEventListener('change', (e) => {
+    let reader = new FileReader();
+    let profileImageByteArray = [];
+    $scope.imagePreview = true;
+    reader.readAsArrayBuffer(e.target.files[0]);
+    reader.onloadend = (evt) => {
+            if (evt.target.readyState === FileReader.DONE) {
+            const arrayBufferImage = evt.target.result,
+                array = new Uint8Array(arrayBufferImage);
+            for (const a of array) {
+                profileImageByteArray.push(a);
+            }
+            $scope.resume.profileImage = profileImageByteArray;
+            let binaryImage = '';
+            let bytesImage = new Uint8Array(profileImageByteArray);
+            let lenImage = bytesImage.byteLength;
+            for (let i = 0; i < lenImage; i++) {
+                binaryImage += String.fromCharCode(bytesImage[i]);
+            }
+            let file = window.btoa(binaryImage);
+            document.getElementById("ProfileImagePreview").src = "data:image/png;base64," + file;
+            }
+        }
+    })
+
+    inputPFDResume.addEventListener('change', (e) => {
+        $scope.PDFResumePreview = true;
+        let reader = new FileReader();
+        let PDFResumeByteArray = [];
+        reader.readAsArrayBuffer(e.target.files[0]);
+        reader.onloadend = (evt) => {
+                if (evt.target.readyState === FileReader.DONE) {
+                const arrayBuffer = evt.target.result,
+                    array = new Uint8Array(arrayBuffer);
+                for (const a of array) {
+                    PDFResumeByteArray.push(a);
+                }
+                $scope.resume.pdfresume = PDFResumeByteArray;
+                let binary = '';
+                let bytes = new Uint8Array($scope.resume.pdfresume);
+                let len = bytes.byteLength;
+                for (let i = 0; i < len; i++) {
+                    binary += String.fromCharCode(bytes[i]);
+                }
+                let filePDF = window.btoa(binary);
+                document.getElementById("previewPDF").src = "data:application/pdf;base64," + filePDF;
+                }
+            }
+        })
+
+    $scope.generateResume = () => {
+        $http({
+            method: "GET",
+            url: 'http://localhost:8080/talenting/resumes/CV/'+$scope.resume.id,
+            responseType: "arraybuffer",
+        }).then((res) => {
+            // const fileName = $scope.resume.person.name + " " + $scope.resume.person.surname + " " + $scope.resume.person.secondSurname + " CV";
+            // const a = document.createElement("a");
+            // document.body.appendChild(a);
+            // const file = new Blob([res.data], {type: "application/pdf"});
+            // a.href = window.URL.createObjectURL(file);
+            // a.download = fileName;
+            // a.click();
+            let binary = '';
+            let bytes = new Uint8Array(res.data);
+            let len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            let filePDF = window.btoa(binary);
+            document.getElementById("previewPDFApplication").src = "data:application/pdf;base64," + filePDF;
+        })
+        $("#resumeModal").modal("show");
     }
-
-    var props = {
-        outputType: jsPDFInvoiceTemplate.OutputType.Save,
-        returnJsPDFDocObject: true,
-        fileName: "Invoice 2021",
-        orientationLandscape: false,
-        compress: true,
-        logo: {
-            src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/logo.png",
-            type: 'PNG', //optional, when src= data:uri (nodejs case)
-            width: 53.33, //aspect ratio = width/height
-            height: 26.66,
-            margin: {
-                top: 0, //negative or positive num, from the current position
-                left: 0 //negative or positive num, from the current position
-            }
-        },
-        stamp: {
-            inAllPages: true, //by default = false, just in the last page
-            src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
-            type: 'JPG', //optional, when src= data:uri (nodejs case)
-            width: 20, //aspect ratio = width/height
-            height: 20,
-            margin: {
-                top: 0, //negative or positive num, from the current position
-                left: 0 //negative or positive num, from the current position
-            }
-        },
-        business: {
-            name: "Business Name",
-            address: "Albania, Tirane ish-Dogana, Durres 2001",
-            phone: "(+355) 069 11 11 111",
-            email: "email@example.com",
-            email_1: "info@example.al",
-            website: "www.example.al",
-        },
-        contact: {
-            label: "Invoice issued for:",
-            name: "Client Name",
-            address: "Albania, Tirane, Astir",
-            phone: "(+355) 069 22 22 222",
-            email: "client@website.al",
-            otherInfo: "www.website.al",
-        },
-        invoice: {
-            label: "Invoice #: ",
-            num: 19,
-            invDate: "Payment Date: 01/01/2021 18:12",
-            invGenDate: "Invoice Date: 02/02/2021 10:17",
-            headerBorder: false,
-            tableBodyBorder: false,
-            header: [
-              {
-                title: "#", 
-                style: { 
-                  width: 10 
-                } 
-              }, 
-              { 
-                title: "Title",
-                style: {
-                  width: 30
-                } 
-              }, 
-              { 
-                title: "Description",
-                style: {
-                  width: 80
-                } 
-              }, 
-              { title: "Price"},
-              { title: "Quantity"},
-              { title: "Unit"},
-              { title: "Total"}
-            ],
-            table: Array.from(Array(10), (item, index)=>([
-                index + 1,
-                "There are many variations ",
-                "Lorem Ipsum is simply dummy text dummy text ",
-                200.5,
-                4.5,
-                "m2",
-                400.5
-            ])),
-            additionalRows: [{
-                col1: 'Total:',
-                col2: '145,250.50',
-                col3: 'ALL',
-                style: {
-                    fontSize: 14 //optional, default 12
-                }
-            },
-            {
-                col1: 'VAT:',
-                col2: '20',
-                col3: '%',
-                style: {
-                    fontSize: 10 //optional, default 12
-                }
-            },
-            {
-                col1: 'SubTotal:',
-                col2: '116,199.90',
-                col3: 'ALL',
-                style: {
-                    fontSize: 10 //optional, default 12
-                }
-            }],
-            invDescLabel: "Invoice Note",
-            invDesc: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
-        },
-        footer: {
-            text: "The invoice is created on a computer and is valid without the signature and stamp.",
-        },
-        pageEnable: true,
-        pageLabel: "Page ",
-    };
 
 }]);

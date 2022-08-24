@@ -36,12 +36,36 @@ talenting.controller('appliersController',
                     $http({
                         method: 'POST',
                         url: 'http://localhost:8080/talenting/changeAppliersStatus',
-                        params: { status: status, id: id }
+                        params: { status: status, id: id, vacancy: applier.vacancy.id }
                     }).then(response => {
                         $scope.loadAppliersByVacancy();
                     }, err => {
                     });
                 }
+                $http({
+                    method: 'GET',
+                    url: 'http://localhost:8080/talenting/resumes/' + applier.person.id
+                }).then(response => {
+                    $http({
+                        method: "GET",
+                        url: 'http://localhost:8080/talenting/resumes/CV/' + response.data.resume.id,
+                        responseType: "arraybuffer",
+                    }).then(response => {
+                        let binary = '';
+                        let bytes = new Uint8Array(response.data);
+                        let len = bytes.byteLength;
+                        for (let i = 0; i < len; i++) {
+                            binary += String.fromCharCode(bytes[i]);
+                        }
+                        let filePDF = window.btoa(binary);
+                        document.getElementById("previewPDFApplication").src = "data:application/pdf;base64," + filePDF;
+                    }, err => {
+                    });
+
+                    document.getElementById("previewPDF").src = "data:application/pdf;base64," + response.data.resume.pdfresume;
+                }, err => {
+                });
+                $("#resumeModal").modal("show");
             };
 
             $scope.changeOtherStatus = (status, applier) => {
@@ -54,21 +78,21 @@ talenting.controller('appliersController',
                     confirmButtonColor: '#65D069',
                     cancelButtonColor: '#E07577',
                     cancelButtonText: 'No',
-                    confirmButtonText: 'Sí',                    
-                }).then((result) =>{
-                    if(result.isConfirmed){
+                    confirmButtonText: 'Sí',
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         let id = applier.id;
                         $http({
                             method: 'POST',
                             url: 'http://localhost:8080/talenting/changeAppliersStatus',
-                            params: { status: status, id: id }
+                            params: { status: status, id: id, vacancy: applier.vacancy.id }
                         }).then(response => {
                             alertService.showAlert.success('Se ha modificado el estado de la solicitud exitosamente');
                             $scope.loadAppliersByVacancy();
                         }, err => {
                             alertService.showAlert.error('Ocurrio un error al cambiar el estado de la solicitud');
                         });
-                    }else{
+                    } else {
                         Swal.fire({
                             title: '',
                             text: 'No se ha modificado el estado de la solicitud',
@@ -77,11 +101,12 @@ talenting.controller('appliersController',
                             confirmButtonText: 'Ok'
                         });
                     }
-                });                
+                });
             };
 
             $scope.openModalInterview = (applier) => {
                 $scope.applierInterview = applier;
+                $scope.interviewDate = new Date(applier.interviewDate + " 00:00:00");
                 $scope.modal = new bootstrap.Modal(document.getElementById("interviewModal"), {});
                 $scope.interviewModalRegister.$setUntouched();
                 $scope.interviewModalRegister.$setPristine();

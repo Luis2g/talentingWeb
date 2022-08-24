@@ -29,7 +29,7 @@ function($scope, $http, alertService, $cookies) {
                 if(user.role === 'employeer'){
                     $scope.getEmployeerInfo(user)
                 }else{
-                    window.location.replace('/');
+                    window.location.replace('/#!/landingPage');
                 }
 
 
@@ -43,14 +43,13 @@ function($scope, $http, alertService, $cookies) {
     }
 
     $scope.getEmployeerInfo = (userToLookForEmployeerInfo) => {
-        console.log('it comes inside')
         $http({
             method: 'GET',
             url: 'http://localhost:8080/talenting/employeers',
             params: { personId: userToLookForEmployeerInfo.id }
         }).then( response => {
             $cookies.put('employeer', JSON.stringify(response.data));
-            window.location.replace('/');
+            window.location.replace('/#!/landingPage');
         }).catch( () => {
             alertService.showAlert.warning('Ha ocurrido un error intentelo mas tarde');
         });
