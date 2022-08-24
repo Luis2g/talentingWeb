@@ -3,6 +3,7 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
 
     $scope.sharedVacancies = [];
     $scope.people = [];
+    $scope.friends = [];
 
     $scope.userSession;
     
@@ -10,7 +11,6 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
 
     if(session){
         $scope.userSession = JSON.parse($cookies.get('user'));
-        console.log($scope.userSession);
     }else{
         $scope.userSession
     }
@@ -33,12 +33,9 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
                     }
                 });
             });
-
-
-            console.log(response);
             
         });
-    }
+    };
 
     $scope.getPeopleToAddAsFriends = () => {
         $http({
@@ -46,17 +43,35 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
             url: 'http://localhost:8080/talenting/getPeople',
             params: { personId: $scope.userSession.person.id }
         }).then( response => {
-            console.log( response );
             $scope.people = response.data;
-
+            $scope.getFriends();
         });
-    }
+    };
+
+    $scope.getFriends = () =>{
+        $http({
+            method: 'GET',
+            url: 'http://localhost:8080/talenting/getFriends',
+            params: { personId: $scope.userSession.person.id }
+        }).then( response => {
+            $scope.friends = response.data;
+        });
+    };
+
+    $scope.deleteFriend = (friendId) =>{
+        $http({
+            method: 'DELETE',
+            url: 'http://localhost:8080/talenting/deleteFriend',
+            params: { personId: $scope.userSession.person.id, friendId: friendId }
+        }).then( response => {
+            $scope.getPeopleToAddAsFriends();
+            $scope.getFriends();
+        });
+    };
 
     $scope.sendFriendshipRequest = ( personId, index ) => {
 
         let friendshipRequest = {person: {id: $scope.userSession.id}, friend: {id: personId}}
-
-        console.log('me envio', index);
 
         $http({
             method: 'POST',
@@ -71,9 +86,6 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
     };
 
     $scope.cancelFriendshipRequest = ( requestId, index ) => {
-
-        console.log('me cancelo', index);
-
 
         $http({
             method: 'DELETE',
@@ -93,6 +105,7 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
             url: 'http://localhost:8080/talenting/confirmFriendshipRequest',
             params: { requestId: requestId }
         }).then( () => {
+            $scope.friends.push($scope.people[index].person);
             $scope.people.splice(index, 1);
             alertService.showAlert.info('¡Ahora son amigos!');
         })
@@ -218,8 +231,6 @@ talenting.controller('socialMediaController', ['$scope', '$http', '$location','u
 
 
     $scope.openModalInformation = (fullVacancy) => {
-    
-        console.log(fullVacancy);
         $scope.vacancies = angular.copy(fullVacancy);
         $("#infoPostulation").modal("show");
 
