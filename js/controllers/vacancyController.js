@@ -20,6 +20,8 @@ talenting.controller('vacancyController',
                 inValidVacancyForm: false
             }
 
+            $scope.currentDate = new Date().toISOString().split('T')[0];
+
             let session = $cookies.get('user');
 
 
