@@ -44,7 +44,7 @@ talenting.controller('appliersController',
                         let mail = {
                             to: applier.person.contactInformation.email,
                             subject: 'Notificación Talenting.',
-                            content: 'Tu Curriculim Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                            content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
                         }
                         $http({
                             method: 'POST',
@@ -57,7 +57,7 @@ talenting.controller('appliersController',
                             let mail = {
                                 to: applier.person.contactInformation.email,
                                 subject: 'Notificación Talenting.',
-                                content: 'Tu Curriculim Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                                content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
                             }
                         }, err => {
                         });
@@ -130,7 +130,7 @@ talenting.controller('appliersController',
                                     let mail = {
                                         to: applier.person.contactInformation.email,
                                         subject: 'Notificación Talenting.',
-                                        content: 'Tu Curriculim Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                                        content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
                                     }
                                 }, err => {
                                 });
@@ -151,12 +151,32 @@ talenting.controller('appliersController',
                                     let mail = {
                                         to: applier.person.contactInformation.email,
                                         subject: 'Notificación Talenting.',
-                                        content: 'Tu Curriculim Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                                        content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                                    }
+                                }, err => {
+                                });
+                            }else if(status === 'Idoneo'){
+                                let mail = {
+                                    to: applier.person.contactInformation.email,
+                                    subject: 'Notificación Talenting.',
+                                    content: 'Hola hay buenas noticias, estas cerca de conseguir un nuevo empleo, la empresa '+company+' te ha considerado un candidato idóneo para formar parte de su equipo se trabajo', 
+                                }
+                                $http({
+                                    method: 'POST',
+                                    url: 'http://localhost:8080/talenting/sendNotification',
+                                    data: mail
+                                }).then(response => {
+    
+                                    let company = $scope.vacancy.employeer.companyName
+            
+                                    let mail = {
+                                        to: applier.person.contactInformation.email,
+                                        subject: 'Notificación Talenting.',
+                                        content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
                                     }
                                 }, err => {
                                 });
                             }
-                            
                         }, err => {
                             alertService.showAlert.error('Ocurrio un error al cambiar el estado de la solicitud');
                         });
@@ -224,7 +244,7 @@ talenting.controller('appliersController',
                             let mail = {
                                 to: applier.person.contactInformation.email,
                                 subject: 'Notificación Talenting.',
-                                content: 'Tu Curriculim Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
+                                content: 'Tu Curriculum Vitae ha sido visualizado por la empresa '+company+' a la cual te has postulado.', 
                             }
                         }, err => {
                         });
