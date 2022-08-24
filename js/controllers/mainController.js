@@ -55,15 +55,28 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
     // to disapple to a vacancy
     $scope.disapply = (vacancyId, index) => {
 
-        $http({
-            method: "DELETE",
-            url: 'http://localhost:8080/talenting/appliersInVacancies',
-            params: {vacancyId: vacancyId}
-        }).then( () => {
 
-            $scope.availableVacancies[index].applied = 0;
-            
-        });
+        Swal.fire({
+            title: '¿Estas seguro?',
+            text: "Si retiras tu postulación todo tu proceso de contratación será cancelado",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $http({
+                    method: "DELETE",
+                    url: 'http://localhost:8080/talenting/appliersInVacancies',
+                    params: {vacancyId: vacancyId}
+                }).then( () => {
+                    $scope.availableVacancies[index].applied = 0;
+                    alertService.showAlert.info('¡Se ha retirado tu postulación!');
+                });
+            }
+        })
     };
 
     //to share one

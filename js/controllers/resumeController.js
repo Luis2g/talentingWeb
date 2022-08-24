@@ -298,18 +298,14 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
             $scope.alertEmptyInputs();
             $scope.formResume.hasExperience.$error.required = true;
             $scope.formResume.hasExperience.$touched = true;
-        }else if($scope.formResume.expertise.$error.required){
-            $scope.alertEmptyInputs();
-            $scope.formResume.expertise.$error.required = true;
-            $scope.formResume.expertise.$touched = true;
         }else if($scope.formResume.schoolPreparation.$error.required){
             $scope.alertEmptyInputs();
             $scope.formResume.schoolPreparation.$error.required = true;
             $scope.formResume.schoolPreparation.$touched = true;
-        }else if($scope.listHabilities.length < 3){
+        }else if($scope.listHabilities.length < 2){
             Swal.fire({
                 title: 'Sin habilidades',
-                text: "Necesitas agregar almenos 3 habilidades",
+                text: "Necesitas agregar almenos 2 habilidades",
                 icon: 'info',
                 showConfirmButton: false,
                 timer:5000
@@ -340,7 +336,6 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                     $scope.formResume.title.$error.required
                     $scope.formResume.description.$error.required
                     $scope.formResume.hasExperience.$error.required
-                    $scope.formResume.expertise.$error.required
                     $scope.formResume.schoolPreparation.$error.required
 
                     // await this.uploadProfileImage();
@@ -398,7 +393,7 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
                     $scope.formResume.title.$error.required
                     $scope.formResume.description.$error.required
                     $scope.formResume.hasExperience.$error.required
-                    $scope.formResume.expertise.$error.required
+                    
                     $scope.formResume.schoolPreparation.$error.required
                     
                     console.log(resumeDTO);
@@ -509,19 +504,28 @@ talenting.controller('resumeController', ['$scope', '$http', '$location','userSe
         })
 
     $scope.generateResume = () => {
-        return $http({
+        $http({
             method: "GET",
             url: 'http://localhost:8080/talenting/resumes/CV/'+$scope.resume.id,
             responseType: "arraybuffer",
         }).then((res) => {
-            const fileName = $scope.resume.person.name + " " + $scope.resume.person.surname + " " + $scope.resume.person.secondSurname + " CV";
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            const file = new Blob([res.data], {type: "application/pdf"});
-            a.href = window.URL.createObjectURL(file);
-            a.download = fileName;
-            a.click();
+            // const fileName = $scope.resume.person.name + " " + $scope.resume.person.surname + " " + $scope.resume.person.secondSurname + " CV";
+            // const a = document.createElement("a");
+            // document.body.appendChild(a);
+            // const file = new Blob([res.data], {type: "application/pdf"});
+            // a.href = window.URL.createObjectURL(file);
+            // a.download = fileName;
+            // a.click();
+            let binary = '';
+            let bytes = new Uint8Array(res.data);
+            let len = bytes.byteLength;
+            for (let i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            let filePDF = window.btoa(binary);
+            document.getElementById("previewPDFApplication").src = "data:application/pdf;base64," + filePDF;
         })
+        $("#resumeModal").modal("show");
     }
 
 }]);

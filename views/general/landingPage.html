@@ -133,6 +133,88 @@
 
     </div>
 </div>
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-white text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Feedback a traves de nuestro contacto:</span>
+      </div>
+      <!-- Left -->
+  
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 link-grayish">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 link-grayish">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 link-grayish">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 link-grayish">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 link-grayish">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 link-grayish">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+  
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-6 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3 text-grayish"></i>Talenting
+            </h6>
+            <p>
+              Talenting es una empresa dedicada a ofrecer crear el primer enlace de los aspirantes con las empresas, ayudando a encontrar empresas que se ajustan a las necesidades de los aspirantes a la par de ofrecer los mejores aspirantes a las empresas.
+            </p>
+          </div>
+          <!-- Grid column -->
+  
+        
+          <!-- Grid column -->
+  
+          <!-- Grid column -->
+          <div class="col-md-6 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Contacto</h6>
+            <p><i class="fas fa-home me-3 text-grayish"></i> Tezoyuca, Morelos</p>
+            <p>
+              <i class="fas fa-envelope me-3 text-grayish"></i>
+              talenting@gmail.com
+            </p>
+            <p><i class="fas fa-phone me-3 text-grayish"></i> + 01 234 567 88</p>
+            <p><i class="fas fa-print me-3 text-grayish"></i> + 01 234 567 89</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+  
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.025);">
+      © 2022 Copyright:
+      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">talenting.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+  <!-- Footer -->
 
 <!-- Modal for info postulation -->
 <div class="modal fade" id="infoPostulation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -214,15 +296,15 @@
                             <br>
                             <h5>Beneficios</h5>
                             <hr>
-                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6" ng-repeat="benefits in vacancies.retrievedBenefits">
-                                <span class="material-icons">done</span><span ng-bind="benefits.name"></span>
+                            <div class="col-2" ng-repeat="benefits in vacancies.retrievedBenefits">
+                                <span class="badge text-bg-success" ng-bind="benefits.name"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">¡Postularme!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <!-- <button type="button" class="btn btn-success">¡Postularme!</button> -->
                 </div>
             </form>
         </div>

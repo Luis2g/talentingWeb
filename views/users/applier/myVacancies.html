@@ -4,8 +4,8 @@
             <div class="col-10">
             <h1 class="display-5" >Mis aplicaciones</h1>
         </div>
-        <div class="col-2">
-            <button type="button" ng-click="switch.toMyFavorites()"  class="btn btn-success">
+        <div class="col-2 text-end mt-3">
+            <button type="button" ng-click="switch.toMyFavorites()"  class="btn btn-outline-success">
                 Mis favoritas
             </button>
         </div>
@@ -18,8 +18,8 @@
                     <th class="text-center text-muted "  style="vertical-align: middle;" >#</th>
                     <th class="text-center text-muted "  style="vertical-align: middle;" >Empresa</th>
                     <th class="text-center text-muted "  style="vertical-align: middle;" >Titulo</th>
-                    <th class="text-center text-muted "  style="vertical-align: middle;" >Status</th>
                     <th class="text-center text-muted "  style="vertical-align: middle;" >Estado</th>
+                    <th class="text-center text-muted "  style="vertical-align: middle;" >Entidad</th>
                     <th class="text-center text-muted "  style="vertical-align: middle;" >Modalidad</th>
                     <th class="text-center text-muted "  style="vertical-align: middle;" >Validez</th>
                     <th class="text-center text-muted "  style="vertical-align: middle;" >Salario</th>
@@ -35,11 +35,18 @@
                     <td><strong ng-bind="$index + 1" ></strong></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.employeer.companyName" ></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.title" ></td>
-                    <td ng-bind="fullVacancy.applierInVacancy.status" ></td>
+                    <td>
+                        <span ng-show="fullVacancy.applierInVacancy.status === 'En espera'" class="badge text-bg-warning" style="color: #fff!important;">{{fullVacancy.applierInVacancy.status}}</span>
+                        <span ng-show="fullVacancy.applierInVacancy.status === 'CV visto'" class="badge text-bg-light">{{fullVacancy.applierInVacancy.status}}</span>
+                        <span ng-show="fullVacancy.applierInVacancy.status === 'Entrevista'" class="badge text-bg-primary">{{fullVacancy.applierInVacancy.status}}</span>
+                        <span ng-show="fullVacancy.applierInVacancy.status === 'Idoneo'" class="badge text-bg-info" style="color: #fff!important;">{{fullVacancy.applierInVacancy.status}}</span>
+                        <span ng-show="fullVacancy.applierInVacancy.status === 'Contratado'" class="badge text-bg-success">{{fullVacancy.applierInVacancy.status}}</span>
+                        <span ng-show="fullVacancy.applierInVacancy.status === 'Rechazado'" class="badge text-bg-danger">{{fullVacancy.applierInVacancy.status}}</span>
+                    </td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.stateInWhichIsAvailable" ></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.modality" ></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.validityDate | date : 'dd/MM/yyyy'" ></td>
-                    <td><span style="color: #818181" >Desde</span> {{ fullVacancy.applierInVacancy.vacancy.minimumSalary | currency }} MX <br> <span style="color: #818181" >Hasta</span> {{fullVacancy.applierInVacancy.vacancy.maximumSalary | currency}} MX </td>
+                    <td><span style="color: #818181" >Desde</span><br> <p style="font-size: 12px;">{{ fullVacancy.applierInVacancy.vacancy.minimumSalary | currency }} MX</p> <span style="color: #818181" >Hasta</span> <p style="font-size: 12px;">{{fullVacancy.applierInVacancy.vacancy.maximumSalary | currency}} MX </p></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.paymentFrecuency"></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.type"></td>
                     <td ng-bind="fullVacancy.applierInVacancy.vacancy.startDate | date : 'dd/MM/yyyy'" ></td>

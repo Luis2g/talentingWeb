@@ -16,30 +16,20 @@
                 <hr>
             </div>
             <div ng-init="getPeopleToAddAsFriends()" class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 mt-3">
-                <div class="mb-2">
+                <!-- <div class="mb-2">
                     <input class="form-control" type="search" placeholder="Buscar amigos">
-                </div>
+                </div> -->
                 <div ng-repeat="personDTO in people" class="card mb-2" style="width: 100%; height: auto;">
                     <div class="card-body">
-                        <div class="row col-12">
-                            <div class="col-8">
+                        <div class="row" >
+                            <div class="col-6">
                                 <h5 class="card-title" ng-bind="personDTO.person.name + ' ' + personDTO.person.surname + ' ' + personDTO.person.secondSurname" ></h5>
-                                <!-- <h6 class="card-subtitle mb-2 text-muted">Desarrollador Full Stack</h6> -->
                             </div>
-                            <div class="col-4 mt-2" ng-if="personDTO.whoSentIt !== null" >
+                            <div class="col-6 mt-2" ng-if="personDTO.whoSentIt !== null" >
                                 <div class=" text-end" ng-if="personDTO.whoSentIt === 'them'" >
-                                    te ha enviado solicitud
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <button class="btn btn-outline-success" ng-click="confirmFriendshipRequest(personDTO.id, $index)" >Aceptar</button>
-                                            </td>
-                                            <td></td>
-                                            <td>
-                                                <button class="btn btn-outline-danger" ng-click="rejectFriendshipRequest(personDTO.id, $index)" >Rechazar</button>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                    Solicitud de amistad
+                                    <button class="btn btn-outline-success" ng-click="confirmFriendshipRequest(personDTO.id, $index)" >Aceptar</button>
+                                    <button class="btn btn-outline-danger" ng-click="rejectFriendshipRequest(personDTO.id, $index)" >Rechazar</button>
                                 </div>
                                 <div class="text-end" ng-if="personDTO.whoSentIt === 'me'" >
                                     <button class="btn btn-outline-danger" ng-click="cancelFriendshipRequest(personDTO.id, $index)" >Cancelar solicitud</button>
@@ -218,15 +208,15 @@
                             <br>
                             <h5>Beneficios</h5>
                             <hr>
-                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6" ng-repeat="benefits in vacancies.retrievedBenefits">
-                                <span class="material-icons">done</span><span ng-bind="benefits.name"></span>
+                            <div class="col-2" ng-repeat="benefits in vacancies.retrievedBenefits">
+                                <span class="badge text-bg-success" ng-bind="benefits.name"></span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success">¡Postularme!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <!-- <button type="button" class="btn btn-success">¡Postularme!</button> -->
                 </div>
             </form>
         </div>
