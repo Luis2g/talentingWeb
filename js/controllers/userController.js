@@ -75,9 +75,9 @@ talenting.controller('userController', ['$scope', '$http', '$location','userServ
       $scope.person = $scope.session.person
       $scope.contactInformation = $scope.session.person.contactInformation
       $scope.contactState.state = $scope.contactInformation.state;
-      $scope.user = $scope.session
-      $scope.person.dateOfBirth = $scope.person.dateOfBirth.substr(0,10)
-
+      $scope.user = $scope.session 
+      $scope.person.dateOfBirth = new Date($scope.person.dateOfBirth.split('T')[0]+' 00:00:00')
+      
       if($scope.session.role === 'employeer'){
         $scope.isEmployeer = true;
         let id = $scope.session.id
