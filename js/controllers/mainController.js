@@ -143,6 +143,160 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
 
     };
 
+    $scope.idCuenta = "630cce4546413763c6b1b0e1";
+    $scope.apiKey = "HynpY4dSSJqRVazpEq9dTg";
+    $scope.listaActualizar = [];
+    $scope.contacto = [];
+
+    $scope.guardarLista = () => {
+        console.log($scope.nombreLista);
+        let nombreLista = $scope.nombreLista;
+        $http({
+            method: "POST",
+            url: "https://mailifyapis.com/v1/lists",
+            data: {"name": nombreLista},
+            headers:{
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then( response => {
+            $scope.consultarLista();
+            $("#listaModal").modal("hide");
+            $scope.nombreLista = '';
+        });
+    }
+
+    $scope.consultarLista = () => {
+        $http({
+            method: "GET",
+            url: 'https://mailifyapis.com/v1/lists?offset=0',
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.listas = response.data;
+        });
+    }
+
+    $scope.consultarListaPorId = (lista) => {
+        $scope.listaActualizar = angular.copy(lista);
+        $("#actualizarLista").modal("show");
+    }
+
+    $scope.actualizarLista = (lista) => {
+        console.log(lista.name);
+        $http({
+            method: "PUT",
+            url: 'https://mailifyapis.com/v1/lists/'+lista.id,
+            data: {"name": lista.name, readOnly: false},
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.consultarLista();
+            $("#actualizarLista").modal("hide");
+            $scope.nombreListaActualizar = '';
+        });
+    }
+
+    $scope.eliminarLista = (id) => {
+        $http({
+            method: "DELETE",
+            url: 'https://mailifyapis.com/v1/lists/'+id,
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.consultarLista();
+        });
+    }
+
+
+    $scope.consultarContacto = (lista) => {
+        $http({
+            method: "GET",
+            url: 'https://mailifyapis.com/v1/lists/'+lista.id+'/contacts?offset=0',
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.contactos = response.data;
+            console.log(response);
+            $("#consultarContacto").modal("show");
+        });
+    }
+
+    $scope.agregarContacto = (lista) => {
+        console.log(lista);
+        $scope.contacto.lista = lista;
+        $("#contactoModal").modal("show");
+    }
+
+    $scope.guardarContacto = (contacto) => {
+        console.log(contacto);
+        console.log(contacto.lista.id);
+        console.log(contacto.telefono);
+        console.log(contacto.email);
+        $http({
+            method: "POST",
+            url: 'https://mailifyapis.com/v1/lists/'+contacto.lista.id+'/contacts',
+            data: {"email": contacto.email, "phone": contacto.telefono},
+            headers:{
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then( response => {
+            console.log(response);
+            $scope.consultarLista();
+            $("#contactoModal").modal("hide");
+            $scope.contacto.email = '';
+            $scope.contacto.telefono = '';
+        });
+    }
+
+    $scope.consultarContactoPorId = (contacto) => {
+        console.log(contacto);
+        // $scope.listaActualizar = angular.copy(lista);
+        // $("#actualizarLista").modal("show");
+    }
+
+    $scope.actualizarLista = (contacto) => {
+        console.log(contacto);
+        // $http({
+        //     method: "PUT",
+        //     url: 'https://mailifyapis.com/v1/lists/'+lista.id,
+        //     data: {"name": lista.name, readOnly: false},
+        //     headers: {
+        //         Accountid: $scope.idCuenta,
+        //         Apikey: $scope.apiKey
+        //     }
+        // }).then( response => {
+        //     $scope.consultarLista();
+        //     $("#actualizarLista").modal("hide");
+        //     $scope.nombreListaActualizar = '';
+        // });
+    }
+
+    $scope.eliminarContacto = (contacto) => {
+        console.log(contacto);
+        // $http({
+        //     method: "DELETE",
+        //     url: 'https://mailifyapis.com/v1/lists/'+id+'/contacts/'+id,
+        //     headers: {
+        //         Accountid: $scope.idCuenta,
+        //         Apikey: $scope.apiKey
+        //     }
+        // }).then( response => {
+        //     $scope.consultarLista();
+        // });
+    }
+
     $scope.filterVacancy = () => {
         if (($scope.vacancyTitle !== undefined) && ($scope.vacancyTitle !== "") && ($scope.stateSelected !== undefined) && ($scope.stateSelected !== null)) {
             let idToSend = $scope.userSession !== undefined ? $scope.userSession.person.id : 0;
