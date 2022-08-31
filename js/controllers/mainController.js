@@ -143,6 +143,9 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
 
     };
 
+
+    // INICIO DE GESTIÓN DE CORREOS
+
     $scope.idCuenta = "630cce4546413763c6b1b0e1";
     $scope.apiKey = "HynpY4dSSJqRVazpEq9dTg";
     $scope.listaActualizar = [];
@@ -182,6 +185,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
 
     $scope.consultarListaPorId = (lista) => {
         $scope.listaActualizar = angular.copy(lista);
+        console.log(lista)
         $("#actualizarLista").modal("show");
     }
 
@@ -317,6 +321,149 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
             }
         });
     }
+
+    $scope.consultarCampania = () => {
+        //?offset=0&search=campaign&state=DRAFT
+        $http({
+            method: "GET",
+            url: 'https://mailifyapis.com/v1/campaigns',
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then( response => {
+            $scope.campanias = response.data;
+        });
+    }
+
+    $scope.guardarCampania = (campania) => {
+        console.log(campania);
+        $http({
+            method: "POST",
+            url: 'https://mailifyapis.com/v1/campaigns/email',
+            data: {"name": campania.nombre, "emailFrom": campania.email, "aliasFrom": campania.alias, "emailReplyTo": campania.email, "aliasReplyTo": campania.alias, "subject": campania.asunto},
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then( response => {
+            $scope.consultarCampania();
+            $("#agregarCampania").modal("hide");
+            $scope.campania.nombre = '';
+            $scope.campania.email = '';
+            $scope.campania.alias = '';
+            $scope.campania.asunto = '';
+        });
+    }
+
+    $scope.asignarListaCampania = [];
+
+    $scope.consultarCampaniaPorId = (campania) => {
+        $scope.asignarListaCampaniaObj = angular.copy(campania);
+        console.log($scope.asignarListaCampaniaObj);
+        $('#asignarLista').modal("show");
+    }
+
+    $scope.asignarListaCampania = (lista) => {
+        console.log(lista);
+        console.log($scope.asignarListaCampaniaObj);
+        $http({
+            method: "POST",
+            url: 'https://mailifyapis.com/v1/campaigns/'+$scope.asignarListaCampaniaObj.id+'/list',
+            data: {"listId": lista.id},
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then(response => {
+            $scope.consultarCampania();
+            $('#asignarLista').modal("hide");
+            console.log(response);
+        });
+    }
+    $scope.asignarPlantillaCampaniaObj = [];
+    $scope.consultarDetallesCampania = (campania) => {
+        console.log(campania);
+        $http({
+            method: "GET",
+            url: 'https://mailifyapis.com/v1/campaigns/'+campania.id,
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.detallesDeCampania = response.data;
+            console.log(response.data.campaign);
+            console.log($scope.detallesDeCampania);
+        });
+        $('#detallesCampania').modal("show");
+    }
+
+    $scope.consultarPlantillaCampania = (campania) => {
+        $scope.asignarPlantillaCampaniaObj = angular.copy(campania);
+        $http({
+            method: "GET",
+            url: 'https://mailifyapis.com/v1/templates',
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.plantillas = response.data.templates;
+            console.log(response.data);
+        });
+        $('#asignarPlantilla').modal("show");
+    }
+
+    $scope.asignarPlantillaCampania = (plantilla) => {
+        console.log(plantilla);
+        console.log($scope.asignarPlantillaCampaniaObj);
+        $http({
+            method: "POST",
+            url: 'https://mailifyapis.com/v1/campaigns/'+$scope.asignarPlantillaCampaniaObj.id+'/content',
+            data: {"templateId": plantilla.id},
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey,
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }).then(response => {
+            $scope.consultarCampania();
+            $('#asignarPlantilla').modal("hide");
+            console.log(response);
+        });
+    }
+
+    $scope.enviarCorreos = (campania) => {
+        swal.fire({
+            title: "Confirmación de envio de correos",
+            text: "¿Estás seguro de enviar los correos?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: 'No'
+        }).then(async (isConfirm) => {
+            if (isConfirm.value){    
+                $http({
+                    method: "POST",
+                    url: 'https://mailifyapis.com/v1/campaigns/'+campania.id+'/send',
+                    headers: {
+                        Accountid: $scope.idCuenta,
+                        Apikey: $scope.apiKey
+                    }
+                }).then( response => {
+                    console.log((response))
+                    $scope.consultarCampania();
+                });
+            }
+        });
+    }
+
+    // FIN DE GESTIÓN DE CORREOS
 
     $scope.filterVacancy = () => {
         if (($scope.vacancyTitle !== undefined) && ($scope.vacancyTitle !== "") && ($scope.stateSelected !== undefined) && ($scope.stateSelected !== null)) {
