@@ -203,16 +203,29 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
     }
 
     $scope.eliminarLista = (id) => {
-        $http({
-            method: "DELETE",
-            url: 'https://mailifyapis.com/v1/lists/'+id,
-            headers: {
-                Accountid: $scope.idCuenta,
-                Apikey: $scope.apiKey
+        swal.fire({
+            title: "Confirmación de eliminación de lista",
+            text: "¿Estás seguro de eliminar la lista?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: 'No'
+        }).then(async (isConfirm) => {
+            if (isConfirm.value){    
+                $http({
+                    method: "DELETE",
+                    url: 'https://mailifyapis.com/v1/lists/'+id,
+                    headers: {
+                        Accountid: $scope.idCuenta,
+                        Apikey: $scope.apiKey
+                    }
+                }).then( response => {
+                    $scope.consultarLista();
+                });
             }
-        }).then( response => {
-            $scope.consultarLista();
         });
+        
     }
 
 
@@ -225,6 +238,7 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
                 Apikey: $scope.apiKey
             }
         }).then( response => {
+            $scope.listaSeleccionadaContacto = angular.copy(lista);
             $scope.contactos = response.data;
             console.log(response);
             $("#consultarContacto").modal("show");
@@ -238,10 +252,6 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
     }
 
     $scope.guardarContacto = (contacto) => {
-        console.log(contacto);
-        console.log(contacto.lista.id);
-        console.log(contacto.telefono);
-        console.log(contacto.email);
         $http({
             method: "POST",
             url: 'https://mailifyapis.com/v1/lists/'+contacto.lista.id+'/contacts',
@@ -252,7 +262,6 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         }).then( response => {
-            console.log(response);
             $scope.consultarLista();
             $("#contactoModal").modal("hide");
             $scope.contacto.email = '';
@@ -262,39 +271,51 @@ talenting.controller('mainController', ['$scope', '$http', '$location','userServ
 
     $scope.consultarContactoPorId = (contacto) => {
         console.log(contacto);
-        // $scope.listaActualizar = angular.copy(lista);
-        // $("#actualizarLista").modal("show");
+        $scope.contactoActualizado = angular.copy(contacto);
+        $scope.contactoActualizado.listaSeleccionadaContacto = $scope.listaSeleccionadaContacto;
+        $("#actualizarContacto").modal("show");
     }
 
-    $scope.actualizarLista = (contacto) => {
+    $scope.actualizarContacto = (contacto) => {
         console.log(contacto);
-        // $http({
-        //     method: "PUT",
-        //     url: 'https://mailifyapis.com/v1/lists/'+lista.id,
-        //     data: {"name": lista.name, readOnly: false},
-        //     headers: {
-        //         Accountid: $scope.idCuenta,
-        //         Apikey: $scope.apiKey
-        //     }
-        // }).then( response => {
-        //     $scope.consultarLista();
-        //     $("#actualizarLista").modal("hide");
-        //     $scope.nombreListaActualizar = '';
-        // });
+        $http({
+            method: "PUT",
+            url: 'https://mailifyapis.com/v1/lists/'+$scope.contactoActualizado.listaSeleccionadaContacto.id+'/contacts/'+contacto.id,
+            data: {"email": contacto.email, "phone": contacto.phone},
+            headers: {
+                Accountid: $scope.idCuenta,
+                Apikey: $scope.apiKey
+            }
+        }).then( response => {
+            $scope.consultarContacto($scope.contactoActualizado.listaSeleccionadaContacto);
+            $("#actualizarContacto").modal("hide");
+            $scope.nombreListaActualizar = '';
+        });
     }
 
     $scope.eliminarContacto = (contacto) => {
-        console.log(contacto);
-        // $http({
-        //     method: "DELETE",
-        //     url: 'https://mailifyapis.com/v1/lists/'+id+'/contacts/'+id,
-        //     headers: {
-        //         Accountid: $scope.idCuenta,
-        //         Apikey: $scope.apiKey
-        //     }
-        // }).then( response => {
-        //     $scope.consultarLista();
-        // });
+        swal.fire({
+            title: "Confirmación de eliminación de contacto",
+            text: "¿Estás seguro de eliminar el contacto?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            confirmButtonColor: '#3085d6',
+            cancelButtonText: 'No'
+        }).then(async (isConfirm) => {
+            if (isConfirm.value){    
+                $http({
+                    method: "DELETE",
+                    url: 'https://mailifyapis.com/v1/lists/'+$scope.listaSeleccionadaContacto.id+'/contacts/'+contacto.id,
+                    headers: {
+                        Accountid: $scope.idCuenta,
+                        Apikey: $scope.apiKey
+                    }
+                }).then( response => {
+                    $scope.consultarContacto($scope.listaSeleccionadaContacto);
+                });
+            }
+        });
     }
 
     $scope.filterVacancy = () => {
